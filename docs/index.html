@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Research Engine · 投资研报逻辑审计</title>
+<title>Research Engine · AI 投资研究新范式</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -18,7 +18,6 @@ body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-5
 
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
 
-/* nav */
 nav{padding:24px 0 16px;display:flex;align-items:center}
 .brand{display:flex;align-items:center;gap:10px}
 .brand-bar{width:2px;height:24px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
@@ -27,83 +26,82 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
 .nav-right a{font-size:11px;color:var(--t3);text-decoration:none;transition:color 0.15s}
 .nav-right a:hover{color:var(--accent)}
+.nav-demo{padding:4px 14px;border:1px solid var(--card-border);border-radius:4px;color:var(--accent) !important;font-weight:500}
+.nav-demo:hover{border-color:var(--accent) !important}
 
-/* hero two-col */
-.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin:56px 0 48px;align-items:start}
-.hero-left h1{font-size:40px;font-weight:200;letter-spacing:-0.02em;line-height:1.2;margin-bottom:20px}
-.hero-left h1 strong{font-weight:200;color:var(--accent)}
-.pain p{font-size:14px;color:var(--t2);line-height:1.8;margin-bottom:6px}
-.pain b{color:var(--fg);font-weight:500}
-.value{font-size:15px;color:var(--fg);line-height:1.7;margin:20px 0 24px;font-weight:300}
-.value em{font-style:normal;color:var(--accent);font-weight:400}
+/* hero 3/4 + 1/4 */
+.hero-row{display:grid;grid-template-columns:3fr 1fr;gap:32px;margin:56px 0 48px;align-items:start}
 
-/* input */
-.input-card{border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);padding:20px 24px}
+/* left 3/4 */
+.hero-left h1{font-size:42px;font-weight:200;letter-spacing:-0.02em;line-height:1.15;margin-bottom:12px}
+.hero-left h1 strong{font-weight:300;color:var(--accent)}
+.subtitle{font-size:18px;font-weight:300;color:var(--t2);margin-bottom:6px}
+.subtitle em{font-style:normal;color:var(--accent);font-weight:400}
+.sub2{font-size:13px;color:var(--t3);margin-bottom:28px;line-height:1.6}
+
+.input-card{border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);padding:22px 24px}
 .input-card label{display:block;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
-.input-row{display:flex;gap:12px;align-items:center}
+.input-row{display:flex;gap:10px;align-items:center;margin-bottom:12px}
 .input-field{flex:1;background:transparent;border:none;border-bottom:1px solid var(--card-border);color:var(--fg);font-size:16px;font-weight:300;padding:8px 0;outline:none;font-family:inherit;transition:border-color 0.2s}
 .input-field:focus{border-bottom-color:var(--accent)}
-.input-field::placeholder{color:var(--t4)}
-.start-btn{padding:10px 20px;background:var(--accent);color:#000;font-size:13px;font-weight:500;border:none;border-radius:4px;cursor:pointer;font-family:inherit;white-space:nowrap;text-decoration:none;display:inline-block;transition:background 0.15s}
+.input-field::placeholder{color:var(--t5)}
+.btn-row{display:flex;gap:10px;align-items:center}
+.upload-btn{padding:9px 16px;border:1px solid var(--card-border);border-radius:4px;background:transparent;color:var(--t2);font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
+.upload-btn:hover{border-color:var(--accent);color:var(--accent)}
+.start-btn{padding:9px 22px;background:var(--accent);color:#000;font-size:13px;font-weight:500;border:none;border-radius:4px;cursor:pointer;font-family:inherit;white-space:nowrap;text-decoration:none;display:inline-block;transition:background 0.15s}
 .start-btn:hover{background:#dfb97e}
-.input-hint{font-size:10px;color:var(--t4);margin-top:8px}
+.upload-name{font-size:10px;color:var(--t4);margin-left:4px}
 
-/* hero right: flow + principles */
-.hero-right{}
-.section-label{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.section-label::before{content:'';width:20px;height:1px;background:var(--accent)}
-.section-label span{font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3)}
-
-.flow-compact{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:28px}
-.fc-step{text-align:center;padding:10px 2px;border:1px solid var(--card-border);border-radius:6px;background:var(--card-bg);transition:border-color 0.15s}
-.fc-step:hover{border-color:rgba(212,167,106,0.3)}
-.fc-step .zh{font-size:20px;font-weight:300;color:var(--fg);margin-bottom:2px}
-.fc-step .en{font-size:8px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
-.fc-step .desc{font-size:9px;color:var(--t4);line-height:1.3}
-.fc-step.hl{border-color:rgba(212,167,106,0.25)}
-.fc-step.hl .zh{color:var(--accent)}
-
-.principles-compact{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.pc{padding:12px 14px;border:1px solid var(--card-border);border-radius:6px;background:var(--card-bg)}
-.pc dt{font-size:11px;font-weight:600;color:var(--fg);margin-bottom:3px}
-.pc dd{font-size:10px;color:var(--t4);line-height:1.45}
+/* right 1/4 journey card */
+.journey-card{border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);padding:20px;transition:border-color 0.2s}
+.journey-card:hover{border-color:rgba(212,167,106,0.3)}
+.journey-card h3{font-size:14px;font-weight:500;color:var(--fg);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.journey-card h3 .ico{color:var(--accent)}
+.journey-card .jc-sub{font-size:11px;color:var(--t3);line-height:1.5;margin-bottom:14px}
+.journey-card .jc-stats{list-style:none;margin-bottom:16px}
+.journey-card .jc-stats li{font-size:11px;color:var(--t4);padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;gap:6px}
+.journey-card .jc-stats li:last-child{border-bottom:none}
+.journey-card .jc-stats .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.jc-btn{display:block;text-align:center;padding:10px;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:12px;font-weight:500;text-decoration:none;transition:all 0.15s}
+.jc-btn:hover{background:var(--accent);color:#000}
 
 /* divider */
 .divider{display:flex;align-items:center;gap:10px;margin:48px 0 20px}
 .divider::before{content:'';width:24px;height:1px;background:var(--accent)}
 .divider span{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3)}
 
-/* journey */
-.journey{margin-bottom:48px}
-.journey-intro{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:24px;max-width:700px}
-.journey-steps{display:flex;flex-direction:column;gap:0}
-.j-step{display:grid;grid-template-columns:60px 1fr auto;gap:16px;align-items:start;padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
-.j-step:last-child{border-bottom:none}
-.j-num{text-align:center}
-.j-num .n{font-size:28px;font-weight:200;color:var(--t4);line-height:1}
-.j-num .zh{font-size:16px;font-weight:300;color:var(--t3);margin-top:2px}
-.j-step.hl .j-num .zh{color:var(--accent)}
-.j-step.hl .j-num .n{color:var(--accent)}
-.j-body h3{font-size:14px;font-weight:500;color:var(--fg);margin-bottom:4px}
-.j-body p{font-size:12px;color:var(--t3);line-height:1.6}
-.j-body .narrator{font-size:12px;color:var(--t2);font-style:italic;margin-bottom:6px;line-height:1.5}
-.j-links{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;padding-top:4px}
-.j-link{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--card-border);border-radius:6px;text-decoration:none;color:var(--fg);font-size:11px;background:var(--card-bg);transition:all 0.15s;white-space:nowrap}
-.j-link:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.03)}
-.j-link .ico{color:var(--accent);font-size:13px}
+/* workflow: click to expand */
+.wf-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:0}
+.wf-step{text-align:center;padding:16px 6px;border:1px solid var(--card-border);border-radius:8px;background:var(--card-bg);cursor:pointer;transition:all 0.15s;user-select:none}
+.wf-step:hover,.wf-step.active{border-color:rgba(212,167,106,0.3)}
+.wf-step.active{background:rgba(212,167,106,0.04);border-color:var(--accent)}
+.wf-step .zh{font-size:24px;font-weight:300;color:var(--fg);margin-bottom:2px}
+.wf-step.active .zh{color:var(--accent)}
+.wf-step .en{font-size:8px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--t4);margin-bottom:4px}
+.wf-step .brief{font-size:10px;color:var(--t4);line-height:1.3}
 
-footer{border-top:1px solid var(--card-border);padding:28px 0;text-align:center;margin-top:32px}
+.wf-detail{border:1px solid var(--card-border);border-top:none;border-radius:0 0 8px 8px;background:var(--card-bg);padding:20px 24px;margin-bottom:32px;display:none}
+.wf-detail.active{display:block}
+.wf-detail h4{font-size:14px;font-weight:500;color:var(--fg);margin-bottom:6px}
+.wf-detail p{font-size:12px;color:var(--t3);line-height:1.65}
+
+/* principles */
+.principles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:48px}
+.principle{padding:20px;border:1px solid var(--card-border);border-radius:8px;background:var(--card-bg)}
+.principle .badge{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.principle h4{font-size:14px;font-weight:500;color:var(--fg);margin-bottom:6px}
+.principle p{font-size:11px;color:var(--t3);line-height:1.55}
+
+footer{border-top:1px solid var(--card-border);padding:28px 0;text-align:center;margin-top:16px}
 footer p{font-size:11px;color:var(--t4);margin-bottom:3px}
 footer a{color:var(--accent);text-decoration:none}
-footer a:hover{text-decoration:underline}
 
 @media(max-width:768px){
-  .hero-row{grid-template-columns:1fr;gap:32px}
+  .hero-row{grid-template-columns:1fr;gap:24px}
   .hero-left h1{font-size:28px}
-  .flow-compact{grid-template-columns:repeat(3,1fr)}
-  .principles-compact{grid-template-columns:1fr}
-  .j-step{grid-template-columns:48px 1fr}
-  .j-links{grid-column:1/-1}
+  .wf-steps{grid-template-columns:repeat(3,1fr)}
+  .principles{grid-template-columns:1fr}
+  .btn-row{flex-direction:column;align-items:stretch}
 }
 </style>
 </head>
@@ -117,143 +115,83 @@ footer a:hover{text-decoration:underline}
     <span class="brand-name">Research<em>Engine</em></span>
   </div>
   <div class="nav-right">
+    <a href="#journey-section" class="nav-demo">查看 Demo</a>
     <a href="https://www.askmbb.com" target="_blank">AskMBB</a>
     <a href="https://github.com/Wild-KD/ucws-deep-research" target="_blank">GitHub</a>
   </div>
 </nav>
 
-<!-- Hero: two columns -->
+<!-- Hero: 3/4 + 1/4 -->
 <div class="hero-row">
 
-  <!-- Left: pitch + input -->
   <div class="hero-left">
-    <h1>AI 帮你<br><strong>读透研报</strong></h1>
-
-    <div class="pain">
-      <p>做投资研究时，你是不是也觉得：</p>
-      <p><b>无法快速且深入地了解</b>一个行业、一家公司或一个投资课题；</p>
-      <p>AI 每次给你的知识点<b>很散、没有主线、不知道该信哪个</b>。</p>
-    </div>
-
-    <div class="value">
-      我们从<em>权威源搜索</em>高质量研报，<em>拆解逻辑框架</em>，<em>验证数据真伪</em>，<em>沉淀关键事实</em>，<em>合并为一条清晰的投资主线</em>，最后帮你<em>持续追踪</em>。
-    </div>
+    <h1>AI 投资研究<strong>新范式</strong></h1>
+    <div class="subtitle">人类擅长深度，AI 擅长<em>广度</em></div>
+    <div class="sub2">人类与 AI 的最佳配合：你定方向、提问题，AI 帮你搜遍权威源、拆透逻辑、验证数据、合成主线。<br>像拥有一个读完 30 篇研报的研究员，随时给你定制化讲解。</div>
 
     <div class="input-card">
-      <label>研究标的</label>
-      <div class="input-row">
-        <input type="text" class="input-field" id="topicInput" placeholder="例如：白银、特斯拉、光伏产业链...">
-        <a href="app.html" class="start-btn" id="startBtn">开始审计</a>
+      <label>研究投资问题</label>
+      <input type="text" class="input-field" id="topicInput" placeholder="今年年初白银为什么暴涨？">
+      <div class="btn-row">
+        <label class="upload-btn" for="fileInput">
+          📄 上传研报 PDF
+          <input type="file" id="fileInput" accept=".pdf" multiple style="display:none" onchange="showFileName(this)">
+        </label>
+        <span class="upload-name" id="fileName"></span>
+        <a href="app.html" class="start-btn" id="startBtn" style="margin-left:auto">开始深度研究</a>
       </div>
-      <div class="input-hint">上传研报 PDF 或由 AI 自动搜索权威信息源</div>
     </div>
   </div>
 
-  <!-- Right: flow + principles -->
-  <div class="hero-right">
-    <div class="section-label"><span>六步工作流</span></div>
-    <div class="flow-compact">
-      <div class="fc-step"><div class="zh">搜</div><div class="en">Search</div><div class="desc">权威源搜索</div></div>
-      <div class="fc-step"><div class="zh">读</div><div class="en">Read</div><div class="desc">金字塔拆解</div></div>
-      <div class="fc-step hl"><div class="zh">审</div><div class="en">Verify</div><div class="desc">多Agent验证</div></div>
-      <div class="fc-step"><div class="zh">沉</div><div class="en">Distill</div><div class="desc">沉淀关键事实</div></div>
-      <div class="fc-step"><div class="zh">合</div><div class="en">Merge</div><div class="desc">合并主线</div></div>
-      <div class="fc-step"><div class="zh">追</div><div class="en">Track</div><div class="desc">持续追踪</div></div>
-    </div>
-
-    <div class="section-label"><span>核心原则</span></div>
-    <div class="principles-compact">
-      <div class="pc"><dt>投行级 Color Code</dt><dd>蓝=引用、绿=假设、黑=计算，一眼区分事实与判断</dd></div>
-      <div class="pc"><dt>咨询业方法论</dt><dd>MECE + Storytelling，讲出优于市面水平的逻辑主线</dd></div>
-      <div class="pc"><dt>社科验证范式</dt><dd>三色染色，独立验证数据节点与枝干逻辑关系</dd></div>
-    </div>
+  <!-- Journey card 1/4 -->
+  <div class="journey-card" id="journey-section">
+    <h3><span class="ico">◆</span> 白银投资主线</h3>
+    <div class="jc-sub">一个研究员从零开始读懂白银的完整旅程</div>
+    <ul class="jc-stats">
+      <li><span class="dot"></span>3 篇券商研报，81 页</li>
+      <li><span class="dot"></span>3 条逻辑线拆解</li>
+      <li><span class="dot"></span>19 个 Agent 并发验证</li>
+      <li><span class="dot"></span>1 条合并投资主线</li>
+      <li><span class="dot"></span>定制追踪看板</li>
+    </ul>
+    <a class="jc-btn" href="markmap_guotai.html">查看完整 Demo →</a>
   </div>
 
 </div>
 
-<!-- Journey Demo -->
-<div class="divider"><span>Demo · 白银投资主线 Journey</span></div>
+<!-- Workflow -->
+<div class="divider"><span>六步工作流</span></div>
 
-<div class="journey">
-  <p class="journey-intro">
-    假设你是一个普通研究员，想搞懂今年白银为什么涨。你之前没研究过有色金属，但下载了几篇券商研报。
-    以下是系统帮你完成的整个旅程：
-  </p>
+<div class="wf-steps" id="wfSteps">
+  <div class="wf-step active" data-step="0"><div class="zh">搜</div><div class="en">Search</div><div class="brief">权威源搜索</div></div>
+  <div class="wf-step" data-step="1"><div class="zh">读</div><div class="en">Read</div><div class="brief">金字塔拆解</div></div>
+  <div class="wf-step" data-step="2"><div class="zh">审</div><div class="en">Verify</div><div class="brief">多Agent验证</div></div>
+  <div class="wf-step" data-step="3"><div class="zh">沉</div><div class="en">Distill</div><div class="brief">沉淀关键事实</div></div>
+  <div class="wf-step" data-step="4"><div class="zh">合</div><div class="en">Merge</div><div class="brief">合并主线</div></div>
+  <div class="wf-step" data-step="5"><div class="zh">追</div><div class="en">Track</div><div class="brief">持续追踪</div></div>
+</div>
+<div class="wf-detail active" id="wfDetail">
+  <!-- Content set by JS -->
+</div>
 
-  <div class="journey-steps">
+<!-- Principles -->
+<div class="divider"><span>专业优先 · 核心方法论</span></div>
 
-    <div class="j-step">
-      <div class="j-num"><div class="n">01</div><div class="zh">搜</div></div>
-      <div class="j-body">
-        <div class="narrator">"我想研究白银上涨的原因，但不知道该看哪些报告。"</div>
-        <h3>系统从权威源搜索了 3 篇不同视角的研报</h3>
-        <p>国泰君安（期货展望，45页）、方正证券（供需+历史，23页）、银河证券（宏观视角，13页）。三篇覆盖不同范式，共 81 页。</p>
-      </div>
-      <div class="j-links"></div>
-    </div>
-
-    <div class="j-step">
-      <div class="j-num"><div class="n">02</div><div class="zh">读</div></div>
-      <div class="j-body">
-        <div class="narrator">"45 页的报告太长了，我没时间从头读。"</div>
-        <h3>系统将每篇研报拆解为金字塔结构</h3>
-        <p>用 Minto 金字塔原则提取逻辑框架，标注 IB Color Code（蓝=引用、绿=假设、黑=计算），补充常识跳步。你可以在原文复刻和逻辑重组之间切换。</p>
-      </div>
-      <div class="j-links">
-        <a class="j-link" href="markmap_guotai.html"><span class="ico">△</span> 国泰君安 · 金字塔</a>
-        <a class="j-link" href="markmap_galaxy.html"><span class="ico">△</span> 银河证券 · 金字塔</a>
-        <a class="j-link" href="markmap_founder.html"><span class="ico">△</span> 方正证券 · 金字塔</a>
-      </div>
-    </div>
-
-    <div class="j-step hl">
-      <div class="j-num"><div class="n">03</div><div class="zh">审</div></div>
-      <div class="j-body">
-        <div class="narrator">"报告里的数据靠谱吗？逻辑链条能跑通吗？"</div>
-        <h3>19 个子 Agent 并发验证每个数据节点和因果边</h3>
-        <p>每个数据点独立溯源到一手来源（Silver Institute、CME、LBMA），每条因果推理独立检验。三色染色：绿=验证通过、黄=待验证、红=有冲突。点击任意节点查看完整验证底稿。</p>
-      </div>
-      <div class="j-links">
-        <a class="j-link" href="verify_guotai.html"><span class="ico">✓</span> 国泰君安 · 验证图</a>
-        <a class="j-link" href="verify_galaxy.html"><span class="ico">✓</span> 银河证券 · 验证图</a>
-        <a class="j-link" href="verify_founder.html"><span class="ico">✓</span> 方正证券 · 验证图</a>
-      </div>
-    </div>
-
-    <div class="j-step">
-      <div class="j-num"><div class="n">04</div><div class="zh">沉</div></div>
-      <div class="j-body">
-        <div class="narrator">"这么多数据点，哪些是真正重要的？"</div>
-        <h3>沉淀关键事实与核心 Source，构建知识资产</h3>
-        <p>系统从验证通过的数据中筛选出对投资主线真正有贡献的关键事实，记录每个数据的一手来源 URL，形成可追踪的知识资产库。无关但正确的数据降级为佐证。</p>
-      </div>
-      <div class="j-links"></div>
-    </div>
-
-    <div class="j-step">
-      <div class="j-num"><div class="n">05</div><div class="zh">合</div></div>
-      <div class="j-body">
-        <div class="narrator">"三篇报告各说各的，到底该信谁？"</div>
-        <h3>三条逻辑线合并为一条完整的投资主线</h3>
-        <p>用 Storyteller 方法先确定故事（"白银面临结构性供需缺口，现货机制正将其转化为逼空风险"），再按 WHY/HOW/CONTEXT/RISK 搭建共识树。包含完整供需数据链：供给 1015 Moz - 需求 1164 Moz = 缺口 -149 Moz。</p>
-      </div>
-      <div class="j-links">
-        <a class="j-link" href="merged.html"><span class="ico">◆</span> 合并投资主线</a>
-      </div>
-    </div>
-
-    <div class="j-step">
-      <div class="j-num"><div class="n">06</div><div class="zh">追</div></div>
-      <div class="j-body">
-        <div class="narrator">"主线我懂了，但后面该盯什么指标？"</div>
-        <h3>从主线中导出核心指标，生成定制化追踪看板</h3>
-        <p>按供需面/现货面/宏观面三大框架，追踪 COMEX 库存、Lease Rate、FedWatch 等核心指标。每个指标附 YTD 趋势分析和近期异动预警。数据自动从一手来源更新。</p>
-      </div>
-      <div class="j-links">
-        <a class="j-link" href="dashboard.html"><span class="ico">▦</span> 前瞻追踪看板</a>
-      </div>
-    </div>
-
+<div class="principles">
+  <div class="principle">
+    <div class="badge">投行规范</div>
+    <h4>Financial Model Color Code</h4>
+    <p>借鉴投行财务模型的颜色标注体系：<strong style="color:#4a9eff">蓝色</strong>=引用外部数据、<strong style="color:#4ade80">绿色</strong>=假设与预测、<strong style="color:var(--fg)">黑色</strong>=计算结果。让你一眼区分哪些是事实、哪些是判断。</p>
+  </div>
+  <div class="principle">
+    <div class="badge">咨询方法论</div>
+    <h4>MECE + Storytelling</h4>
+    <p>像顶级咨询顾问一样组织信息：用 MECE 原则确保不遗漏、不重复，再用 Storytelling 把零散的数据点串成一个有说服力的投资故事，而不是罗列事实。</p>
+  </div>
+  <div class="principle">
+    <div class="badge">社科验证</div>
+    <h4>交叉验证 · 反模型幻觉</h4>
+    <p>每个数据节点独立溯源到一手来源，每条逻辑推导独立检验因果关系。通过多 Agent 交叉验证，把 AI 容易产生的"听起来对但经不起推敲"的幻觉筛出来。</p>
   </div>
 </div>
 
@@ -267,9 +205,40 @@ footer a:hover{text-decoration:underline}
 </footer>
 
 <script>
-document.getElementById('startBtn').addEventListener('click', function(e) {
+var details = [
+  {title:'搜 · 权威源搜索', text:'在 Bloomberg、Wind、Silver Institute 等权威数据库中搜索高质量研报与信息源。覆盖卖方研报、买方观点、财经媒体等多种范式，确保视角多样性。不用二手转述，只搜一手来源。'},
+  {title:'读 · 金字塔式逻辑拆解', text:'用 Minto 金字塔原则将每篇研报拆解为结论先行的逻辑树。标注投行 Color Code（蓝=引用、绿=假设、黑=计算），补充常识跳步让非专业读者也能一眼看穿文章叙事。支持原文复刻与逻辑重组两种视图切换。'},
+  {title:'审 · 多 Agent 并发验证', text:'每个数据节点和因果推导各分配一个独立的验证 Agent，全部并发执行。一篇 45 页的报告可能产生 19 个并发验证任务。每个 Agent 独立搜索一手来源，比对数据，检验逻辑链。三色染色：绿=验证通过、黄=待验证、红=有冲突。'},
+  {title:'沉 · 沉淀关键事实与核心 Source', text:'从验证通过的数据中，筛选出对投资主线真正有贡献的关键事实。每个数据点记录一手来源 URL，形成可追踪的知识资产库。无关但正确的数据降级为佐证，确保主线清晰不臃肿。'},
+  {title:'合 · 多报告合并为投资主线', text:'用 Storyteller 方法先确定故事主线（"白银面临结构性供需缺口"），再按 WHY/HOW/CONTEXT/RISK 搭建共识树。三篇研报各自的逻辑线在此合并为一条完整的投资主线，包含可验算的供需数据链。'},
+  {title:'追 · 定制化看板持续追踪', text:'从投资主线中导出核心监控指标，按供需面/现货面/宏观面三大框架组织。每个指标自动从一手来源拉取最新数据，附 YTD 趋势分析和近期异动预警。让你知道主线还成不成立、什么时候该修正判断。'}
+];
+
+function showStep(i) {
+  document.querySelectorAll('.wf-step').forEach(function(el,idx){
+    el.classList.toggle('active', idx===i);
+  });
+  var d = document.getElementById('wfDetail');
+  d.innerHTML = '<h4>'+details[i].title+'</h4><p>'+details[i].text+'</p>';
+  d.classList.add('active');
+}
+
+document.getElementById('wfSteps').addEventListener('click', function(e){
+  var step = e.target.closest('.wf-step');
+  if(step) showStep(parseInt(step.dataset.step));
+});
+
+showStep(0);
+
+function showFileName(input){
+  var names = [];
+  for(var i=0;i<input.files.length;i++) names.push(input.files[i].name);
+  document.getElementById('fileName').textContent = names.join(', ');
+}
+
+document.getElementById('startBtn').addEventListener('click', function(e){
   var topic = document.getElementById('topicInput').value.trim();
-  if (topic) { e.preventDefault(); window.location.href = 'app.html?topic=' + encodeURIComponent(topic); }
+  if(topic){e.preventDefault();window.location.href='app.html?topic='+encodeURIComponent(topic);}
 });
 </script>
 </body>

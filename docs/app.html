@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Engine · 投资研报逻辑审计</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141417;--fg:#e8e8ed;
+  --card-bg:rgba(255,255,255,0.025);--card-border:rgba(255,255,255,0.07);
+  --accent:#d4a76a;--accent-dim:rgba(212,167,106,0.15);
+  --t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--t5:#3f3f46;
+  --green:#4ade80;--gold:#d4a843;--red:#f87171;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
+
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+nav{padding:20px 0;display:flex;align-items:center;gap:10px}
+.brand-bar{width:2px;height:24px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
+nav span{font-size:14px;font-weight:600}
+nav em{font-style:normal;color:var(--accent)}
+nav a{margin-left:auto;font-size:11px;color:var(--t3);text-decoration:none}
+nav a:hover{color:var(--accent)}
+
+h1{font-size:28px;font-weight:200;margin:40px 0 8px;letter-spacing:-0.02em}
+h1 strong{font-weight:200;color:var(--accent)}
+.subtitle{font-size:13px;color:var(--t3);margin-bottom:32px}
+
+/* ---- form ---- */
+.input-section{
+  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
+  padding:28px;margin-bottom:24px;
+}
+.field-label{
+  font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--t3);margin-bottom:10px;display:block;
+}
+.topic-input{
+  width:100%;background:transparent;border:none;border-bottom:1px solid var(--card-border);
+  color:var(--fg);font-size:20px;font-weight:300;padding:8px 0;outline:none;
+  transition:border-color 0.2s;font-family:inherit;
+}
+.topic-input:focus{border-bottom-color:var(--accent)}
+.topic-input::placeholder{color:var(--t4)}
+
+.upload-area{
+  margin-top:20px;border:1px dashed var(--card-border);border-radius:8px;
+  padding:20px;text-align:center;cursor:pointer;transition:all 0.15s;
+}
+.upload-area:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.02)}
+.upload-area.has-files{border-color:var(--accent);border-style:solid;background:rgba(212,167,106,0.03)}
+.upload-label{font-size:13px;color:var(--t3)}
+.upload-label b{color:var(--accent);font-weight:500}
+.file-list{margin-top:10px;text-align:left}
+.file-item{
+  display:flex;align-items:center;gap:8px;padding:6px 10px;
+  font-size:12px;color:var(--t2);border-radius:4px;
+  background:rgba(255,255,255,0.02);margin-bottom:4px;
+}
+.file-item .rm{
+  margin-left:auto;cursor:pointer;color:var(--t4);font-size:14px;
+  transition:color 0.15s;border:none;background:none;
+}
+.file-item .rm:hover{color:var(--red)}
+
+.provider-row{margin-top:16px;display:flex;align-items:center;gap:12px}
+.provider-row select{
+  background:var(--bg);border:1px solid var(--card-border);border-radius:6px;
+  color:var(--fg);font-size:12px;padding:6px 10px;font-family:inherit;outline:none;
+}
+
+.submit-btn{
+  margin-top:20px;width:100%;padding:14px;
+  background:var(--accent);color:#000;font-size:14px;font-weight:500;
+  border:none;border-radius:6px;cursor:pointer;
+  letter-spacing:0.02em;transition:background 0.15s;font-family:inherit;
+}
+.submit-btn:hover{background:#dfb97e}
+.submit-btn:disabled{opacity:0.3;cursor:not-allowed}
+
+/* ---- progress ---- */
+.progress-section{
+  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
+  padding:28px;margin-bottom:24px;display:none;
+}
+.progress-section.active{display:block}
+.progress-title{font-size:14px;font-weight:600;margin-bottom:16px}
+.progress-steps{list-style:none}
+.progress-steps li{
+  display:flex;align-items:center;gap:10px;padding:8px 0;
+  font-size:13px;color:var(--t3);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.progress-steps li:last-child{border-bottom:none}
+.progress-steps li.done{color:var(--green)}
+.progress-steps li.running{color:var(--accent)}
+.progress-steps li.error{color:var(--red)}
+.step-icon{width:20px;text-align:center;font-size:12px}
+.step-text{flex:1}
+.step-time{font-size:10px;color:var(--t4);font-family:monospace}
+
+.spinner{
+  display:inline-block;width:12px;height:12px;
+  border:2px solid var(--accent);border-top-color:transparent;
+  border-radius:50%;animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- results ---- */
+.results-section{
+  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
+  padding:28px;margin-bottom:24px;display:none;
+}
+.results-section.active{display:block}
+.results-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.results-sub{font-size:12px;color:var(--t3);margin-bottom:16px}
+.result-files{list-style:none}
+.result-files li a{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  text-decoration:none;color:var(--fg);border-radius:6px;
+  border:1px solid transparent;transition:all 0.15s;font-size:13px;
+}
+.result-files li a:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.03)}
+.result-files .fsize{font-size:10px;color:var(--t4);margin-left:auto}
+
+/* ---- error ---- */
+.error-box{
+  margin-top:12px;padding:12px 16px;
+  border:1px solid rgba(248,113,113,0.2);background:rgba(248,113,113,0.05);
+  border-radius:8px;font-size:12px;color:var(--red);display:none;
+}
+.error-box.active{display:block}
+
+.demo-link-row{margin-top:32px;padding-top:20px;border-top:1px solid var(--card-border);text-align:center}
+.demo-link-row a{font-size:12px;color:var(--t3);text-decoration:none}
+.demo-link-row a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="brand-bar"></div>
+    <span>Research<em>Engine</em></span>
+    <a href="index.html">← Back to overview</a>
+  </nav>
+
+  <h1>投资研报<strong>逻辑审计</strong></h1>
+  <p class="subtitle">上传研报 PDF，AI 自动拆解、验证、合并、可视化</p>
+
+  <!-- Input Form -->
+  <div class="input-section" id="inputSection">
+    <label class="field-label">研究标的 / Topic</label>
+    <input type="text" class="topic-input" id="topicInput" placeholder="例如：白银、特斯拉、光伏产业链...">
+
+    <label class="field-label" style="margin-top:20px">上传研报 PDF（可选，支持多个）</label>
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" multiple accept=".pdf" style="display:none" onchange="handleFiles(this.files)">
+      <div class="upload-label">点击或拖拽上传 PDF 研报<br><b>支持多个文件</b>，不上传则由 AI 自动搜索</div>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <div class="provider-row">
+      <label class="field-label" style="margin:0">LLM Provider</label>
+      <select id="providerSelect">
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="miromind">MiroMind</option>
+        <option value="openai">OpenAI (GPT)</option>
+      </select>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="startRun()">
+      开始审计 Start Audit
+    </button>
+
+    <div class="error-box" id="errorBox"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section" id="progressSection">
+    <div class="progress-title">管线执行中 Pipeline Running...</div>
+    <ul class="progress-steps" id="progressList"></ul>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+    <div class="results-title">审计完成 Audit Complete</div>
+    <div class="results-sub" id="resultsSub"></div>
+    <ul class="result-files" id="resultFiles"></ul>
+  </div>
+
+  <div class="demo-link-row">
+    <a href="index.html">查看预计算白银 Demo · View pre-computed silver demo →</a>
+  </div>
+</div>
+
+<script>
+const API = window.location.origin;
+let selectedFiles = [];
+let currentRunId = null;
+let ws = null;
+
+function handleFiles(fileList) {
+  for (const f of fileList) {
+    if (f.name.endsWith('.pdf') && !selectedFiles.find(x => x.name === f.name)) {
+      selectedFiles.push(f);
+    }
+  }
+  renderFileList();
+}
+
+function removeFile(idx) {
+  selectedFiles.splice(idx, 1);
+  renderFileList();
+}
+
+function renderFileList() {
+  const el = document.getElementById('fileList');
+  const area = document.getElementById('uploadArea');
+  if (selectedFiles.length === 0) {
+    el.innerHTML = '';
+    area.classList.remove('has-files');
+    return;
+  }
+  area.classList.add('has-files');
+  el.innerHTML = selectedFiles.map((f, i) =>
+    `<div class="file-item">
+      <span>📄 ${f.name}</span>
+      <span style="color:var(--t4);font-size:10px">${(f.size/1024/1024).toFixed(1)} MB</span>
+      <button class="rm" onclick="event.stopPropagation();removeFile(${i})">×</button>
+    </div>`
+  ).join('');
+}
+
+// Drag and drop
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = 'var(--accent)'; });
+uploadArea.addEventListener('dragleave', () => { uploadArea.style.borderColor = ''; });
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.style.borderColor = '';
+  handleFiles(e.dataTransfer.files);
+});
+
+async function startRun() {
+  const topic = document.getElementById('topicInput').value.trim();
+  if (!topic) { showError('请输入研究标的'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '启动中...';
+  hideError();
+
+  const formData = new FormData();
+  formData.append('topic', topic);
+  formData.append('provider', document.getElementById('providerSelect').value);
+  for (const f of selectedFiles) {
+    formData.append('files', f);
+  }
+
+  try {
+    const resp = await fetch(`${API}/api/run`, { method: 'POST', body: formData });
+    if (!resp.ok) throw new Error(`Server error: ${resp.status}`);
+    const data = await resp.json();
+    currentRunId = data.run_id;
+
+    // Show progress section
+    document.getElementById('inputSection').style.display = 'none';
+    document.getElementById('progressSection').classList.add('active');
+    document.getElementById('progressList').innerHTML = '';
+
+    // Connect WebSocket for real-time updates
+    connectWS(currentRunId);
+  } catch (e) {
+    showError(e.message);
+    btn.disabled = false;
+    btn.textContent = '开始审计 Start Audit';
+  }
+}
+
+function connectWS(runId) {
+  const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${protocol}//${location.host}/ws/${runId}`);
+
+  ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    addProgressItem(msg);
+
+    if (msg.status === 'completed' && msg.step === 'pipeline') {
+      loadResults(runId);
+    }
+    if (msg.status === 'error') {
+      document.querySelector('.progress-title').textContent = '管线出错 Pipeline Error';
+      document.querySelector('.progress-title').style.color = 'var(--red)';
+    }
+  };
+
+  ws.onerror = () => {
+    // Fallback: poll status
+    pollStatus(runId);
+  };
+}
+
+function addProgressItem(msg) {
+  const list = document.getElementById('progressList');
+  const icons = { started: '⏳', completed: '✅', skipped: '⏭️', error: '❌' };
+  const cls = msg.status === 'completed' ? 'done' : msg.status === 'error' ? 'error' : 'running';
+  const icon = icons[msg.status] || '📌';
+
+  // Check if step already exists (update it)
+  const existing = document.getElementById(`step-${msg.step}`);
+  if (existing) {
+    existing.className = cls;
+    existing.querySelector('.step-icon').textContent = msg.status === 'started' ? '' : icon;
+    if (msg.status === 'started') {
+      existing.querySelector('.step-icon').innerHTML = '<span class="spinner"></span>';
+    }
+    existing.querySelector('.step-text').textContent = `${msg.step} ${msg.detail || ''}`;
+    return;
+  }
+
+  const li = document.createElement('li');
+  li.id = `step-${msg.step}`;
+  li.className = cls;
+  const iconHtml = msg.status === 'started' ? '<span class="spinner"></span>' : icon;
+  li.innerHTML = `
+    <span class="step-icon">${iconHtml}</span>
+    <span class="step-text">${msg.step} ${msg.detail || ''}</span>
+    <span class="step-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
+  `;
+  list.appendChild(li);
+  li.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function pollStatus(runId) {
+  const interval = setInterval(async () => {
+    try {
+      const resp = await fetch(`${API}/api/run/${runId}`);
+      const data = await resp.json();
+      if (data.status === 'completed') {
+        clearInterval(interval);
+        loadResults(runId);
+      } else if (data.status === 'error') {
+        clearInterval(interval);
+        document.querySelector('.progress-title').textContent = '管线出错: ' + (data.error || '');
+      }
+    } catch (e) { /* keep polling */ }
+  }, 3000);
+}
+
+async function loadResults(runId) {
+  document.querySelector('.progress-title').textContent = '管线完成 Pipeline Complete ✅';
+
+  try {
+    const resp = await fetch(`${API}/api/run/${runId}/outputs`);
+    const data = await resp.json();
+
+    document.getElementById('resultsSection').classList.add('active');
+    document.getElementById('resultsSub').textContent = `${data.files.length} files generated`;
+
+    const list = document.getElementById('resultFiles');
+    list.innerHTML = data.files.map(f =>
+      `<li><a href="${f.url}" target="_blank">
+        <span>${getFileIcon(f.name)} ${f.name}</span>
+        <span class="fsize">${(f.size/1024).toFixed(1)} KB</span>
+      </a></li>`
+    ).join('');
+  } catch (e) {
+    document.getElementById('resultsSub').textContent = 'Error loading results';
+  }
+}
+
+function getFileIcon(name) {
+  if (name.endsWith('.html')) return '🌐';
+  if (name.endsWith('.json')) return '📋';
+  return '📄';
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBox');
+  el.textContent = msg;
+  el.classList.add('active');
+}
+function hideError() {
+  document.getElementById('errorBox').classList.remove('active');
+}
+</script>
+</body>
+</html>

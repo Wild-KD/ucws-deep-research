@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>国泰期货 · 白银金字塔对比</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
+  .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .header h1 { font-size: 14px; color: #1a1a2e; }
+  .tabs { display: flex; gap: 0; }
+  .tab { padding: 5px 14px; font-size: 11px; cursor: pointer; color: #888; border: 1px solid #ddd; border-bottom: none; border-radius: 5px 5px 0 0; background: #f5f5f5; }
+  .tab.on { color: #1a1a2e; background: #fff; font-weight: 600; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+  .legend { margin-left: auto; font-size: 9px; color: #666; display: flex; gap: 10px; }
+  .legend span { display: flex; align-items: center; gap: 3px; }
+  .ldot { width: 8px; height: 2px; display: inline-block; }
+  .toggle-btn { padding: 4px 10px; font-size: 10px; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; color: #666; }
+  .toggle-btn:hover { background: #eee; }
+  .toggle-btn.active { background: #e8e8e8; color: #333; border-color: #bbb; }
+  .map-wrap { width: 100vw; height: calc(100vh - 44px); position: relative; }
+  .map-wrap svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+  .map-wrap svg.off { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>国泰期货 · 白银金字塔</h1>
+  <div class="tabs">
+    <div class="tab on" onclick="swTab(0)">原文结构</div>
+    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+  </div>
+  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <div class="legend">
+    <span><span class="ldot" style="background:#0000CC"></span>蓝=引用</span>
+    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+  </div>
+</div>
+
+<div class="map-wrap" id="w0">
+  <svg id="s0a"></svg><svg id="s0b" class="off"></svg>
+</div>
+<div class="map-wrap" id="w1" style="display:none">
+  <svg id="s1a"></svg><svg id="s1b" class="off"></svg>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+// ===== KNOWLEDGE LINES =====
+const K = {
+  k1: `- <span style="color:#999">[常识: 利率下行降低持有无收益资产(如白银)的机会成本, 有利于贵金属配置需求]</span><br>*(金融学基础理论)*`,
+  k2: `- <span style="color:#999">[常识: 财政赤字扩张→国债供给增加→美元信用稀释预期→利好实物资产/贵金属]</span><br>*(宏观经济学)*`,
+  k3: `- <span style="color:#999">[常识: 流动性充裕时资金寻找收益, 白银因市场容量小(仅黄金44%)对资金流入价格弹性更大]</span><br>*(方正证券)*`,
+  k4: `- <span style="color:#999">[常识: 显性库存=交易所+ETF等公开可查库存; 自由流通量=显性库存-被锁定部分]</span><br>*(行业定义)*`,
+  k5: `- <span style="color:#999">[常识: 伴生矿=开采其他金属时附带产出白银, 银价涨不会刺激增产, 开采决策由主矿种价格驱动]</span><br>*(矿业基础)*`,
+  k6: `- <span style="color:#999">[常识: 矿业CAPEX从投入到产能释放通常需1-2年, 现在投资→2027-2028才能体现]</span><br>*(矿业资本周期)*`,
+  k7: `- <span style="color:#999">[常识: 光伏银浆是白银工业需求最大单一分项(约占37%); TOPCon是新一代电池, 比PERC需更多银浆]</span><br>*(Silver Institute)*`,
+  k8: `- <span style="color:#999">[常识: 白银用于服务器电路板焊接/连接器/散热, 新兴需求但规模远小于光伏]</span><br>*(国泰报告)*`,
+  k9: `- <span style="color:#999">[常识: 贸易商预期关税→从伦敦买银运纽约赚价差→伦敦库存被抽走]</span><br>*(贸易套利机制)*`,
+  k10: `- <span style="color:#999">[常识: ETF运作=投资者买份额→发行方购实物存金库→实物被锁定; 占比越高自由流通越少]</span><br>*(ETF机制)*`,
+  k11: `- <span style="color:#999">[常识: lease rate=借白银利息, 越高=可借实物越稀缺; 库存持仓比=库存÷期货持仓, 越低=实物越不足]</span><br>*(期货市场指标)*`
+};
+
+function mkOriginal(withK) {
+return `
+# 白银主升浪: 2026年白银将继续强于黄金, 目标75$/oz *(国泰 2025.12.23)*
+
+## 宏观背景
+
+### 降息延续
+- <span style="color:#0000CC;font-weight:bold">2026年美联储预计降息两次共50bp至3.25%</span><br>*(FedWatch)*
+
+### 财政扩张
+- <span style="color:#0000CC;font-weight:bold">《大美丽法案》落地, 10年增赤字3.4万亿美元</span><br>*(CBO/CRFB)*
+
+### 流动性充裕
+- <span style="color:#008800;font-weight:bold">财政货币双宽松, 美联储重启扩表, 贵金属利多</span><br>*(Bloomberg+国泰)*
+
+## 4.1 三重挤压
+- <span style="color:#008800;font-weight:bold">白银现货因库存去化+关税套利+ETF锁仓三重叠加, 伦敦可流通白银极度稀缺</span>
+
+### 库存去化
+- <span style="color:#0000CC;font-weight:bold">2025.11显性库存42640吨, ~1.2月</span><br>*(Wind/SMM)*
+
+### 套利搬运
+- <span style="color:#0000CC;font-weight:bold">2024底白银纳入关键矿产清单, 伦敦→COMEX套利搬运</span><br>*(USGS/CME)*
+
+### ETF锁仓
+- <span style="color:#0000CC;font-weight:bold">2025.12伦敦ETF持仓23749吨, 占LBMA 87%</span><br>*(Bloomberg)*
+
+### 市场确认
+- <span style="color:#0000CC;font-weight:bold">2025.12.19 lease rate 7.8%; 库存持仓比9.8%历史低位</span><br>*(Bloomberg/上金所)*
+
+### ⚠ 缓解迹象
+- <span style="color:#008800;font-weight:bold">TD递延费转空付多, 累库380吨, 隐形库存部分释放</span><br>*(上金所/SMM)*
+
+## 4.2 供需失衡
+- <span style="color:#008800;font-weight:bold">矿产供给受伴生矿制约, 光伏/AI支撑需求, 结构性失衡延续</span>
+
+### 供给端
+
+#### 结构制约
+- <span style="color:#0000CC;font-weight:bold">2024年74%伴生矿, 产量取决于铜锌非银价</span><br>*(WoodMac)*
+
+#### 矿企收缩
+- <span style="color:#0000CC;font-weight:bold">2025年15家矿企10家下调产量</span><br>*(各企业年报)*
+
+#### 产量预测
+- <span style="color:#000;font-weight:bold">2026年矿产银27073吨, +1.67%</span><br>*(WoodMac+国泰)*
+
+#### CAPEX
+- <span style="color:#008800;font-weight:bold">2025年回升292亿, 释放需1-2年</span><br>*(各企业年报)*
+
+### 需求端
+
+#### 光伏耗银
+- <span style="color:#0000CC;font-weight:bold">装机493GW(↓13%)</span>, <span style="color:#000;font-weight:bold">耗银仅↓7%至7830吨</span><br>*(BNEF+国泰)*
+
+#### AI耗银
+- <span style="color:#000;font-weight:bold">每GW 331kg, 规模尚小</span><br>*(国泰测算)*
+
+## 4.3 缺口延续
+- <span style="color:#000;font-weight:bold">2026年供需仍有缺口, 较2025年收敛</span>
+
+### 历史缺口
+- <span style="color:#000;font-weight:bold">2025年缺口~5187吨, 2026年~4185吨</span><br>*(世界白银协会+国泰)*
+
+### 流通库存
+- <span style="color:#000;font-weight:bold">自由流通~6600吨</span>; <span style="color:#0000CC;font-weight:bold">2026.1.1中国出口许可证</span><br>*(LBMA/商务部)*
+`;
+}
+
+function mkReorg(withK) {
+return `
+# 白银主升浪: 2026年白银将继续强于黄金, 目标75$/oz *(国泰 2025.12.23)*
+
+## 宏观背景
+
+### 降息延续
+- <span style="color:#0000CC;font-weight:bold">2026年美联储预计降息两次共50bp至3.25%</span><br>*(FedWatch)*
+${withK ? K.k1 : ''}
+
+### 财政扩张
+- <span style="color:#0000CC;font-weight:bold">《大美丽法案》落地, 10年增赤字3.4万亿美元</span><br>*(CBO/CRFB)*
+${withK ? K.k2 : ''}
+
+### 流动性充裕
+- <span style="color:#008800;font-weight:bold">财政货币双宽松, 美联储重启扩表, 贵金属利多</span><br>*(Bloomberg+国泰)*
+${withK ? K.k3 : ''}
+
+## 原因分析
+- 三者共同导致伦敦可流通白银极度稀缺: 库存去化是基础, 套利搬运是催化, ETF锁仓是放大
+
+### 库存去化
+- <span style="color:#0000CC;font-weight:bold">2025.11显性库存42640吨, 覆盖1.2月</span>; <span style="color:#000;font-weight:bold">自由流通约6600吨</span><br>*(Wind/SMM/LBMA+国泰估算)*
+${withK ? K.k4 : ''}
+
+#### 供给端
+
+##### 近期收缩
+- <span style="color:#0000CC;font-weight:bold">2024年全球银产74%来自伴生矿, 产量取决于铜锌非银价; 受此制约, 2025年15家核心矿企中10家下调产量</span><br>*(WoodMac; 各企业年报)*
+${withK ? K.k5 : ''}
+
+##### 远期展望
+- <span style="color:#000;font-weight:bold">2026年矿产银预计27073吨(+1.67%); 至2030年缓慢升至27797吨</span><br>*(WoodMac+国泰推算)*
+- <span style="color:#008800;font-weight:bold">CAPEX回升至292亿, 但资本支出与产量存在1-2年滞后, 短期供给潜力有限</span><br>*(各企业年报+国泰)*
+${withK ? K.k6 : ''}
+
+#### 需求端
+
+##### 光伏耗银
+- <span style="color:#0000CC;font-weight:bold">2026年光伏装机493GW(↓13%)</span>, <span style="color:#000;font-weight:bold">TOPCon转型使耗银仅↓7%至7830吨</span><br>*(BNEF装机; 国泰模型)*
+${withK ? K.k7 : ''}
+
+##### AI耗银
+- <span style="color:#000;font-weight:bold">AI算力中心每GW耗银约331kg</span><br>*(国泰测算)*
+${withK ? K.k8 : ''}
+
+### 套利搬运
+- <span style="color:#0000CC;font-weight:bold">2024底白银纳入关键矿产清单, 伦敦白银被搬至COMEX, 伦敦库存被虹吸</span><br>*(USGS/CME)*
+${withK ? K.k9 : ''}
+
+### ETF锁仓
+- <span style="color:#0000CC;font-weight:bold">2025.12伦敦ETF持仓23749吨占LBMA 87%</span>; <span style="color:#008800;font-weight:bold">降息周期中难减</span><br>*(Bloomberg/LBMA)*
+${withK ? K.k10 : ''}
+
+### 现货紧张确认
+- <span style="color:#0000CC;font-weight:bold">2025.12.19 lease rate 7.8%, 库存持仓比9.8%历史低位</span><br>*(Bloomberg/上金所)*
+${withK ? K.k11 : ''}
+- ⚠ <span style="color:#008800;font-weight:bold">TD递延费转空付多, 累库380吨; 并非毫无瑕疵</span><br>*(上金所/SMM)*
+
+## 前瞻判断
+
+### 缺口收敛
+- <span style="color:#000;font-weight:bold">2026年缺口预计收敛至4185吨, 较2025年(5187吨)缩小但仍为负</span><br>*(世界白银协会+国泰)*
+
+### 出口管制
+- <span style="color:#0000CC;font-weight:bold">2026.1.1起中国对白银实施出口许可证, 国内外库存交替紧张延续</span><br>*(商务部2025.10)*
+`;
+}
+
+// ===== RENDER =====
+const { Transformer } = window.markmap;
+const { Markmap } = window.markmap;
+const transformer = new Transformer();
+const opts = { color: () => '#999', colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 };
+
+function render(svgId, md) {
+  const { root } = transformer.transform(md);
+  return Markmap.create('#'+svgId, opts, root);
+}
+
+// Render all 4 versions (original/reorg × with/without knowledge)
+const mm0a = render('s0a', mkOriginal(false));
+const mm0b = render('s0b', mkOriginal(false)); // original has no knowledge either way
+const mm1a = render('s1a', mkReorg(true));
+const mm1b = render('s1b', mkReorg(false));
+
+let curTab = 0;
+let showK = true;
+
+function swTab(n) {
+  curTab = n;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
+  document.getElementById('w0').style.display = n===0 ? '' : 'none';
+  document.getElementById('w1').style.display = n===1 ? '' : 'none';
+  fitCurrent();
+}
+
+function toggleK() {
+  showK = !showK;
+  const btn = document.getElementById('toggleBtn');
+  btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  btn.classList.toggle('active', showK);
+  // For reorg tab, swap between with/without knowledge
+  document.getElementById('s1a').classList.toggle('off', !showK);
+  document.getElementById('s1b').classList.toggle('off', showK);
+  fitCurrent();
+}
+
+function fitCurrent() {
+  if (curTab===0) mm0a.fit();
+  else if (showK) mm1a.fit();
+  else mm1b.fit();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>方正证券 · 白银金字塔对比</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
+  .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .header h1 { font-size: 14px; color: #1a1a2e; }
+  .tabs { display: flex; gap: 0; }
+  .tab { padding: 5px 14px; font-size: 11px; cursor: pointer; color: #888; border: 1px solid #ddd; border-bottom: none; border-radius: 5px 5px 0 0; background: #f5f5f5; }
+  .tab.on { color: #1a1a2e; background: #fff; font-weight: 600; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+  .legend { margin-left: auto; font-size: 9px; color: #666; display: flex; gap: 10px; }
+  .legend span { display: flex; align-items: center; gap: 3px; }
+  .ldot { width: 8px; height: 2px; display: inline-block; }
+  .toggle-btn { padding: 4px 10px; font-size: 10px; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; color: #666; }
+  .toggle-btn:hover { background: #eee; }
+  .toggle-btn.active { background: #e8e8e8; color: #333; border-color: #bbb; }
+  .map-wrap { width: 100vw; height: calc(100vh - 44px); position: relative; }
+  .map-wrap svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+  .map-wrap svg.off { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>方正证券 · 白银金字塔</h1>
+  <div class="tabs">
+    <div class="tab on" onclick="swTab(0)">原文结构</div>
+    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+  </div>
+  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <div class="legend">
+    <span><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
+    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+  </div>
+</div>
+
+<div class="map-wrap" id="c0"><svg id="s0"></svg></div>
+<div class="map-wrap" id="c1" style="display:none"><svg id="s1a"></svg><svg id="s1b" class="off"></svg></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+const BLUE = '#005EB8';
+const K = {
+  k1: `- <span style="color:#999">[常识: 去美元化→各国减持美债→寻找替代储值资产→贵金属受益; 白银因市场容量小(仅黄金44%)弹性更大]</span><br>*(国际金融)*`,
+  k2: `- <span style="color:#999">[常识: "双重属性"意味白银同时受金融(利率/美元/避险)和实体经济(工业/光伏)两套逻辑驱动, 波动来源更复杂]</span><br>*(贵金属分析框架)*`,
+  k3: `- <span style="color:#999">[常识: 8千万盎司≈2490吨; "不考虑投资需求"意味仅工业+珠宝+银器消耗就超过总供给, ETF等金融需求额外加剧短缺]</span><br>*(单位换算; 行业定义)*`,
+  k4: `- <span style="color:#999">[常识: 伴生矿=开采铜/铅/锌时附带产出白银, 银价涨不会刺激增产]</span><br>*(矿业知识; WoodMackenzie)*`,
+  k5: `- <span style="color:#999">[常识: 再生银来自工业废料/旧首饰/电子回收, 增速虽快但总量有限, 不足以弥补矿产增长乏力]</span><br>*(行业知识)*`,
+  k6: `- <span style="color:#999">[常识: 工业需求最大分项是电子电气, 其次是光伏银浆; 光伏是增长最快分项, 受全球能源转型驱动]</span><br>*(世界白银协会)*`,
+  k7: `- <span style="color:#999">[常识: ETF增仓=从市场购入实物白银锁入金库, 直接减少可流通供给; 期货溢价说明市场预期未来白银更贵或现货紧张]</span><br>*(ETF机制; 期货定价)*`,
+  k8: `- <span style="color:#999">[常识: 金银比=金价÷银价, 高位意味白银相对黄金"便宜"; 历史上极端高位后往往回归均值, 白银跑赢]</span><br>*(贵金属比价分析)*`,
+  k9: `- <span style="color:#999">[常识: 2008年白银暴跌因: ①全面流动性危机下所有资产被抛售换现金 ②工业需求断崖; 说明"避险=白银涨"在极端情况下不成立]</span><br>*(金融危机案例)*`,
+  k10: `- <span style="color:#999">[常识: 中国白银净进口国, 出口管制→减少对外供给→加剧国际市场紧张]</span><br>*(贸易格局)*`
+};
+
+const mdOrig = `
+# 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
+
+## 白银金融属性偏弱但工业属性更强
+
+### 金融属性: 与黄金高相关但市场容量更小
+- <span style="color:${BLUE};font-weight:bold">白银与黄金价格自2004年以来滚动相关系数稳定在80%左右</span><br>*(世界白银协会)*
+- <span style="color:${BLUE};font-weight:bold">2023年全球白银交易量2.6万亿美元, 仅为黄金5.9万亿的44%</span><br>*(世界白银协会)*
+
+### 工业属性: 工业需求占比超50%
+- <span style="color:${BLUE};font-weight:bold">2023年白银工业需求占比超50%, 黄金仅为6.7%</span><br>*(世界白银协会)*
+- <span style="color:${BLUE};font-weight:bold">白银广泛应用于电子电气、光伏、钎焊、化工、医药等行业</span><br>*(方正整理)*
+
+## 供需结构: 2021年起转为持续缺口
+
+### 供给相对稳定
+
+#### 矿产银产量呈下降趋势但2024年小幅恢复
+- <span style="color:${BLUE};font-weight:bold">全球白银总年产量稳定在3万吨左右; 2024年矿产银产量同比+0.9%至819.7百万盎司</span><br>*(世界白银协会)*
+
+#### 再生银增长成为第二大供给来源
+- <span style="color:${BLUE};font-weight:bold">2024年白银回收量同比增长6%, 达近12年最高值, 占总供应约20%</span><br>*(世界白银协会)*
+
+### 需求: 工业需求主导
+
+#### 工业需求占总需求58.5%
+- <span style="color:${BLUE};font-weight:bold">2024年工业白银需求占总需求58.5%, 珠宝17.9%, 实物投资16.4%; 光伏占需求总量17%</span><br>*(世界白银协会)*
+
+#### ETF暴涨抽离实物
+- <span style="color:${BLUE};font-weight:bold">白银ETF持仓量从6亿盎司攀升至7.5亿盎司以上, 期货溢价约7%</span><br>*(方正引用SLV/PSLV数据)*
+
+### 2021年是供需转折年
+- <span style="color:${BLUE};font-weight:bold">2021年白银需求显著超过供应, 不考虑投资需求的供需缺口已近8千万盎司/年</span><br>*(世界白银协会)*
+
+## 历史复盘: 金银比三次峰值后白银均反弹
+
+### 2003年互联网泡沫后: 金银比约82
+- <span style="color:${BLUE};font-weight:bold">白银从低位持续攀升至2008年3月21美元</span><br>*(方正历史数据)*
+
+### 2008年次贷危机: 金银比冲至80+
+- <span style="color:${BLUE};font-weight:bold">白银先从21美元暴跌至9美元(跌幅近60%), 再反弹</span><br>*(方正历史数据)*
+
+### 2020年新冠疫情: 金银比突破122
+- <span style="color:${BLUE};font-weight:bold">白银强劲反弹, 金银比回落至30左右</span><br>*(方正历史数据)*
+
+## 中国白银供小于求, 依赖进口
+- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量(矿产+再生)共4659吨, 工业需求单项8567吨, 供给严重不足</span><br>*(同花顺/方正整理)*
+- <span style="color:${BLUE};font-weight:bold">2025年10月商务部发文, 2026.1.1起对白银出口实施许可证审批制度</span><br>*(商务部)*
+
+## 展望: 长期看好, 短期需警惕
+- <span style="color:#008800;font-weight:bold">白银回调风险大于黄金, 短期波动幅度需重点警惕</span><br>*(方正分析)*
+- <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
+`;
+
+function mkReorg(withK) {
+return `
+# 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
+
+## 去美元化趋势下白银双重属性使其同时受益于金融和工业需求
+
+### 去美元化推动贵金属偏好超过美债
+- <span style="color:${BLUE};font-weight:bold">全球"去美元化"推进, 投资者对贵金属偏好似乎超过了美债</span><br>*(方正引用前期报告)*
+${withK ? K.k1 : ''}
+
+### 白银金融属性偏弱但工业属性更强
+- <span style="color:${BLUE};font-weight:bold">白银与黄金相关系数~80%, 但工业需求占比超50%(黄金仅6.7%); 市场容量仅黄金44%</span><br>*(世界白银协会)*
+${withK ? K.k2 : ''}
+
+## 2021年起供需结构性缺口是白银上涨的基本面根基
+
+### 供需转折: 2021年起每年需求超过供给
+- <span style="color:${BLUE};font-weight:bold">2021年白银需求显著超过供应, 不考虑投资需求的供需缺口已近8千万盎司/年</span><br>*(世界白银协会)*
+${withK ? K.k3 : ''}
+
+#### 供给刚性: 矿产稳定但增长乏力
+
+##### 矿产银产量受限
+- <span style="color:${BLUE};font-weight:bold">全球白银总年产量稳定在3万吨左右; 2024年矿产银产量同比仅+0.9%至819.7百万盎司</span><br>*(世界白银协会)*
+${withK ? K.k4 : ''}
+
+##### 再生银增长但总量有限
+- <span style="color:${BLUE};font-weight:bold">2024年白银回收量同比增长6%, 达近12年最高值, 占总供应约20%</span><br>*(世界白银协会)*
+${withK ? K.k5 : ''}
+
+#### 需求端: 工业需求主导, ETF加剧紧张
+
+##### 工业需求占总需求58.5%, 光伏是最大增量
+- <span style="color:${BLUE};font-weight:bold">2024年工业白银需求占总需求58.5%, 珠宝17.9%, 实物投资16.4%; 光伏占需求总量17%</span><br>*(世界白银协会)*
+${withK ? K.k6 : ''}
+
+##### ETF增仓抽离实物加剧短缺
+- <span style="color:${BLUE};font-weight:bold">白银ETF持仓从6亿盎司攀升至7.5亿盎司以上, 期货溢价约7%</span><br>*(方正引用SLV/PSLV数据)*
+${withK ? K.k7 : ''}
+
+### 历史验证: 金银比三次极端高位后白银均跑赢
+- <span style="color:${BLUE};font-weight:bold">2000年以来金银比三次达到峰值(2003年82, 2008年80+, 2020年122), 每次峰值后白银均强劲反弹</span><br>*(方正历史数据)*
+${withK ? K.k8 : ''}
+
+#### ⚠ 2008年警示: 极端流动性危机下白银先崩再涨
+- <span style="color:${BLUE};font-weight:bold">2008年次贷危机中金银比冲至80+, 但白银先从21美元暴跌至9美元(跌幅近60%), 之后才反弹</span><br>*(方正历史数据)*
+${withK ? K.k9 : ''}
+
+### 中国供给严重不足且出口管制加剧国际紧张
+- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量(矿产+再生)共4659吨, 工业需求单项8567吨, 供给严重不足; 2026.1.1起实施出口许可证</span><br>*(同花顺/方正; 商务部)*
+${withK ? K.k10 : ''}
+
+## 前瞻: 长期看多但短期需警惕深度回调
+
+### 长期: 工业需求刚性增长支撑银价
+- <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
+
+### 短期: 白银回调风险大于黄金
+- <span style="color:#008800;font-weight:bold">白银回调风险大于黄金, 短期波动幅度需重点警惕; 1980年曾出现保证金提至100%或强制"仅限平仓"等极端手段</span><br>*(方正分析; 历史案例)*
+
+### ⚠ 数据口径注意
+- <span style="color:#999">[注: 本报告工业需求占比在核心结论写"50-60%", 正文写"58.5%", 两处口径不完全一致]</span><br>*(编者注)*
+`;
+}
+
+const { Transformer, Markmap } = window.markmap;
+const transformer = new Transformer();
+const opts = { color: () => '#999', colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 };
+
+const mm0 = Markmap.create('#s0', opts, transformer.transform(mdOrig).root);
+const mm1a = Markmap.create('#s1a', opts, transformer.transform(mkReorg(true)).root);
+const mm1b = Markmap.create('#s1b', opts, transformer.transform(mkReorg(false)).root);
+
+let curTab = 0, showK = true;
+function swTab(n) {
+  curTab = n;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
+  document.getElementById('c0').style.display = n===0 ? '' : 'none';
+  document.getElementById('c1').style.display = n===1 ? '' : 'none';
+  if(n===0) mm0.fit(); else if(showK) mm1a.fit(); else mm1b.fit();
+}
+function toggleK() {
+  showK = !showK;
+  document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  document.getElementById('toggleBtn').classList.toggle('active', showK);
+  document.getElementById('s1a').classList.toggle('off', !showK);
+  document.getElementById('s1b').classList.toggle('off', showK);
+  if(curTab===1) { if(showK) mm1a.fit(); else mm1b.fit(); }
+}
+</script>
+</body>
+</html>

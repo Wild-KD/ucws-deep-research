@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>中国银河 · 白银金字塔对比</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
+  .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .header h1 { font-size: 14px; color: #1a1a2e; }
+  .tabs { display: flex; gap: 0; }
+  .tab { padding: 5px 14px; font-size: 11px; cursor: pointer; color: #888; border: 1px solid #ddd; border-bottom: none; border-radius: 5px 5px 0 0; background: #f5f5f5; }
+  .tab.on { color: #1a1a2e; background: #fff; font-weight: 600; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+  .legend { margin-left: auto; font-size: 9px; color: #666; display: flex; gap: 10px; }
+  .legend span { display: flex; align-items: center; gap: 3px; }
+  .ldot { width: 8px; height: 2px; display: inline-block; }
+  .toggle-btn { padding: 4px 10px; font-size: 10px; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9; color: #666; }
+  .toggle-btn:hover { background: #eee; }
+  .toggle-btn.active { background: #e8e8e8; color: #333; border-color: #bbb; }
+  .map-wrap { width: 100vw; height: calc(100vh - 44px); position: relative; }
+  .map-wrap svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+  .map-wrap svg.off { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>中国银河 · 白银金字塔</h1>
+  <div class="tabs">
+    <div class="tab on" onclick="swTab(0)">原文结构</div>
+    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+  </div>
+  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <div class="legend">
+    <span><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
+    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+  </div>
+</div>
+
+<div class="map-wrap" id="c0"><svg id="s0"></svg></div>
+<div class="map-wrap" id="c1" style="display:none"><svg id="s1a"></svg><svg id="s1b" class="off"></svg></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+const BLUE = '#005EB8';
+const K = {
+  k1: `- <span style="color:#999">[常识: 央行独立性受质疑→货币政策可能被政治干预→利率路径不可预测→避险资金流向贵金属]</span><br>*(政治经济学)*`,
+  k2: `- <span style="color:#999">[常识: CPI低于预期→通胀压力减弱→降息概率上升→实际利率下行预期→持有贵金属机会成本降低]</span><br>*(货币政策传导)*`,
+  k3: `- <span style="color:#999">[常识: 白银市场容量仅黄金44%(2.6万亿vs5.9万亿), 同等资金流入时银价波动更大]</span><br>*(方正证券报告p4)*`,
+  k4: `- <span style="color:#999">[常识: 白银兼具贵金属和工业金属双重属性; 工业需求占总需求约58%, 光伏是最大单一分项; 供给74%来自伴生矿]</span><br>*(世界白银协会; WoodMackenzie)*`
+};
+
+const mdOrig = `
+# 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16 周报)*
+
+## 金融属性驱动白银跟随黄金上涨
+
+### 美联储独立性受质疑引发避险
+- <span style="color:${BLUE};font-weight:bold">美联储主席鲍威尔被调查引发市场对央行独立性的担忧</span><br>*(美国司法部公开信息)*
+- <span style="color:${BLUE};font-weight:bold">副主席候选人凯文·沃什迅速跃升为下任主席热门</span><br>*(公开报道)*
+
+### CPI低于预期推升降息预期
+- <span style="color:${BLUE};font-weight:bold">美联储维持利率不变, 美国2025年12月CPI数据低于预期, 市场押注2025年3月降息升温</span><br>*(美联储会议声明; 美国劳工部)*
+
+### 贵金属资金涌入推高金银价格
+- <span style="color:${BLUE};font-weight:bold">本周国际银价12日首次突破80美元/盎司, 金价超4600美元/盎司</span><br>*(交易所行情)*
+- <span style="color:${BLUE};font-weight:bold">本周COMEX白银上涨13.37%, 黄金上涨2.23%</span><br>*(COMEX)*
+
+### 白银与黄金价格高度相关
+- <span style="color:#008800;font-weight:bold">长期以来金银价格走势具备高度相关性</span><br>*(银河分析, 未给相关系数)*
+
+## 工业属性为白银提供中长期支撑
+- <span style="color:#008800;font-weight:bold">从工业属性看, 光伏、新能源等领域对白银需求提供坚实的中长期支撑</span><br>*(银河分析)*
+- <span style="color:#008800;font-weight:bold">白银市场供应端紧张状态不会长期改变</span><br>*(银河分析)*
+
+## 短期存在获利了结回调风险
+- <span style="color:#008800;font-weight:bold">预计白银下周价格可能面临资金获利了结的回调</span><br>*(银河分析)*
+- <span style="color:#008800;font-weight:bold">但不排除进一步上行至100美元/盎司</span><br>*(银河分析, 无模型支撑)*
+`;
+
+function mkReorg(withK) {
+return `
+# 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16 周报)*
+
+## 美联储政策不确定性+CPI低于预期利好贵金属
+
+### 央行独立性担忧引发避险情绪
+- <span style="color:${BLUE};font-weight:bold">美联储主席鲍威尔被调查, 副主席候选人沃什成为下任主席热门</span><br>*(美国司法部; 公开报道)*
+${withK ? K.k1 : ''}
+
+### CPI低于预期推升降息预期
+- <span style="color:${BLUE};font-weight:bold">美联储维持利率不变, 2025年12月CPI低于预期, 市场押注2025年3月降息升温</span><br>*(美联储声明; 美国劳工部)*
+${withK ? K.k2 : ''}
+
+## 金融属性驱动白银跟随黄金上涨
+
+### 白银跟随黄金且波动更大
+- <span style="color:${BLUE};font-weight:bold">本周COMEX白银上涨13.37%, 黄金上涨2.23%; 银价首次突破80美元/盎司, 金价超4600美元/盎司</span><br>*(COMEX; 交易所行情)*
+- <span style="color:#008800;font-weight:bold">白银跟随黄金上涨, 长期金银价格走势高度相关</span><br>*(银河分析, 未给相关系数)*
+${withK ? K.k3 : ''}
+
+### 工业属性为白银提供中长期底部支撑
+- <span style="color:#008800;font-weight:bold">光伏、新能源等领域对白银需求提供坚实的中长期支撑</span><br>*(银河分析)*
+- <span style="color:#008800;font-weight:bold">白银市场供应端紧张状态不会长期改变</span><br>*(银河分析)*
+${withK ? K.k4 : ''}
+
+## 前瞻: 短期回调风险但中长期看多
+
+### 短期存在获利了结压力
+- <span style="color:#008800;font-weight:bold">下周白银可能面临资金获利了结的回调</span><br>*(银河分析)*
+
+### 中长期上涨逻辑稳固
+- <span style="color:#008800;font-weight:bold">白银价格上涨逻辑依然稳固, 不排除进一步上行至100美元/盎司</span><br>*(银河分析, 无模型支撑)*
+`;
+}
+
+const { Transformer, Markmap } = window.markmap;
+const transformer = new Transformer();
+const opts = { color: () => '#999', colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 };
+
+const mm0 = Markmap.create('#s0', opts, transformer.transform(mdOrig).root);
+const mm1a = Markmap.create('#s1a', opts, transformer.transform(mkReorg(true)).root);
+const mm1b = Markmap.create('#s1b', opts, transformer.transform(mkReorg(false)).root);
+
+let curTab = 0, showK = true;
+function swTab(n) {
+  curTab = n;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
+  document.getElementById('c0').style.display = n===0 ? '' : 'none';
+  document.getElementById('c1').style.display = n===1 ? '' : 'none';
+  if(n===0) mm0.fit(); else if(showK) mm1a.fit(); else mm1b.fit();
+}
+function toggleK() {
+  showK = !showK;
+  document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  document.getElementById('toggleBtn').classList.toggle('active', showK);
+  document.getElementById('s1a').classList.toggle('off', !showK);
+  document.getElementById('s1b').classList.toggle('off', showK);
+  if(curTab===1) { if(showK) mm1a.fit(); else mm1b.fit(); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investment Research Logic Engine — KDLD</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',system-ui,sans-serif;background:#fafafa;color:#1a1a2e;line-height:1.6}
+
+.hero{padding:56px 40px 40px;text-align:center;background:linear-gradient(180deg,#f0f4f8 0%,#fafafa 100%)}
+.hero h1{font-size:32px;font-weight:800;letter-spacing:-0.03em;margin-bottom:6px;color:#0f172a}
+.hero .tagline{font-size:16px;color:#64748b;font-weight:400;margin-bottom:20px;font-style:italic}
+.hero .desc{font-size:14px;color:#475569;max-width:640px;margin:0 auto 28px;line-height:1.7}
+.hero .badge{display:inline-block;padding:4px 14px;background:#e0e7ff;color:#3730a3;font-size:11px;font-weight:600;border-radius:20px;letter-spacing:0.02em}
+
+.pipeline-section{padding:40px 40px 32px;max-width:960px;margin:0 auto}
+.pipeline-section h2{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:24px;text-align:center;letter-spacing:-0.01em}
+
+.pipeline{display:flex;align-items:flex-start;gap:0;justify-content:center;flex-wrap:wrap}
+.step{flex:0 0 130px;text-align:center;position:relative}
+.step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;margin:0 auto 8px}
+.step-zh{font-size:20px;font-weight:700;margin-bottom:2px;color:#1e293b}
+.step-en{font-size:10px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.step-desc{font-size:11px;color:#64748b;line-height:1.45;padding:0 4px}
+.arrow{flex:0 0 28px;display:flex;align-items:center;justify-content:center;padding-top:12px;color:#cbd5e1;font-size:18px}
+
+.s1 .step-num{background:#2563eb}
+.s2 .step-num{background:#7c3aed}
+.s3 .step-num{background:#dc2626}
+.s4 .step-num{background:#ea580c}
+.s5 .step-num{background:#059669}
+.s6 .step-num{background:#0891b2}
+
+.features{padding:0 40px 40px;max-width:960px;margin:0 auto}
+.features h2{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:20px;text-align:center}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.feat{padding:20px;background:#fff;border:1px solid #e2e8f0;border-radius:10px}
+.feat h3{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:6px}
+.feat p{font-size:11px;color:#64748b;line-height:1.5}
+.feat .color-demo{display:flex;gap:8px;margin-top:8px}
+.feat .color-demo span{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.c-green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+.c-gold{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.c-red{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.c-black{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1}
+
+.demo-section{padding:32px 40px 40px;max-width:960px;margin:0 auto}
+.demo-section h2{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:8px;text-align:center}
+.demo-sub{font-size:12px;color:#94a3b8;text-align:center;margin-bottom:20px}
+
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.demo-group{margin-bottom:16px}
+.demo-group h3{font-size:12px;font-weight:700;color:#475569;margin-bottom:8px;padding-left:4px;text-transform:uppercase;letter-spacing:0.04em}
+a.card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:#1e293b;transition:all 0.15s}
+a.card:hover{border-color:#818cf8;box-shadow:0 2px 8px rgba(99,102,241,0.08)}
+.card-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.card h4{font-size:12px;font-weight:600;margin-bottom:1px}
+.card p{font-size:10px;color:#94a3b8}
+.icon-purple{background:#ede9fe}
+.icon-red{background:#fee2e2}
+.icon-orange{background:#ffedd5}
+.icon-teal{background:#ccfbf1}
+
+.footer{padding:24px 40px;text-align:center;border-top:1px solid #e2e8f0;background:#f8fafc}
+.footer p{font-size:11px;color:#94a3b8;margin-bottom:4px}
+.footer a{color:#6366f1;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+.arch{padding:0 40px 40px;max-width:960px;margin:0 auto;text-align:center}
+.arch pre{display:inline-block;text-align:left;font-size:11px;color:#475569;background:#f1f5f9;padding:16px 24px;border-radius:8px;line-height:1.6;font-family:'SF Mono','Fira Code',monospace}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">UCWS Singapore 2026 × MiroMind Deep Research</div>
+  <h1 style="margin-top:16px">Investment Research Logic Engine</h1>
+  <p class="tagline">A compiler for investment theses — from story to spec.</p>
+  <p class="desc">
+    Every financial AI agent generates research. This one <strong>audits</strong> it.<br>
+    It decomposes research reports into falsifiable claims, verifies each against primary sources,
+    and recompiles them into a transparent thesis you can audit.
+  </p>
+</div>
+
+<!-- Pipeline -->
+<div class="pipeline-section">
+  <h2>Six-Step Audit Pipeline</h2>
+  <div class="pipeline">
+    <div class="step s1">
+      <div class="step-num">1</div>
+      <div class="step-zh">搜</div>
+      <div class="step-en">Search</div>
+      <div class="step-desc">Find 3+ reports from diverse paradigms</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step s2">
+      <div class="step-num">2</div>
+      <div class="step-zh">读</div>
+      <div class="step-en">Decompose</div>
+      <div class="step-desc">Minto pyramid extraction + logic reorganization</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step s3">
+      <div class="step-num">3</div>
+      <div class="step-zh">审</div>
+      <div class="step-en">Verify</div>
+      <div class="step-desc">Multi-agent parallel verification + 4-color coding</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step s4">
+      <div class="step-num">4</div>
+      <div class="step-zh">合</div>
+      <div class="step-en">Merge</div>
+      <div class="step-desc">Storyteller-driven cross-report consensus tree</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step s5">
+      <div class="step-num">5</div>
+      <div class="step-zh">图</div>
+      <div class="step-en">Visualize</div>
+      <div class="step-desc">Interactive markmap with verification colors</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step s6">
+      <div class="step-num">6</div>
+      <div class="step-zh">讲</div>
+      <div class="step-en">Dashboard</div>
+      <div class="step-desc">Forward monitoring with key indicators</div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Features -->
+<div class="features">
+  <h2>Core Design Principles</h2>
+  <div class="feat-grid">
+    <div class="feat">
+      <h3>Audit, Not Generate</h3>
+      <p>We don't produce research — we decompose existing reports into structured claims and independently verify each one. The agent checks, not creates.</p>
+    </div>
+    <div class="feat">
+      <h3>4-Color Verification</h3>
+      <p>Every data point gets a trust signal based on independent source verification.</p>
+      <div class="color-demo">
+        <span class="c-green">Verified</span>
+        <span class="c-gold">Unverified</span>
+        <span class="c-red">Conflict</span>
+        <span class="c-black">Structural</span>
+      </div>
+    </div>
+    <div class="feat">
+      <h3>Reasoning Transparency</h3>
+      <p>Click any node to see the full audit trail: original claim, verification source (with URL), subclaims, and findings. Nothing is a black box.</p>
+    </div>
+    <div class="feat">
+      <h3>Anti-Hallucination</h3>
+      <p>The decompose step only uses data explicitly in the report. No self-calculation, no unit conversion, no cross-source splicing. Every data point carries a page number.</p>
+    </div>
+    <div class="feat">
+      <h3>Multi-Agent Verification</h3>
+      <p>Step 3 fans out one sub-agent per data node and causal edge — 19 concurrent verification agents for a 45-page report. Each searches independently.</p>
+    </div>
+    <div class="feat">
+      <h3>Storyteller Merging</h3>
+      <p>Before merging reports, the agent determines the story: WHY (fundamentals) / HOW (mechanism) / CONTEXT (macro) / RISK. "Does it contribute to the story?" trumps "Is it correct?"</p>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<div class="arch">
+<pre>
+Topic + Reports
+      ↓
+┌─────────────────────────────────────────────────┐
+│            Orchestrator Agent                    │
+│                                                  │
+│  ① Search → ② Decompose → ③ Verify → ④ Merge   │
+│              (×N reports)    ↓ fan-out            │
+│                          ┌──┬──┬──┐              │
+│                          V1 V2..VN               │
+│                          (parallel)              │
+│                          └──┴──┴──┘              │
+│                              ↓                   │
+│                    ⑤ Visualize → ⑥ Dashboard     │
+└─────────────────────────────────────────────────┘
+      ↓
+Interactive HTML Outputs (markmap + verification maps + dashboard)
+</pre>
+</div>
+
+<!-- Demo Outputs -->
+<div class="demo-section">
+  <h2>Live Demo: Silver Investment Thesis Audit</h2>
+  <p class="demo-sub">3 Chinese research reports (81 pages total) analyzed through the full pipeline</p>
+
+  <div class="demo-group">
+    <h3>Per-Report Decomposition + Verification</h3>
+    <div class="demo-grid">
+      <a class="card" href="silver/markmap_guotai.html">
+        <div class="card-icon icon-purple">🏛</div>
+        <div><h4>国泰君安 · Pyramid</h4><p>45 pages · futures outlook · original + reorganized tabs</p></div>
+      </a>
+      <a class="card" href="silver/verify_guotai.html">
+        <div class="card-icon icon-red">🔍</div>
+        <div><h4>国泰君安 · Verification Map</h4><p>19 sub-agents · clickable workpapers · 4-color coded</p></div>
+      </a>
+      <a class="card" href="silver/markmap_galaxy.html">
+        <div class="card-icon icon-purple">🏛</div>
+        <div><h4>银河证券 · Pyramid</h4><p>13 pages · macro weekly · financial attributes lens</p></div>
+      </a>
+      <a class="card" href="silver/verify_galaxy.html">
+        <div class="card-icon icon-red">🔍</div>
+        <div><h4>银河证券 · Verification Map</h4><p>Multi-agent verified · source URLs · audit trail</p></div>
+      </a>
+      <a class="card" href="silver/markmap_founder.html">
+        <div class="card-icon icon-purple">🏛</div>
+        <div><h4>方正证券 · Pyramid</h4><p>23 pages · supply-demand + historical review</p></div>
+      </a>
+      <a class="card" href="silver/verify_founder.html">
+        <div class="card-icon icon-red">🔍</div>
+        <div><h4>方正证券 · Verification Map</h4><p>Data nodes + causal edges verified independently</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="demo-group">
+    <h3>Cross-Report Synthesis</h3>
+    <div class="demo-grid">
+      <a class="card" href="silver/merged.html">
+        <div class="card-icon icon-orange">🌳</div>
+        <div><h4>Merged Consensus Tree</h4><p>WHY / HOW / CONTEXT / RISK · complete supply-demand data chain</p></div>
+      </a>
+      <a class="card" href="silver/dashboard.html">
+        <div class="card-icon icon-teal">📊</div>
+        <div><h4>Forward Monitoring Dashboard</h4><p>Supply-demand / spot / macro · Chart.js · YTD + anomaly analysis</p></div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p><strong>Team KDLD</strong> · UCWS Singapore 2026 × MiroMind Deep Research Special Track</p>
+  <p>Built with Claude + MiroMind API · <a href="https://github.com/KDLD" target="_blank">GitHub</a></p>
+  <p style="margin-top:8px;font-size:10px;color:#cbd5e1">
+    "You don't need to trust this agent. You just need to see exactly what it checked, what it found, and what it couldn't verify."
+  </p>
+</div>
+
+</body>
+</html>

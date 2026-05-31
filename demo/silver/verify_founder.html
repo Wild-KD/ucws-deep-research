@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>方正证券 · 白银验证地图</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
+  .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .header h1 { font-size: 14px; color: #1a1a2e; }
+  .legend { font-size: 9px; color: #666; display: flex; gap: 12px; margin-left: auto; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .ldot { width: 14px; height: 14px; border-radius: 3px; display: inline-block; border: 2px solid; background: #fff; }
+  .stats { font-size: 10px; color: #666; padding: 4px 20px; border-bottom: 1px solid #eee; }
+  .map-wrap { width: 100vw; height: calc(100vh - 74px); }
+  .map-wrap svg { width: 100%; height: 100%; }
+  #wpanel { display:none; position:fixed; right:12px; top:60px; width:340px; max-height:70vh; overflow-y:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:14px 16px; box-shadow:0 4px 20px rgba(0,0,0,.1); font-size:11px; z-index:20; }
+  .wp-close { float:right; cursor:pointer; color:#999; border:1px solid #ddd; padding:1px 6px; border-radius:3px; font-size:10px; }
+  .wp-title { font-size:12px; font-weight:600; color:#1a1a2e; margin-bottom:8px; padding-right:24px; }
+  .wp-label { font-size:9px; color:#999; font-weight:600; text-transform:uppercase; margin-top:8px; }
+  .wp-src { color:#005EB8; margin:2px 0; font-size:10px; }
+  .wp-finding { color:#333; line-height:1.6; }
+  .wp-verdict { font-weight:600; margin-top:4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>方正证券 · 白银验证地图</h1>
+  <div class="legend">
+    <span><span class="ldot" style="border-color:#009A44"></span>验证通过</span>
+    <span><span class="ldot" style="border-color:#D4A843"></span>有source未验证</span>
+    <span><span class="ldot" style="border-color:#CC0000"></span>有冲突</span>
+    <span><span class="ldot" style="border-color:#333"></span>结构/常识</span>
+  </div>
+</div>
+<div class="stats">数据节点: <b style="color:#009A44">2🟢</b> · <b style="color:#D4A843">6🟡</b> · <b style="color:#CC0000">2🔴</b></div>
+<div class="map-wrap"><svg id="mm"></svg></div>
+<div id="wpanel"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+const BLUE = '#005EB8';
+const G = '#009A44', Y = '#D4A843', R = '#CC0000', B = '#333';
+
+const verifyColors = [
+  ['去美元化', Y],
+  ['80%', Y], ['相关系数', Y],
+  ['2.6万亿', R], ['5.9万亿', R], ['44%', R],
+  ['58.5%', Y], ['17%', Y],
+  ['8千万盎司', Y],
+  ['3万吨', Y], ['819.7', Y],
+  ['增长6%', G], ['12年最高', G], ['20%', G],
+  ['6亿盎司', Y], ['7.5亿', Y], ['7%', Y],
+  ['21美元', Y], ['9美元', Y], ['60%', Y],
+  ['4659吨', G], ['8567吨', G],
+  ['出口许可证', Y], ['许可证审批', Y],
+  ['50-60%', Y],
+  ['供需结构性缺口', Y],
+  ['供给刚性', Y],
+  ['2008年警示', Y],
+  ['中国供给严重不足', G],
+];
+
+const workpapers = {
+  '2.6万亿': {color:'🔴',claim:'白银交易量2.6万亿vs黄金5.9万亿(44%)',structured:true,
+    conclusion:'🔴 两个数字均无法从任何权威source验证',
+    subclaims:[{text:'事实: 交易量数据能否核实?',status:'🔴',
+      finding:'黄金实际日均交易量~1630亿$, 年化~41万亿$, 远超5.9万亿。白银2.6万亿也无任何公开source确认。Silver Institute不发布此类交易量数据。',
+      quote:'',
+      sources:[]}]},
+
+  '80%': {color:'🟡',claim:'金银滚动相关系数稳定在80%左右',structured:true,
+    conclusion:'🟡 数值基本正确(CME确认~0.8), 但source归错且"稳定"有夸大',
+    subclaims:[{text:'事实: 相关系数是否约80%?',status:'🟡',
+      finding:'CME Group研究确认2004年以来一年滚动相关约0.68-0.95, 均值~0.8。但报告归因为"世界白银协会", 实际来自CME Group。且2025年相关性降至20年最低。',
+      quote:'',
+      sources:[{title:'Four Factors Driving Gold Prices Relative to Silver',author:'CME Group, Erik Norland, 2024',url:'https://www.cmegroup.com/insights/economic-research/2024/four-factors-driving-gold-prices-relative-to-silver.html'}]}]},
+
+  '58.5': {color:'🟡',claim:'工业需求占总需求58.5%, 光伏占17%',structured:true,
+    conclusion:'🟡 Silver Institute数据算出58.7%, 接近; 光伏17%匹配; 但报告另处写50-60%口径不一致',
+    subclaims:[{text:'事实: 58.5%和17%是否准确?',status:'🟡',
+      finding:'Silver Institute WSS 2025: 工业需求680.5Moz÷总需求1160Moz=58.7%, 接近58.5%。PV需求197.6Moz=17.0%, 匹配。',
+      quote:'',
+      sources:[{title:'Silver Industrial Demand Reached a Record 680.5 Moz in 2024',author:'Silver Institute',url:'https://silverinstitute.org/silver-industrial-demand-reached-a-record-680-5-moz-in-2024/'}]}]},
+
+  '8千万': {color:'🟡',claim:'供需缺口已近8千万盎司/年',structured:true,
+    conclusion:'🟡 仅匹配2021年最小缺口, 2022-2024年缺口远大于8千万',
+    subclaims:[{text:'事实: 缺口是否为8千万?',status:'🟡',
+      finding:'Silver Institute: 2021年deficit ~89Moz, 2022年~272Moz, 2023年~210Moz, 2024年~151Moz。"近8千万"仅约匹配2021年, 后续年份远大于此。',
+      quote:'',
+      sources:[{title:'Silver Supply and Demand',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}]},
+
+  '819.7': {color:'🟡',claim:'矿产银产量+0.9%至819.7百万盎司; 总产量~3万吨',structured:true,
+    conclusion:'🟡 819.7Moz精确匹配; "3万吨"是总供应非矿产(矿产约2.55万吨)',
+    subclaims:[{text:'事实: 819.7Moz是否准确?',status:'🟢',
+      finding:'Silver Institute WSS 2025原文: "Global silver mine production rose by 0.9 percent to 819.7 Moz." 精确匹配。',
+      quote:'',
+      sources:[{title:'Silver Industrial Demand Record 2024',author:'Silver Institute / GlobeNewsWire, 2025.4.16',url:'https://silverinstitute.org/silver-industrial-demand-reached-a-record-680-5-moz-in-2024/'}]}]},
+
+  '增长6%': {color:'🟢',claim:'回收量同比增长6%, 达近12年最高值, 占总供应约20%',structured:true,
+    conclusion:'🟢 三项子声明均精确匹配Silver Institute',
+    subclaims:[{text:'事实: 回收量数据',status:'🟢',
+      finding:'Silver Institute WSS 2025: 回收量增长6%至193.9Moz, 为12年最高, 占总供应约19%(报告说"约20%"为合理四舍五入)。',
+      quote:'',
+      sources:[{title:'Silver Supply and Demand',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}]},
+
+  '6亿盎司': {color:'🟡',claim:'ETF持仓从6亿攀升至7.5亿盎司以上, 期货溢价约7%',structured:true,
+    conclusion:'🟡 SLV+PSLV合计约710Moz, 未达7.5亿; 7%溢价未确认',
+    subclaims:[{text:'事实: ETF持仓是否达7.5亿?',status:'🟡',
+      finding:'SEC文件: SLV约492Moz + PSLV约217Moz = 约709Moz, 未达750Moz。"从6亿"起点(SLV+PSLV 2023年底约608Moz)基本正确。',
+      quote:'',
+      sources:[{title:'Global Silver ETP Holdings Chart',author:'MiningVisuals',url:'https://www.miningvisuals.com/post/charted-the-growth-of-global-silver-etp-holdings-2016-2026'}]}]},
+
+  '21美元': {color:'🟡',claim:'2008年白银从21美元暴跌至9美元, 跌幅近60%',structured:true,
+    conclusion:'🟡 实际峰值约20.7$, 跌幅约57%, 报告四舍五入',
+    subclaims:[{text:'事实: 价格和跌幅',status:'🟡',
+      finding:'实际2008年3月峰值约$20.67-20.78, 10月底低点约$9.05。实际跌幅56-57%, 报告说"近60%"为四舍五入。',
+      quote:'',
+      sources:[{title:'Silver Price History March 2008',author:'Bullion-Rates.com',url:'https://www.bullion-rates.com/silver/USD/2008-3-history.htm'}]}]},
+
+  '4659': {color:'🟢',claim:'中国白银产量4659吨, 工业需求8567吨',structured:true,
+    conclusion:'🟢 CCTV等多源精确匹配',
+    subclaims:[{text:'事实: 中国产量和需求',status:'🟢',
+      finding:'央视经济频道、中新社等多家权威媒体报道完全一致: 矿产银3426吨+再生银1233吨=4659吨; 工业需求8567吨。',
+      quote:'',
+      sources:[{title:'2024年白银供需数据报道',author:'CCTV经济频道, 2025.10.20',url:'https://jingji.cctv.com/2025/10/20/ARTIN81qvFG5TZHB2OzBxocG251019.shtml'}]}]},
+
+  '出口许可证': {color:'🟡',claim:'2026.1.1起中国实施出口许可证审批制度',structured:true,
+    conclusion:'🟡 事实正确, 但是"继续"非新政(自2019年起已实施)',
+    subclaims:[{text:'事实: 政策是否存在?',status:'🟢',
+      finding:'商务部公告2025年第69号确认。但原文用"继续"——自2019年起已实施, 每年例行续期。',
+      quote:'',
+      sources:[{title:'商务部公告2025年第69号',author:'商务部, 2025.10.29',url:'https://www.mofcom.gov.cn/zcfb/dwmygl/art/2025/art_d939f5e193604b1aaf76aacc441a16f4.html'}]}]},
+};
+
+function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
+function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
+function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
+function getNodeColor(node) {
+  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
+  if (text.includes('常识')) return B;
+  if (text.includes('注:')) return B;
+  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
+  if (hasKids(node)) return B;
+  return Y;
+}
+
+const md = `
+# 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
+
+## 去美元化趋势下白银双重属性使其同时受益于金融和工业需求
+
+### 去美元化推动贵金属偏好超过美债
+- <span style="color:${BLUE};font-weight:bold">全球"去美元化"推进, 投资者对贵金属偏好似乎超过了美债</span><br>*(方正引用前期报告)*
+
+### 白银金融属性偏弱但工业属性更强
+- <span style="color:${BLUE};font-weight:bold">白银与黄金相关系数~80%, 工业需求占比超50%; 市场容量2.6万亿美元仅为黄金5.9万亿的44%</span><br>*(世界白银协会)*
+
+## 2021年起供需结构性缺口是白银上涨的基本面根基
+
+### 供需转折: 2021年起每年需求超过供给
+- <span style="color:${BLUE};font-weight:bold">2021年白银需求显著超过供应, 不考虑投资需求的供需缺口已近8千万盎司/年</span><br>*(世界白银协会)*
+
+#### 供给刚性: 矿产稳定但增长乏力
+
+##### 矿产银产量受限
+- <span style="color:${BLUE};font-weight:bold">全球白银总年产量稳定在3万吨左右; 2024年矿产银产量同比+0.9%至819.7百万盎司</span><br>*(世界白银协会)*
+
+##### 再生银增长但总量有限
+- <span style="color:${BLUE};font-weight:bold">2024年白银回收量同比增长6%, 达近12年最高值, 占总供应约20%</span><br>*(世界白银协会)*
+
+#### 需求端: 工业需求主导, ETF加剧紧张
+
+##### 工业需求占总需求58.5%, 光伏是最大增量
+- <span style="color:${BLUE};font-weight:bold">2024年工业白银需求占总需求58.5%, 珠宝17.9%, 实物投资16.4%; 光伏占需求总量17%</span><br>*(世界白银协会)*
+
+##### ETF增仓抽离实物加剧短缺
+- <span style="color:${BLUE};font-weight:bold">白银ETF持仓从6亿盎司攀升至7.5亿盎司以上, 期货溢价约7%</span><br>*(方正引用SLV/PSLV数据)*
+
+### 历史验证: 金银比三次极端高位后白银均跑赢
+- <span style="color:${BLUE};font-weight:bold">2000年以来金银比三次达到峰值(2003年82, 2008年80+, 2020年122), 每次后白银均强劲反弹</span><br>*(方正历史数据)*
+
+#### ⚠ 2008年警示: 极端流动性危机下白银先崩再涨
+- <span style="color:${BLUE};font-weight:bold">2008年次贷危机中金银比冲至80+, 但白银先从21美元暴跌至9美元(跌幅近60%), 之后才反弹</span><br>*(方正历史数据)*
+
+### 中国供给严重不足且出口管制加剧国际紧张
+- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量(矿产+再生)共4659吨, 工业需求单项8567吨; 2026.1.1起实施出口许可证</span><br>*(同花顺/方正; 商务部)*
+
+## 前瞻: 长期看多但短期需警惕深度回调
+
+### 长期: 工业需求刚性增长支撑银价
+- <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
+
+### 短期: 白银回调风险大于黄金
+- <span style="color:#008800;font-weight:bold">白银回调风险大于黄金, 短期波动需警惕; 1980年曾出现保证金提至100%或强制仅限平仓</span><br>*(方正分析; 历史案例)*
+
+### ⚠ 数据口径注意
+- <span style="color:#999">[注: 本报告工业需求占比在核心结论写"50-60%", 正文写"58.5%", 口径不完全一致]</span><br>*(编者注)*
+`;
+
+const { Transformer, Markmap } = window.markmap;
+const transformer = new Transformer();
+Markmap.create('#mm', { color: getNodeColor, colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 }, transformer.transform(md).root);
+
+function showWorkpaper(text) {
+  var decoded = decodeHtml(text.replace(/<[^>]*>/g,''));
+  var found = null;
+  for (var kw in workpapers) { if (decoded.includes(kw)) { found = workpapers[kw]; break; } }
+  var panel = document.getElementById('wpanel');
+  if (!found) { panel.style.display='none'; return; }
+  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">✕</span>';
+  if (found.structured) {
+    h += '<div class="wp-title">'+found.claim+'</div>';
+    h += '<div class="wp-verdict" style="padding:6px 8px;background:#f0f8f0;border-radius:4px">'+found.conclusion+'</div>';
+    found.subclaims.forEach(function(sc,i){
+      var bc = sc.status==='🟢'?G:sc.status==='🟡'?Y:R;
+      var did = 'sc'+i;
+      h += '<div style="margin-top:8px;border-left:3px solid '+bc+';border-radius:4px">';
+      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' ▼</div>';
+      h += '<div id="'+did+'" style="display:none;padding:6px 8px"><div class="wp-finding">'+sc.finding+'</div>';
+      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">• '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' — <i>'+s.author+'</i></div>'; });
+      h += '</div></div>';
+    });
+  }
+  panel.innerHTML = h; panel.style.display = 'block';
+}
+setTimeout(function(){ document.querySelectorAll('g.markmap-node').forEach(function(g){ g.style.cursor='pointer'; g.addEventListener('click',function(e){ var fo=g.querySelector('foreignObject'); if(fo)showWorkpaper(fo.innerHTML); e.stopPropagation(); }); }); },1500);
+</script>
+</body>
+</html>

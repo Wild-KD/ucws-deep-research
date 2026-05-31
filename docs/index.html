@@ -3,478 +3,321 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Investment Research Logic Engine</title>
+<title>Investment Research Logic Engine · KDLD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --paper: oklch(97% 0.006 75);
-  --surface: oklch(94.5% 0.006 75);
-  --border: oklch(89% 0.006 75);
-  --ink: oklch(18% 0.008 75);
-  --ink-2: oklch(38% 0.008 75);
-  --ink-3: oklch(55% 0.006 75);
-  --ink-4: oklch(68% 0.005 75);
-  --copper: oklch(52% 0.11 38);
-  --copper-dim: oklch(62% 0.06 38);
-  --v-green: oklch(48% 0.12 155);
-  --v-gold: oklch(58% 0.12 80);
-  --v-red: oklch(50% 0.14 25);
+  --bg: #141417;
+  --fg: #e8e8ed;
+  --card-bg: rgba(255,255,255,0.025);
+  --card-border: rgba(255,255,255,0.07);
+  --accent: #d4a76a;
+  --accent-dim: rgba(212,167,106,0.15);
+  --t2: #a1a1aa;
+  --t3: #71717a;
+  --t4: #52525b;
+  --t5: #3f3f46;
 }
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: var(--paper);
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--fg);
+  -webkit-font-smoothing:antialiased;
 }
+body::before{
+  content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);
+  width:80vw;height:50vh;
+  background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);
+  pointer-events:none;z-index:-1;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* ---- nav ---- */
+nav{padding:24px 0 16px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-bar{width:2px;height:28px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
+.brand-name{font-size:16px;font-weight:600;letter-spacing:0.02em}
+.brand-name em{font-style:normal;color:var(--accent)}
+.brand-sub{color:var(--t3);font-size:11px;margin-left:6px}
+nav a{font-size:11px;color:var(--t3);text-decoration:none;transition:color 0.15s}
+nav a:hover{color:var(--accent)}
 
 /* ---- hero ---- */
-.hero {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 72px 24px 48px;
+.hero{margin:80px 0 48px}
+.hero h1{
+  font-size:48px;font-weight:200;letter-spacing:-0.02em;line-height:1.15;
+  margin-bottom:20px;
 }
-.hero .kicker {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--copper);
-  margin-bottom: 16px;
-}
-.hero h1 {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  margin-bottom: 16px;
-}
-.hero h1 em {
-  font-style: normal;
-  color: var(--copper);
-}
-.hero .lede {
-  font-size: 16px;
-  line-height: 1.65;
-  color: var(--ink-2);
-  max-width: 560px;
-}
-.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero h1 strong{font-weight:200;color:var(--accent)}
+.hero .lede{font-size:15px;color:var(--t2);line-height:1.7;max-width:580px;margin-bottom:24px}
+.hero .lede b{color:var(--fg);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.tags span{font-size:11px;color:var(--t3);border:1px solid var(--t5);border-radius:999px;padding:4px 14px}
 
 /* ---- pipeline ---- */
-.pipeline-wrap {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  padding: 40px 24px;
+.section-label{
+  display:flex;align-items:center;gap:10px;margin-bottom:16px;
 }
-.pipeline-inner {
-  max-width: 880px;
-  margin: 0 auto;
+.section-label::before{content:'';width:24px;height:1px;background:var(--accent)}
+.section-label span{
+  font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3);
 }
-.pipeline-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 24px;
+.pipeline-bar{
+  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
+  padding:32px;margin-bottom:48px;
 }
-.steps {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0;
-  position: relative;
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.step{text-align:center}
+.step-n{
+  font-size:11px;font-weight:600;color:var(--t4);letter-spacing:0.05em;
+  margin-bottom:8px;
 }
-.steps::before {
-  content: '';
-  position: absolute;
-  top: 15px;
-  left: 40px;
-  right: 40px;
-  height: 1px;
-  background: var(--border);
+.step-zh{font-size:28px;font-weight:300;color:var(--fg);margin-bottom:2px;letter-spacing:0.05em}
+.step-en{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+.step-desc{font-size:11px;color:var(--t3);line-height:1.4}
+.step.hl .step-zh{color:var(--accent)}
+.step.hl .step-n{color:var(--accent)}
+.step-arrow{display:flex;align-items:center;justify-content:center;color:var(--t5);font-size:14px;margin-top:36px}
+
+/* connectors between steps */
+.step-row{display:flex;align-items:flex-start}
+.step-connector{
+  flex:0 0 16px;display:flex;align-items:center;justify-content:center;
+  padding-top:40px;color:var(--t5);font-size:13px;
 }
-.step {
-  text-align: center;
-  position: relative;
-}
-.step-dot {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--ink-3);
-  position: relative;
-  z-index: 1;
-  transition: border-color 0.2s, color 0.2s;
-}
-.step:hover .step-dot {
-  border-color: var(--copper);
-  color: var(--copper);
-}
-.step-zh {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 2px;
-}
-.step-en {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-4);
-  margin-bottom: 6px;
-}
-.step-desc {
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--ink-3);
-  padding: 0 2px;
-}
-.step.accent .step-dot {
-  border-color: var(--copper);
-  background: var(--copper);
-  color: var(--paper);
-}
-.step.accent .step-zh { color: var(--copper); }
 
 /* ---- principles ---- */
-.principles {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 48px 24px;
+.principles{margin-bottom:48px}
+.principle-list{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.principle{
+  padding:16px 20px;
+  border-bottom:1px solid var(--card-border);
 }
-.principles h2 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 20px;
-}
-.principle {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 8px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.principle:last-child { border-bottom: none; }
-.principle dt {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.principle dd {
-  font-size: 13px;
-  color: var(--ink-2);
-  line-height: 1.5;
-}
-.colors-inline {
-  display: inline-flex;
-  gap: 6px;
-  margin-left: 4px;
-  vertical-align: middle;
-}
-.colors-inline span {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 1px 7px;
-  border-radius: 3px;
-}
-.cg { background: oklch(94% 0.04 155); color: oklch(30% 0.08 155); }
-.cy { background: oklch(94% 0.04 80); color: oklch(38% 0.08 80); }
-.cr { background: oklch(94% 0.04 25); color: oklch(35% 0.1 25); }
-.ck { background: oklch(92% 0.005 75); color: oklch(35% 0.01 75); }
+.principle:nth-child(odd){border-right:1px solid var(--card-border)}
+.principle dt{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px}
+.principle dd{font-size:12px;color:var(--t3);line-height:1.55}
+.colors-row{display:inline-flex;gap:6px;margin-top:6px}
+.colors-row span{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px}
+.cg{background:rgba(0,154,68,0.12);color:#4ade80}
+.cy{background:rgba(212,168,67,0.12);color:#d4a843}
+.cr{background:rgba(204,0,0,0.12);color:#f87171}
+.ck{background:rgba(255,255,255,0.05);color:#71717a}
 
 /* ---- demo ---- */
-.demo {
-  border-top: 1px solid var(--border);
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 48px 24px;
+.demo{margin-bottom:48px}
+.demo h2{font-size:20px;font-weight:300;letter-spacing:-0.01em;margin-bottom:4px}
+.demo .demo-sub{font-size:12px;color:var(--t3);margin-bottom:24px}
+.demo-phase{margin-bottom:20px}
+.demo-phase h3{
+  font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--t4);
+  margin-bottom:10px;
 }
-.demo h2 {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 4px;
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.demo-link{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:8px;text-decoration:none;color:var(--fg);
+  border:1px solid var(--card-border);background:var(--card-bg);
+  transition:all 0.15s;
 }
-.demo .demo-sub {
-  font-size: 13px;
-  color: var(--ink-3);
-  margin-bottom: 28px;
+.demo-link:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.03)}
+.demo-link .ico{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(212,167,106,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--accent);flex-shrink:0;
 }
-.demo-phase {
-  margin-bottom: 24px;
-}
-.demo-phase h3 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-4);
-  margin-bottom: 10px;
-}
-.demo-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.demo-link {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  gap: 10px;
-  align-items: start;
-  padding: 12px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid transparent;
-  transition: background 0.15s, border-color 0.15s;
-}
-.demo-link:hover {
-  background: var(--surface);
-  border-color: var(--border);
-}
-.demo-link .glyph {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  background: var(--surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.demo-link h4 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-.demo-link p {
-  font-size: 11px;
-  color: var(--ink-3);
-  line-height: 1.35;
-}
+.demo-link h4{font-size:13px;font-weight:500;margin-bottom:2px}
+.demo-link p{font-size:11px;color:var(--t3);line-height:1.35}
 
 /* ---- arch ---- */
-.arch {
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  padding: 40px 24px;
+.arch{
+  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
+  padding:24px 28px;margin-bottom:48px;
 }
-.arch-inner {
-  max-width: 680px;
-  margin: 0 auto;
-}
-.arch-inner h2 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 16px;
-}
-.arch-inner pre {
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--ink-2);
-  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
-  overflow-x: auto;
+.arch pre{
+  font-size:12px;line-height:1.55;color:var(--t2);
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  overflow-x:auto;
 }
 
-/* ---- reports ---- */
-.reports {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  border-top: 1px solid var(--border);
+/* ---- reports table ---- */
+.reports{margin-bottom:48px}
+.reports table{width:100%;border-collapse:collapse;font-size:12px}
+.reports th{
+  text-align:left;font-weight:600;color:var(--t3);font-size:10px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 10px;border-bottom:1px solid var(--card-border);
+  background:rgba(212,167,106,0.06);
 }
-.reports h2 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 14px;
-}
-.reports table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-.reports th {
-  text-align: left;
-  font-weight: 600;
-  color: var(--ink-3);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--border);
-}
-.reports td {
-  padding: 8px;
-  color: var(--ink-2);
-  border-bottom: 1px solid oklch(93% 0.004 75);
-}
-.reports td:first-child { color: var(--ink); font-weight: 500; }
+.reports td{padding:10px;color:var(--t2);border-bottom:1px solid var(--card-border)}
+.reports td:first-child{color:var(--fg);font-weight:500}
+.reports tr:hover td{background:rgba(255,255,255,0.015)}
 
 /* ---- footer ---- */
-.footer {
-  border-top: 1px solid var(--border);
-  padding: 32px 24px;
-  text-align: center;
+footer{
+  border-top:1px solid var(--card-border);
+  padding:32px 0;text-align:center;margin-top:16px;
 }
-.footer p {
-  font-size: 12px;
-  color: var(--ink-4);
-  margin-bottom: 4px;
+footer p{font-size:11px;color:var(--t4);margin-bottom:4px;letter-spacing:0.04em}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer .quote{
+  font-size:11px;color:var(--t4);font-style:italic;
+  margin-top:12px;display:inline-block;max-width:520px;line-height:1.5;
 }
-.footer a {
-  color: var(--copper);
-  text-decoration: none;
-}
-.footer a:hover { text-decoration: underline; }
-.footer .quote {
-  font-size: 11px;
-  color: var(--ink-4);
-  font-style: italic;
-  margin-top: 12px;
-  max-width: 520px;
-  display: inline-block;
-  line-height: 1.5;
+
+@media(max-width:768px){
+  .hero h1{font-size:28px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
+  .principle-list{grid-template-columns:1fr}
+  .principle{border-right:none !important}
+  .demo-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
+<div class="wrap">
+
+<nav>
+  <div class="brand">
+    <div class="brand-bar"></div>
+    <span class="brand-name">Research<em>Engine</em></span>
+    <span class="brand-sub">by KDLD</span>
+  </div>
+  <a href="https://github.com/Wild-KD/investment-research-engine" target="_blank">GitHub ↗</a>
+</nav>
+
 <div class="hero">
-  <div class="kicker">UCWS Singapore 2026 · MiroMind Deep Research</div>
-  <h1>The investment thesis <em>auditor</em></h1>
+  <h1>投资论点的<br><strong>逻辑审计引擎</strong></h1>
   <p class="lede">
-    Every financial AI generates research. This one <strong>checks it</strong>.
-    It decomposes reports into falsifiable claims, verifies each against primary sources,
-    and recompiles them into a transparent thesis you can audit.
+    所有金融AI都在<b>生成</b>研究报告。这个Agent<b>审计</b>它们。
+    它将研报拆解为可证伪的声明树，对每个数据点独立溯源验证，
+    再编译为一份你可以逐条审查的透明论点。
   </p>
+  <div class="tags">
+    <span>Multi-Agent 并发验证</span>
+    <span>四色染色体系</span>
+    <span>反幻觉规则</span>
+    <span>金字塔 MECE</span>
+    <span>验证时点原则</span>
+  </div>
 </div>
 
-<div class="pipeline-wrap">
-  <div class="pipeline-inner">
-    <div class="pipeline-label">Six-step audit pipeline</div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-dot">1</div>
-        <div class="step-zh">搜</div>
-        <div class="step-en">Search</div>
-        <div class="step-desc">3+ reports, diverse paradigms</div>
-      </div>
-      <div class="step">
-        <div class="step-dot">2</div>
-        <div class="step-zh">读</div>
-        <div class="step-en">Decompose</div>
-        <div class="step-desc">Minto pyramid, logic reorg</div>
-      </div>
-      <div class="step accent">
-        <div class="step-dot">3</div>
-        <div class="step-zh">审</div>
-        <div class="step-en">Verify</div>
-        <div class="step-desc">Multi-agent fan-out, 4-color coding</div>
-      </div>
-      <div class="step">
-        <div class="step-dot">4</div>
-        <div class="step-zh">合</div>
-        <div class="step-en">Merge</div>
-        <div class="step-desc">Storyteller consensus tree</div>
-      </div>
-      <div class="step">
-        <div class="step-dot">5</div>
-        <div class="step-zh">图</div>
-        <div class="step-en">Visualize</div>
-        <div class="step-desc">Interactive markmap</div>
-      </div>
-      <div class="step">
-        <div class="step-dot">6</div>
-        <div class="step-zh">讲</div>
-        <div class="step-en">Dashboard</div>
-        <div class="step-desc">Forward monitoring</div>
-      </div>
+<div class="section-label"><span>Six-Step Audit Pipeline</span></div>
+<div class="pipeline-bar">
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">01</div>
+      <div class="step-zh">搜</div>
+      <div class="step-en">Search</div>
+      <div class="step-desc">3+ reports from diverse paradigms</div>
+    </div>
+    <div class="step">
+      <div class="step-n">02</div>
+      <div class="step-zh">读</div>
+      <div class="step-en">Decompose</div>
+      <div class="step-desc">Minto pyramid + logic reorganization</div>
+    </div>
+    <div class="step hl">
+      <div class="step-n">03</div>
+      <div class="step-zh">审</div>
+      <div class="step-en">Verify</div>
+      <div class="step-desc">Multi-agent fan-out, 4-color coding</div>
+    </div>
+    <div class="step">
+      <div class="step-n">04</div>
+      <div class="step-zh">合</div>
+      <div class="step-en">Merge</div>
+      <div class="step-desc">Storyteller consensus tree</div>
+    </div>
+    <div class="step">
+      <div class="step-n">05</div>
+      <div class="step-zh">图</div>
+      <div class="step-en">Visualize</div>
+      <div class="step-desc">Interactive markmap</div>
+    </div>
+    <div class="step">
+      <div class="step-n">06</div>
+      <div class="step-zh">讲</div>
+      <div class="step-en">Dashboard</div>
+      <div class="step-desc">Forward monitoring</div>
     </div>
   </div>
 </div>
 
+<div class="section-label"><span>Design Principles</span></div>
 <div class="principles">
-  <h2>Design principles</h2>
-  <dl>
+  <dl class="principle-list">
     <div class="principle">
-      <dt>4-color verification</dt>
-      <dd>Every data point earns a trust signal.
-        <span class="colors-inline">
+      <dt>4-Color Verification 四色验证</dt>
+      <dd>Every data point earns a trust signal from independent source verification.
+        <div class="colors-row">
           <span class="cg">Verified</span>
           <span class="cy">Unverified</span>
           <span class="cr">Conflict</span>
           <span class="ck">Structural</span>
-        </span>
+        </div>
       </dd>
     </div>
     <div class="principle">
-      <dt>Anti-hallucination</dt>
-      <dd>Decompose step uses only data explicitly in the report. No self-calculation, no unit conversion, no cross-source splicing. Every data point carries a page number.</dd>
+      <dt>Anti-Hallucination 反幻觉</dt>
+      <dd>Decompose step uses only data in the original report. No self-calculation, no unit conversion, no cross-source splicing. Every data point carries a page number.</dd>
     </div>
     <div class="principle">
-      <dt>Multi-agent fan-out</dt>
-      <dd>Step 3 spawns one sub-agent per data node and causal edge: 19 concurrent verification agents for a 45-page report, each searching independently.</dd>
+      <dt>Multi-Agent Fan-out 多Agent扇出</dt>
+      <dd>Step 3 spawns one sub-agent per data node and causal edge: 19 concurrent verification agents for a 45-page report.</dd>
     </div>
     <div class="principle">
-      <dt>Verification time-point</dt>
-      <dd>Data verified against what was true at report publication date, not today. "Expectations changed" is an update, not an error.</dd>
+      <dt>Verification Time-point 验证时点</dt>
+      <dd>Data is verified against what was true at report publication date, not today. "Expectations changed" is an update, not an error.</dd>
     </div>
     <div class="principle">
-      <dt>Storyteller merging</dt>
-      <dd>Before merging, determine the story: WHY, HOW, CONTEXT, RISK. "Does it contribute to the story?" outranks "Is it correct?"</dd>
+      <dt>Storyteller Merging 叙事合并</dt>
+      <dd>Before merging, determine the story: WHY / HOW / CONTEXT / RISK. "Does it contribute to the story?" outranks "Is it correct?"</dd>
+    </div>
+    <div class="principle">
+      <dt>Skills as Prompts 技能即提示</dt>
+      <dd>Reasoning logic lives in readable Markdown Skill files, not buried in Python code. Judges can read the agent's thinking process directly.</dd>
     </div>
   </dl>
 </div>
 
+<div class="section-label"><span>Live Demo · Silver Case Study</span></div>
 <div class="demo">
-  <h2>Silver case study</h2>
+  <h2>白银投资论点审计</h2>
   <p class="demo-sub">3 Chinese research reports (81 pages) audited through the full pipeline</p>
 
   <div class="demo-phase">
     <h3>Per-report decomposition + verification</h3>
-    <div class="demo-list">
+    <div class="demo-grid">
       <a class="demo-link" href="markmap_guotai.html">
-        <div class="glyph">&#9650;</div>
-        <div><h4>国泰君安 · Pyramid</h4><p>45 pages, futures outlook, original + reorganized</p></div>
+        <div class="ico">△</div>
+        <div><h4>国泰君安 · Pyramid</h4><p>45 pages · futures outlook · original + reorganized</p></div>
       </a>
       <a class="demo-link" href="verify_guotai.html">
-        <div class="glyph">&#10003;</div>
-        <div><h4>国泰君安 · Verification</h4><p>19 sub-agents, clickable workpapers, 4-color</p></div>
+        <div class="ico">✓</div>
+        <div><h4>国泰君安 · Verification</h4><p>19 sub-agents · clickable workpapers · 4-color</p></div>
       </a>
       <a class="demo-link" href="markmap_galaxy.html">
-        <div class="glyph">&#9650;</div>
-        <div><h4>银河证券 · Pyramid</h4><p>13 pages, macro weekly, financial attributes</p></div>
+        <div class="ico">△</div>
+        <div><h4>银河证券 · Pyramid</h4><p>13 pages · macro weekly · financial attributes</p></div>
       </a>
       <a class="demo-link" href="verify_galaxy.html">
-        <div class="glyph">&#10003;</div>
-        <div><h4>银河证券 · Verification</h4><p>Multi-agent verified, source URLs, audit trail</p></div>
+        <div class="ico">✓</div>
+        <div><h4>银河证券 · Verification</h4><p>Multi-agent verified · source URLs · audit trail</p></div>
       </a>
       <a class="demo-link" href="markmap_founder.html">
-        <div class="glyph">&#9650;</div>
-        <div><h4>方正证券 · Pyramid</h4><p>23 pages, supply-demand + historical review</p></div>
+        <div class="ico">△</div>
+        <div><h4>方正证券 · Pyramid</h4><p>23 pages · supply-demand + historical review</p></div>
       </a>
       <a class="demo-link" href="verify_founder.html">
-        <div class="glyph">&#10003;</div>
+        <div class="ico">✓</div>
         <div><h4>方正证券 · Verification</h4><p>Data nodes + causal edges verified independently</p></div>
       </a>
     </div>
@@ -482,56 +325,55 @@ body {
 
   <div class="demo-phase">
     <h3>Cross-report synthesis</h3>
-    <div class="demo-list">
+    <div class="demo-grid">
       <a class="demo-link" href="merged.html">
-        <div class="glyph">&#9670;</div>
-        <div><h4>Merged consensus tree</h4><p>WHY / HOW / CONTEXT / RISK, complete supply-demand data chain</p></div>
+        <div class="ico">◆</div>
+        <div><h4>Merged Consensus Tree</h4><p>WHY / HOW / CONTEXT / RISK · supply-demand data chain</p></div>
       </a>
       <a class="demo-link" href="dashboard.html">
-        <div class="glyph">&#9632;</div>
-        <div><h4>Forward monitoring dashboard</h4><p>Supply-demand / spot / macro, Chart.js, YTD + anomaly analysis</p></div>
+        <div class="ico">▦</div>
+        <div><h4>Forward Monitoring Dashboard</h4><p>Supply-demand / spot / macro · YTD + anomaly analysis</p></div>
       </a>
     </div>
   </div>
 </div>
 
+<div class="section-label"><span>Architecture</span></div>
 <div class="arch">
-  <div class="arch-inner">
-    <h2>Architecture</h2>
 <pre>
 Topic + Reports
       |
-      v
- Orchestrator Agent
- |                                          |
- |  1 Search -> 2 Decompose -> 3 Verify    |
- |                (xN)          | fan-out   |
- |                           [V1 V2 .. VN]  |
- |                              |           |
- |       4 Merge -> 5 Visualize -> 6 Dashboard
- |                                          |
+  Orchestrator Agent (research-pipeline.md)
       |
-      v
- Interactive HTML outputs
+  01 Search ─→ 02 Decompose ─→ 03 Verify ─→ 04 Merge
+                  (×N reports)     | fan-out
+                               [V1 V2 .. VN]
+                                   |
+                        05 Visualize ─→ 06 Dashboard
+      |
+  Interactive HTML Outputs (markmap + verification maps + dashboard)
 </pre>
-  </div>
 </div>
 
+<div class="section-label"><span>Input Reports · Silver Case</span></div>
 <div class="reports">
-  <h2>Input reports (silver case)</h2>
   <table>
     <tr><th>Report</th><th>Source</th><th>Date</th><th>Pages</th><th>Lens</th></tr>
-    <tr><td>贵金属期货行情展望</td><td>国泰君安期货</td><td>2025-12-23</td><td>45</td><td>Futures outlook</td></tr>
-    <tr><td>大类资产新视角(三)</td><td>方正证券</td><td>2026-01-23</td><td>23</td><td>Supply-demand + history</td></tr>
-    <tr><td>全球大类资产配置周报</td><td>中国银河证券</td><td>2026-01-16</td><td>13</td><td>Macro, financial attributes</td></tr>
+    <tr><td>贵金属期货行情展望</td><td>国泰君安期货</td><td>2025-12-23</td><td>45</td><td>Futures outlook, most detailed</td></tr>
+    <tr><td>大类资产新视角(三)</td><td>方正证券</td><td>2026-01-23</td><td>23</td><td>Supply-demand + historical review</td></tr>
+    <tr><td>全球大类资产配置周报</td><td>中国银河证券</td><td>2026-01-16</td><td>13</td><td>Macro weekly, financial attributes</td></tr>
   </table>
 </div>
 
-<div class="footer">
-  <p><strong>Team KDLD</strong> · UCWS Singapore 2026 · MiroMind Deep Research Special Track</p>
-  <p>Built with Claude + MiroMind API · <a href="https://github.com/Wild-KD/investment-research-engine">Source code</a></p>
-  <span class="quote">"You don't need to trust this agent. You just need to see what it checked, what it found, and what it couldn't verify."</span>
 </div>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Team KDLD</strong> · UCWS Singapore 2026 · MiroMind Deep Research Special Track</p>
+    <p>Built with Claude + MiroMind API · <a href="https://github.com/Wild-KD/investment-research-engine">Source Code</a></p>
+    <span class="quote">"You don't need to trust this agent. You just need to see what it checked, what it found, and what it couldn't verify."</span>
+  </div>
+</footer>
 
 </body>
 </html>

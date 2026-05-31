@@ -1,181 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Investment Research Logic Engine · KDLD</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Research Engine · 投资研报逻辑审计</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #141417;
-  --fg: #e8e8ed;
-  --card-bg: rgba(255,255,255,0.025);
-  --card-border: rgba(255,255,255,0.07);
-  --accent: #d4a76a;
-  --accent-dim: rgba(212,167,106,0.15);
-  --t2: #a1a1aa;
-  --t3: #71717a;
-  --t4: #52525b;
-  --t5: #3f3f46;
+:root{
+  --bg:#141417;--fg:#e8e8ed;
+  --card-bg:rgba(255,255,255,0.025);--card-border:rgba(255,255,255,0.07);
+  --accent:#d4a76a;--accent-dim:rgba(212,167,106,0.15);
+  --t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--t5:#3f3f46;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  background:var(--bg);color:var(--fg);
-  -webkit-font-smoothing:antialiased;
-}
-body::before{
-  content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);
-  width:80vw;height:50vh;
-  background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);
-  pointer-events:none;z-index:-1;
-}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
 
-.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
 
-/* ---- nav ---- */
-nav{padding:24px 0 16px;display:flex;align-items:center;justify-content:space-between}
+/* nav */
+nav{padding:24px 0 16px;display:flex;align-items:center}
 .brand{display:flex;align-items:center;gap:10px}
-.brand-bar{width:2px;height:28px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
-.brand-name{font-size:16px;font-weight:600;letter-spacing:0.02em}
+.brand-bar{width:2px;height:24px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
+.brand-name{font-size:15px;font-weight:600}
 .brand-name em{font-style:normal;color:var(--accent)}
-.brand-sub{color:var(--t3);font-size:11px;margin-left:6px}
-nav a{font-size:11px;color:var(--t3);text-decoration:none;transition:color 0.15s}
-nav a:hover{color:var(--accent)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.nav-right a{font-size:11px;color:var(--t3);text-decoration:none;transition:color 0.15s}
+.nav-right a:hover{color:var(--accent)}
 
-/* ---- hero ---- */
-.hero{margin:80px 0 48px}
-.hero h1{
-  font-size:48px;font-weight:200;letter-spacing:-0.02em;line-height:1.15;
-  margin-bottom:20px;
-}
+/* hero */
+.hero{margin:72px 0 40px;max-width:600px}
+.hero h1{font-size:42px;font-weight:200;letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
 .hero h1 strong{font-weight:200;color:var(--accent)}
-.hero .lede{font-size:15px;color:var(--t2);line-height:1.7;max-width:580px;margin-bottom:24px}
-.hero .lede b{color:var(--fg);font-weight:500}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
-.tags span{font-size:11px;color:var(--t3);border:1px solid var(--t5);border-radius:999px;padding:4px 14px}
+.hero .sub{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:28px}
+.hero .sub b{color:var(--fg);font-weight:500}
 
-/* ---- pipeline ---- */
-.section-label{
-  display:flex;align-items:center;gap:10px;margin-bottom:16px;
-}
-.section-label::before{content:'';width:24px;height:1px;background:var(--accent)}
-.section-label span{
-  font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3);
-}
-.pipeline-bar{
+/* input card */
+.input-card{
   border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
-  padding:32px;margin-bottom:48px;
+  padding:28px;margin-bottom:48px;
 }
-.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
-.step{text-align:center}
-.step-n{
-  font-size:11px;font-weight:600;color:var(--t4);letter-spacing:0.05em;
-  margin-bottom:8px;
+.input-card label{
+  display:block;font-size:11px;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--t3);margin-bottom:10px;
 }
-.step-zh{font-size:28px;font-weight:300;color:var(--fg);margin-bottom:2px;letter-spacing:0.05em}
-.step-en{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
-.step-desc{font-size:11px;color:var(--t3);line-height:1.4}
-.step.hl .step-zh{color:var(--accent)}
-.step.hl .step-n{color:var(--accent)}
-.step-arrow{display:flex;align-items:center;justify-content:center;color:var(--t5);font-size:14px;margin-top:36px}
+.input-row{display:flex;gap:12px;align-items:center}
+.input-field{
+  flex:1;background:transparent;border:none;border-bottom:1px solid var(--card-border);
+  color:var(--fg);font-size:18px;font-weight:300;padding:8px 0;outline:none;
+  font-family:inherit;transition:border-color 0.2s;
+}
+.input-field:focus{border-bottom-color:var(--accent)}
+.input-field::placeholder{color:var(--t4)}
+.start-btn{
+  padding:10px 24px;background:var(--accent);color:#000;font-size:13px;font-weight:500;
+  border:none;border-radius:4px;cursor:pointer;font-family:inherit;
+  letter-spacing:0.02em;transition:background 0.15s;white-space:nowrap;
+}
+.start-btn:hover{background:#dfb97e}
+.input-hint{font-size:11px;color:var(--t4);margin-top:10px}
 
-/* connectors between steps */
-.step-row{display:flex;align-items:flex-start}
-.step-connector{
-  flex:0 0 16px;display:flex;align-items:center;justify-content:center;
-  padding-top:40px;color:var(--t5);font-size:13px;
+/* flow steps */
+.flow{display:flex;gap:0;margin-top:20px;align-items:flex-start}
+.flow-step{flex:1;text-align:center;position:relative}
+.flow-step .num{
+  font-size:10px;font-weight:600;color:var(--t4);letter-spacing:0.05em;margin-bottom:4px;
 }
+.flow-step .label{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px}
+.flow-step .desc{font-size:10px;color:var(--t4);line-height:1.4}
+.flow-arrow{flex:0 0 20px;display:flex;align-items:center;justify-content:center;color:var(--t5);font-size:11px;padding-top:14px}
 
-/* ---- principles ---- */
-.principles{margin-bottom:48px}
-.principle-list{display:grid;grid-template-columns:1fr 1fr;gap:0}
-.principle{
-  padding:16px 20px;
-  border-bottom:1px solid var(--card-border);
+/* section divider */
+.divider{
+  display:flex;align-items:center;gap:10px;margin:48px 0 20px;
 }
-.principle:nth-child(odd){border-right:1px solid var(--card-border)}
-.principle dt{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px}
-.principle dd{font-size:12px;color:var(--t3);line-height:1.55}
-.colors-row{display:inline-flex;gap:6px;margin-top:6px}
-.colors-row span{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px}
-.cg{background:rgba(0,154,68,0.12);color:#4ade80}
-.cy{background:rgba(212,168,67,0.12);color:#d4a843}
-.cr{background:rgba(204,0,0,0.12);color:#f87171}
-.ck{background:rgba(255,255,255,0.05);color:#71717a}
+.divider::before{content:'';width:24px;height:1px;background:var(--accent)}
+.divider span{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3)}
 
-/* ---- demo ---- */
-.demo{margin-bottom:48px}
-.demo h2{font-size:20px;font-weight:300;letter-spacing:-0.01em;margin-bottom:4px}
-.demo .demo-sub{font-size:12px;color:var(--t3);margin-bottom:24px}
-.demo-phase{margin-bottom:20px}
-.demo-phase h3{
-  font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--t4);
-  margin-bottom:10px;
-}
-.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* demo grid */
+.demo-intro{font-size:13px;color:var(--t3);margin-bottom:20px;line-height:1.6}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .demo-link{
   display:flex;align-items:center;gap:12px;
   padding:14px 16px;border-radius:8px;text-decoration:none;color:var(--fg);
-  border:1px solid var(--card-border);background:var(--card-bg);
-  transition:all 0.15s;
+  border:1px solid var(--card-border);background:var(--card-bg);transition:all 0.15s;
 }
 .demo-link:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.03)}
 .demo-link .ico{
-  width:36px;height:36px;border-radius:8px;
-  background:rgba(212,167,106,0.08);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--accent);flex-shrink:0;
+  width:32px;height:32px;border-radius:6px;background:rgba(212,167,106,0.08);
+  display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--accent);flex-shrink:0;
 }
-.demo-link h4{font-size:13px;font-weight:500;margin-bottom:2px}
-.demo-link p{font-size:11px;color:var(--t3);line-height:1.35}
+.demo-link h4{font-size:12px;font-weight:500;margin-bottom:1px}
+.demo-link p{font-size:10px;color:var(--t3);line-height:1.3}
+.demo-group-label{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin:16px 0 8px}
 
-/* ---- arch ---- */
-.arch{
-  border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
-  padding:24px 28px;margin-bottom:48px;
+/* pipeline detail (collapsed by default) */
+.pipeline-toggle{
+  font-size:11px;color:var(--accent);cursor:pointer;border:none;background:none;
+  font-family:inherit;padding:0;margin-top:20px;transition:color 0.15s;
 }
-.arch pre{
-  font-size:12px;line-height:1.55;color:var(--t2);
-  font-family:'JetBrains Mono',ui-monospace,monospace;
-  overflow-x:auto;
-}
+.pipeline-toggle:hover{color:#dfb97e}
+.pipeline-detail{display:none;margin-top:16px}
+.pipeline-detail.open{display:block}
+.pipeline-table{width:100%;border-collapse:collapse;font-size:11px}
+.pipeline-table th{text-align:left;color:var(--t3);font-weight:600;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--card-border)}
+.pipeline-table td{padding:8px;color:var(--t2);border-bottom:1px solid rgba(255,255,255,0.03)}
+.pipeline-table td:first-child{color:var(--fg);font-weight:500;white-space:nowrap}
+.pipeline-table .hl{color:var(--accent)}
 
-/* ---- reports table ---- */
-.reports{margin-bottom:48px}
-.reports table{width:100%;border-collapse:collapse;font-size:12px}
-.reports th{
-  text-align:left;font-weight:600;color:var(--t3);font-size:10px;
-  letter-spacing:0.06em;text-transform:uppercase;
-  padding:8px 10px;border-bottom:1px solid var(--card-border);
-  background:rgba(212,167,106,0.06);
-}
-.reports td{padding:10px;color:var(--t2);border-bottom:1px solid var(--card-border)}
-.reports td:first-child{color:var(--fg);font-weight:500}
-.reports tr:hover td{background:rgba(255,255,255,0.015)}
-
-/* ---- footer ---- */
-footer{
-  border-top:1px solid var(--card-border);
-  padding:32px 0;text-align:center;margin-top:16px;
-}
-footer p{font-size:11px;color:var(--t4);margin-bottom:4px;letter-spacing:0.04em}
+/* footer */
+footer{border-top:1px solid var(--card-border);padding:28px 0;text-align:center;margin-top:48px}
+footer p{font-size:11px;color:var(--t4);margin-bottom:3px}
 footer a{color:var(--accent);text-decoration:none}
 footer a:hover{text-decoration:underline}
-footer .quote{
-  font-size:11px;color:var(--t4);font-style:italic;
-  margin-top:12px;display:inline-block;max-width:520px;line-height:1.5;
-}
 
-@media(max-width:768px){
+@media(max-width:640px){
   .hero h1{font-size:28px}
-  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
-  .principle-list{grid-template-columns:1fr}
-  .principle{border-right:none !important}
+  .input-row{flex-direction:column}
+  .start-btn{width:100%}
+  .flow{flex-wrap:wrap;gap:8px}
+  .flow-arrow{display:none}
   .demo-grid{grid-template-columns:1fr}
 }
 </style>
@@ -188,184 +132,73 @@ footer .quote{
   <div class="brand">
     <div class="brand-bar"></div>
     <span class="brand-name">Research<em>Engine</em></span>
-    <span class="brand-sub">by KDLD</span>
   </div>
-  <a href="https://github.com/Wild-KD/investment-research-engine" target="_blank">GitHub ↗</a>
+  <div class="nav-right">
+    <a href="https://www.askmbb.com" target="_blank">AskMBB</a>
+    <a href="https://github.com/Wild-KD/ucws-deep-research" target="_blank">GitHub</a>
+  </div>
 </nav>
 
 <div class="hero">
-  <h1>投资论点的<br><strong>逻辑审计引擎</strong></h1>
-  <p class="lede">
-    所有金融AI都在<b>生成</b>研究报告。这个Agent<b>审计</b>它们。
-    它将研报拆解为可证伪的声明树，对每个数据点独立溯源验证，
-    再编译为一份你可以逐条审查的透明论点。
+  <h1>投资研报<br><strong>逻辑审计</strong></h1>
+  <p class="sub">
+    上传研报，AI 自动<b>拆解论点</b>、<b>验证数据</b>、<b>合并结论</b>、生成可审查的交互式知识图谱。
   </p>
-  <div class="tags">
-    <span>Multi-Agent 并发验证</span>
-    <span>四色染色体系</span>
-    <span>反幻觉规则</span>
-    <span>金字塔 MECE</span>
-    <span>验证时点原则</span>
-  </div>
-  <div style="display:flex;gap:12px;margin-top:8px">
-    <a href="app.html" style="display:inline-block;padding:12px 28px;background:#d4a76a;color:#000;font-size:14px;font-weight:500;text-decoration:none;border-radius:4px;letter-spacing:0.02em;transition:background 0.15s">开始审计 Start Audit →</a>
-    <a href="#demo-section" style="display:inline-block;padding:12px 28px;border:1px solid rgba(255,255,255,0.1);color:#a1a1aa;font-size:14px;font-weight:400;text-decoration:none;border-radius:4px;transition:all 0.15s">查看 Demo</a>
-  </div>
 </div>
 
-<div class="section-label"><span>Six-Step Audit Pipeline</span></div>
-<div class="pipeline-bar">
-  <div class="steps">
-    <div class="step">
-      <div class="step-n">01</div>
-      <div class="step-zh">搜</div>
-      <div class="step-en">Search</div>
-      <div class="step-desc">3+ reports from diverse paradigms</div>
-    </div>
-    <div class="step">
-      <div class="step-n">02</div>
-      <div class="step-zh">读</div>
-      <div class="step-en">Decompose</div>
-      <div class="step-desc">Minto pyramid + logic reorganization</div>
-    </div>
-    <div class="step hl">
-      <div class="step-n">03</div>
-      <div class="step-zh">审</div>
-      <div class="step-en">Verify</div>
-      <div class="step-desc">Multi-agent fan-out, 4-color coding</div>
-    </div>
-    <div class="step">
-      <div class="step-n">04</div>
-      <div class="step-zh">合</div>
-      <div class="step-en">Merge</div>
-      <div class="step-desc">Storyteller consensus tree</div>
-    </div>
-    <div class="step">
-      <div class="step-n">05</div>
-      <div class="step-zh">图</div>
-      <div class="step-en">Visualize</div>
-      <div class="step-desc">Interactive markmap</div>
-    </div>
-    <div class="step">
-      <div class="step-n">06</div>
-      <div class="step-zh">讲</div>
-      <div class="step-en">Dashboard</div>
-      <div class="step-desc">Forward monitoring</div>
-    </div>
+<!-- Main input -->
+<div class="input-card">
+  <label>研究标的 / Topic</label>
+  <div class="input-row">
+    <input type="text" class="input-field" id="topicInput" placeholder="例如：白银、特斯拉、光伏产业链...">
+    <a href="app.html" class="start-btn" id="startBtn">开始审计</a>
+  </div>
+  <div class="input-hint">输入标的后跳转审计页面，支持上传PDF研报或由AI自动搜索</div>
+
+  <div class="flow">
+    <div class="flow-step"><div class="num">01</div><div class="label">上传研报</div><div class="desc">PDF 或 AI 搜索</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="num">02</div><div class="label">拆解论点</div><div class="desc">金字塔 + MECE</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="num">03</div><div class="label">验证数据</div><div class="desc">多Agent并发</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="num">04</div><div class="label">合并结论</div><div class="desc">共识树</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><div class="num">05</div><div class="label">生成图谱</div><div class="desc">markmap</div></div>
   </div>
 </div>
 
-<div class="section-label"><span>Design Principles</span></div>
-<div class="principles">
-  <dl class="principle-list">
-    <div class="principle">
-      <dt>4-Color Verification 四色验证</dt>
-      <dd>Every data point earns a trust signal from independent source verification.
-        <div class="colors-row">
-          <span class="cg">Verified</span>
-          <span class="cy">Unverified</span>
-          <span class="cr">Conflict</span>
-          <span class="ck">Structural</span>
-        </div>
-      </dd>
-    </div>
-    <div class="principle">
-      <dt>Anti-Hallucination 反幻觉</dt>
-      <dd>Decompose step uses only data in the original report. No self-calculation, no unit conversion, no cross-source splicing. Every data point carries a page number.</dd>
-    </div>
-    <div class="principle">
-      <dt>Multi-Agent Fan-out 多Agent扇出</dt>
-      <dd>Step 3 spawns one sub-agent per data node and causal edge: 19 concurrent verification agents for a 45-page report.</dd>
-    </div>
-    <div class="principle">
-      <dt>Verification Time-point 验证时点</dt>
-      <dd>Data is verified against what was true at report publication date, not today. "Expectations changed" is an update, not an error.</dd>
-    </div>
-    <div class="principle">
-      <dt>Storyteller Merging 叙事合并</dt>
-      <dd>Before merging, determine the story: WHY / HOW / CONTEXT / RISK. "Does it contribute to the story?" outranks "Is it correct?"</dd>
-    </div>
-    <div class="principle">
-      <dt>Skills as Prompts 技能即提示</dt>
-      <dd>Reasoning logic lives in readable Markdown Skill files, not buried in Python code. Judges can read the agent's thinking process directly.</dd>
-    </div>
-  </dl>
+<!-- Demo section -->
+<div class="divider"><span>Demo · 白银投资论点审计</span></div>
+<p class="demo-intro">3 篇中国券商研报（共 81 页）完整跑通六步管线的产出。点击查看交互式结果。</p>
+
+<div class="demo-group-label">单报告拆解 + 验证</div>
+<div class="demo-grid">
+  <a class="demo-link" href="markmap_guotai.html"><div class="ico">△</div><div><h4>国泰君安 · 金字塔</h4><p>45页 · 期货展望 · 原文+重组</p></div></a>
+  <a class="demo-link" href="verify_guotai.html"><div class="ico">✓</div><div><h4>国泰君安 · 验证图</h4><p>19个子Agent · 四色染色 · 可点击底稿</p></div></a>
+  <a class="demo-link" href="markmap_galaxy.html"><div class="ico">△</div><div><h4>银河证券 · 金字塔</h4><p>13页 · 宏观周报</p></div></a>
+  <a class="demo-link" href="verify_galaxy.html"><div class="ico">✓</div><div><h4>银河证券 · 验证图</h4><p>数据+逻辑独立验证</p></div></a>
+  <a class="demo-link" href="markmap_founder.html"><div class="ico">△</div><div><h4>方正证券 · 金字塔</h4><p>23页 · 供需+历史复盘</p></div></a>
+  <a class="demo-link" href="verify_founder.html"><div class="ico">✓</div><div><h4>方正证券 · 验证图</h4><p>数据节点+因果边验证</p></div></a>
 </div>
 
-<div class="section-label" id="demo-section"><span>Live Demo · Silver Case Study</span></div>
-<div class="demo">
-  <h2>白银投资论点审计</h2>
-  <p class="demo-sub">3 Chinese research reports (81 pages) audited through the full pipeline</p>
-
-  <div class="demo-phase">
-    <h3>Per-report decomposition + verification</h3>
-    <div class="demo-grid">
-      <a class="demo-link" href="markmap_guotai.html">
-        <div class="ico">△</div>
-        <div><h4>国泰君安 · Pyramid</h4><p>45 pages · futures outlook · original + reorganized</p></div>
-      </a>
-      <a class="demo-link" href="verify_guotai.html">
-        <div class="ico">✓</div>
-        <div><h4>国泰君安 · Verification</h4><p>19 sub-agents · clickable workpapers · 4-color</p></div>
-      </a>
-      <a class="demo-link" href="markmap_galaxy.html">
-        <div class="ico">△</div>
-        <div><h4>银河证券 · Pyramid</h4><p>13 pages · macro weekly · financial attributes</p></div>
-      </a>
-      <a class="demo-link" href="verify_galaxy.html">
-        <div class="ico">✓</div>
-        <div><h4>银河证券 · Verification</h4><p>Multi-agent verified · source URLs · audit trail</p></div>
-      </a>
-      <a class="demo-link" href="markmap_founder.html">
-        <div class="ico">△</div>
-        <div><h4>方正证券 · Pyramid</h4><p>23 pages · supply-demand + historical review</p></div>
-      </a>
-      <a class="demo-link" href="verify_founder.html">
-        <div class="ico">✓</div>
-        <div><h4>方正证券 · Verification</h4><p>Data nodes + causal edges verified independently</p></div>
-      </a>
-    </div>
-  </div>
-
-  <div class="demo-phase">
-    <h3>Cross-report synthesis</h3>
-    <div class="demo-grid">
-      <a class="demo-link" href="merged.html">
-        <div class="ico">◆</div>
-        <div><h4>Merged Consensus Tree</h4><p>WHY / HOW / CONTEXT / RISK · supply-demand data chain</p></div>
-      </a>
-      <a class="demo-link" href="dashboard.html">
-        <div class="ico">▦</div>
-        <div><h4>Forward Monitoring Dashboard</h4><p>Supply-demand / spot / macro · YTD + anomaly analysis</p></div>
-      </a>
-    </div>
-  </div>
+<div class="demo-group-label">跨报告合并</div>
+<div class="demo-grid">
+  <a class="demo-link" href="merged.html"><div class="ico">◆</div><div><h4>合并共识树</h4><p>WHY/HOW/CONTEXT/RISK · 供需数据链</p></div></a>
+  <a class="demo-link" href="dashboard.html"><div class="ico">▦</div><div><h4>前瞻监控看板</h4><p>供需/现货/宏观 · YTD趋势+异动分析</p></div></a>
 </div>
 
-<div class="section-label"><span>Architecture</span></div>
-<div class="arch">
-<pre>
-Topic + Reports
-      |
-  Orchestrator Agent (research-pipeline.md)
-      |
-  01 Search ─→ 02 Decompose ─→ 03 Verify ─→ 04 Merge
-                  (×N reports)     | fan-out
-                               [V1 V2 .. VN]
-                                   |
-                        05 Visualize ─→ 06 Dashboard
-      |
-  Interactive HTML Outputs (markmap + verification maps + dashboard)
-</pre>
-</div>
-
-<div class="section-label"><span>Input Reports · Silver Case</span></div>
-<div class="reports">
-  <table>
-    <tr><th>Report</th><th>Source</th><th>Date</th><th>Pages</th><th>Lens</th></tr>
-    <tr><td>贵金属期货行情展望</td><td>国泰君安期货</td><td>2025-12-23</td><td>45</td><td>Futures outlook, most detailed</td></tr>
-    <tr><td>大类资产新视角(三)</td><td>方正证券</td><td>2026-01-23</td><td>23</td><td>Supply-demand + historical review</td></tr>
-    <tr><td>全球大类资产配置周报</td><td>中国银河证券</td><td>2026-01-16</td><td>13</td><td>Macro weekly, financial attributes</td></tr>
+<!-- Pipeline detail -->
+<button class="pipeline-toggle" onclick="document.getElementById('pipelineDetail').classList.toggle('open');this.textContent=this.textContent.includes('展开')?'收起管线详情 ▲':'展开管线详情 ▼'">展开管线详情 ▼</button>
+<div class="pipeline-detail" id="pipelineDetail">
+  <table class="pipeline-table">
+    <tr><th>Step</th><th>Name</th><th>What it does</th><th>Tools</th></tr>
+    <tr><td>01 搜</td><td>Search</td><td>搜索3+篇不同范式的研报</td><td>web_search</td></tr>
+    <tr><td>02 读</td><td>Decompose</td><td>金字塔拆解 + 逻辑重组 (Minto + MECE)</td><td>pdf_reader</td></tr>
+    <tr><td class="hl">03 审</td><td class="hl">Verify</td><td>多Agent并发验证 + 四色染色 + 底稿</td><td>web_search</td></tr>
+    <tr><td>04 合</td><td>Merge</td><td>Storyteller驱动合并 (WHY/HOW/CONTEXT/RISK)</td><td></td></tr>
+    <tr><td>05 图</td><td>Visualize</td><td>交互式markmap + 验证色</td><td>html_writer</td></tr>
+    <tr><td>06 讲</td><td>Dashboard</td><td>前瞻看板 + AI分析</td><td>web_search</td></tr>
   </table>
 </div>
 
@@ -373,11 +206,19 @@ Topic + Reports
 
 <footer>
   <div class="wrap">
-    <p><strong>Team KDLD</strong> · UCWS Singapore 2026 · MiroMind Deep Research Special Track</p>
-    <p>Built with Claude + MiroMind API · <a href="https://github.com/Wild-KD/investment-research-engine">Source Code</a></p>
-    <span class="quote">"You don't need to trust this agent. You just need to see what it checked, what it found, and what it couldn't verify."</span>
+    <p><strong>Team KDLD</strong> · UCWS Singapore 2026 · MiroMind Deep Research</p>
+    <p>Built with Claude + MiroMind API · <a href="https://github.com/Wild-KD/ucws-deep-research">Source</a></p>
   </div>
 </footer>
 
+<script>
+document.getElementById('startBtn').addEventListener('click', function(e) {
+  var topic = document.getElementById('topicInput').value.trim();
+  if (topic) {
+    e.preventDefault();
+    window.location.href = 'app.html?topic=' + encodeURIComponent(topic);
+  }
+});
+</script>
 </body>
 </html>

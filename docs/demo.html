@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>白银投资主线 · Demo Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Serif+SC:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #141417;
+  --fg: #e8e8ed;
+  --accent: #d4a76a;
+  --t2: #a1a1aa;
+  --t3: #71717a;
+  --t4: #52525b;
+  --card-border: rgba(255,255,255,0.07);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior: smooth }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'PingFang SC', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---- opening ---- */
+.opening {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+.opening::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+}
+.opening .glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(212,167,106,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.opening h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 56px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--fg);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.opening h1 span { color: var(--accent) }
+.opening .sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--t2);
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+  line-height: 1.7;
+}
+.opening .meta {
+  font-size: 12px;
+  color: var(--t3);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 24px;
+}
+.opening .meta span { display: flex; align-items: center; gap: 6px }
+.opening .meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent) }
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: 11px;
+  color: var(--t4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: breathe 2.5s ease-in-out infinite;
+}
+.scroll-hint .arrow { font-size: 16px; color: var(--t4) }
+@keyframes breathe { 0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)} 50%{opacity:1;transform:translateX(-50%) translateY(4px)} }
+
+/* ---- chapter ---- */
+.chapter {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 80px 0;
+}
+.chapter-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 64px;
+  align-items: start;
+  width: 100%;
+}
+.chapter-left {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.chapter-char {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 140px;
+  font-weight: 200;
+  color: rgba(212,167,106,0.08);
+  line-height: 1;
+  user-select: none;
+}
+.chapter-num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--t4);
+  margin-top: 8px;
+}
+.chapter-en {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+.chapter-right {}
+.chapter-narrative {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--t2);
+  font-style: italic;
+  margin-bottom: 24px;
+  line-height: 1.7;
+  padding-left: 16px;
+  border-left: 2px solid rgba(212,167,106,0.15);
+}
+.chapter-title {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+.chapter-title em { font-style: normal; color: var(--accent); font-weight: 400 }
+.chapter-body {
+  font-size: 14px;
+  color: var(--t3);
+  line-height: 1.75;
+  margin-bottom: 28px;
+  max-width: 560px;
+}
+.chapter-body strong { color: var(--t2); font-weight: 500 }
+
+.chapter-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 400;
+  background: rgba(255,255,255,0.015);
+  transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+.ch-link:hover {
+  border-color: var(--accent);
+  background: rgba(212,167,106,0.04);
+  transform: translateY(-1px);
+}
+.ch-link .ico { color: var(--accent); font-size: 15px }
+
+/* dividers between chapters */
+.chapter-divider {
+  height: 1px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(to right, transparent, rgba(212,167,106,0.12), transparent);
+}
+
+/* data chain callout */
+.data-chain {
+  margin: 20px 0;
+  padding: 16px 20px;
+  border: 1px solid rgba(212,167,106,0.15);
+  border-radius: 8px;
+  background: rgba(212,167,106,0.02);
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 13px;
+  color: var(--t2);
+  line-height: 1.8;
+}
+.data-chain .label { color: var(--t4); font-size: 11px }
+.data-chain .num { color: var(--accent); font-weight: 600 }
+
+/* color demo */
+.color-row {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+.color-chip {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.cc-green { background: rgba(0,154,68,0.12); color: #4ade80 }
+.cc-gold { background: rgba(212,168,67,0.12); color: #d4a843 }
+.cc-red { background: rgba(204,0,0,0.12); color: #f87171 }
+
+/* closing */
+.closing {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+}
+.closing h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+.closing .sub { font-size: 14px; color: var(--t3); margin-bottom: 32px }
+.closing .back {
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 12px 28px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.closing .back:hover { background: var(--accent); color: var(--bg) }
+
+/* nav */
+.demo-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  background: linear-gradient(to bottom, var(--bg), transparent);
+  pointer-events: none;
+}
+.demo-nav a { pointer-events: auto; font-size: 12px; color: var(--t3); text-decoration: none; transition: color 0.15s }
+.demo-nav a:hover { color: var(--accent) }
+.demo-nav .brand { font-size: 14px; font-weight: 600; color: var(--fg) }
+.demo-nav .brand em { font-style: normal; color: var(--accent) }
+
+/* scroll fade-in */
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1) }
+.fade-in.visible { opacity: 1; transform: translateY(0) }
+
+@media (max-width: 768px) {
+  .chapter-inner { grid-template-columns: 1fr; gap: 24px }
+  .chapter-left { position: static; transform: none }
+  .chapter-char { font-size: 80px }
+  .opening h1 { font-size: 36px }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-nav">
+  <a href="index.html" class="brand">Research<em>Engine</em></a>
+  <a href="index.html">← 返回首页</a>
+</div>
+
+<!-- Opening -->
+<section class="opening">
+  <div class="glow"></div>
+  <h1>白银<span>投资主线</span></h1>
+  <p class="sub">一个研究员从零开始读懂白银的完整旅程<br>六步，三篇研报，一条主线</p>
+  <div class="meta">
+    <span><span class="dot"></span>国泰君安 · 45页</span>
+    <span><span class="dot"></span>方正证券 · 23页</span>
+    <span><span class="dot"></span>银河证券 · 13页</span>
+  </div>
+  <div class="scroll-hint">
+    <span>向下滚动开始旅程</span>
+    <span class="arrow">↓</span>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 01 搜 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">搜</div>
+      <div class="chapter-num">STEP 01</div>
+      <div class="chapter-en">Search</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"我想研究今年白银为什么暴涨，但之前从没碰过有色金属，不知道该看什么。"</div>
+      <h2 class="chapter-title">从权威源找到<em>三篇不同视角</em>的研报</h2>
+      <div class="chapter-body">
+        系统识别了白银领域的权威信息源，搜索到三篇覆盖不同范式的研报：<strong>国泰君安</strong>（期货展望，最详细的 45 页）、<strong>方正证券</strong>（供需结构 + 历史复盘，23 页）、<strong>银河证券</strong>（宏观周报视角，13 页）。
+        <br><br>
+        三篇加起来 81 页。如果你自己读，大概需要一整天。
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 02 读 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">读</div>
+      <div class="chapter-num">STEP 02</div>
+      <div class="chapter-en">Read</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"45 页的报告太长了。我需要快速抓住它在说什么，而不是从头读到尾。"</div>
+      <h2 class="chapter-title">金字塔原则<em>拆解每篇研报</em>的逻辑框架</h2>
+      <div class="chapter-body">
+        严格遵循 Minto 金字塔原理，对每篇研报进行深度逻辑拆解。每个标题是方向性结论而非分类标签，用 <strong>IB Color Code</strong> 标注数据可信度（蓝=引用、绿=假设、黑=计算），补充逻辑跳步让非专业读者也能看懂。
+        <br><br>
+        你可以在<strong>原文复刻</strong>和<strong>逻辑重组</strong>两种视图间切换，像在读一份结构化的投研备忘录。
+      </div>
+      <div class="chapter-links">
+        <a class="ch-link" href="markmap_guotai.html" target="_blank"><span class="ico">△</span>国泰君安 · 金字塔</a>
+        <a class="ch-link" href="markmap_galaxy.html" target="_blank"><span class="ico">△</span>银河证券 · 金字塔</a>
+        <a class="ch-link" href="markmap_founder.html" target="_blank"><span class="ico">△</span>方正证券 · 金字塔</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 03 审 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">审</div>
+      <div class="chapter-num">STEP 03</div>
+      <div class="chapter-en">Verify</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"报告里的数据靠谱吗？那些'因为 A 所以 B'的推导真的站得住脚吗？"</div>
+      <h2 class="chapter-title">多 Agent 并发，<em>既审数据来源，也审逻辑</em></h2>
+      <div class="chapter-body">
+        每个数据节点和每条逻辑推导各分配一个独立的验证 Agent，全部并发执行。每个 Agent 独立搜索一手来源（Silver Institute、CME、LBMA），比对数据准确性，检验因果链条是否成立。
+      </div>
+      <div class="color-row">
+        <span class="color-chip cc-green">绿 · 验证通过</span>
+        <span class="color-chip cc-gold">黄 · 待验证</span>
+        <span class="color-chip cc-red">红 · 有冲突</span>
+      </div>
+      <div class="chapter-body" style="margin-top:12px">
+        点击验证图中任意节点，可以展开完整的验证底稿：原始声明、验证来源 URL、子声明拆解、最终结论。
+      </div>
+      <div class="chapter-links">
+        <a class="ch-link" href="verify_guotai.html" target="_blank"><span class="ico">✓</span>国泰君安 · 验证图</a>
+        <a class="ch-link" href="verify_galaxy.html" target="_blank"><span class="ico">✓</span>银河证券 · 验证图</a>
+        <a class="ch-link" href="verify_founder.html" target="_blank"><span class="ico">✓</span>方正证券 · 验证图</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 04 沉 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">沉</div>
+      <div class="chapter-num">STEP 04</div>
+      <div class="chapter-en">Distill</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"验证完了这么多数据点，哪些是真正重要的？哪些以后还用得上？"</div>
+      <h2 class="chapter-title">沉淀<em>核心判断</em>与<em>可追踪的知识资产</em></h2>
+      <div class="chapter-body">
+        从验证结果中筛选出两类资产：
+        <br><br>
+        <strong>核心判断</strong>：经过验证的、对投资主线有决定性贡献的关键事实。红色剔除，黄色择优，绿色中只保留对故事有贡献的。
+        <br><br>
+        <strong>知识资产库</strong>：该领域研究需要的核心 Source，每个都有可点击的一手来源 URL。这不是一次性产物，而是未来持续追踪和深入研究的起点。
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 05 合 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">合</div>
+      <div class="chapter-num">STEP 05</div>
+      <div class="chapter-en">Merge</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"三篇报告各说各的。国泰从期货角度看，方正从供需看，银河从宏观看。到底该信谁？"</div>
+      <h2 class="chapter-title">三条逻辑线，<em>合并为一条投资主线</em></h2>
+      <div class="chapter-body">
+        结合金字塔原理，把三篇研报提炼出的逻辑框架合成新的主线。这条主线符合 MECE 原则，按 <strong>WHY</strong>（为什么有结构性问题）、<strong>HOW</strong>（问题怎么变成危机）、<strong>CONTEXT</strong>（宏观大背景）、<strong>RISK</strong>（什么情况会反转）组织。
+        <br><br>
+        像是你自己花一整天读完 81 页后，在脑子里形成的那条主线。
+      </div>
+      <div class="data-chain">
+        <div class="label">完整供需数据链</div>
+        供给：矿产 <span class="num">846.6</span> + 再生 <span class="num">195</span> = 总供给 <span class="num">~1,015 Moz</span><br>
+        需求：工业 <span class="num">681</span>（光伏 <span class="num">193</span>）+ 珠宝 + 投资 = 总需求 <span class="num">~1,164 Moz</span><br>
+        平衡：供给 - 需求 = <span class="num">缺口 -149 Moz</span>
+      </div>
+      <div class="chapter-links">
+        <a class="ch-link" href="merged.html" target="_blank"><span class="ico">◆</span>合并投资主线</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider"></div>
+
+<!-- 06 追 -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-left">
+      <div class="chapter-char">追</div>
+      <div class="chapter-num">STEP 06</div>
+      <div class="chapter-en">Track</div>
+    </div>
+    <div class="chapter-right fade-in">
+      <div class="chapter-narrative">"主线我懂了。但白银的故事还在继续，接下来我该盯着什么？"</div>
+      <h2 class="chapter-title">从主线导出<em>定制化追踪看板</em></h2>
+      <div class="chapter-body">
+        根据投资主线确定需要追踪的核心指标，按<strong>供需面</strong>（供需平衡、缺口趋势、ETF 持仓）、<strong>现货面</strong>（COMEX 库存、LBMA 库存、Lease Rate）、<strong>宏观面</strong>（FedWatch、金银比、DXY）三大框架组织。
+        <br><br>
+        每个指标附 YTD 趋势分析和近期异动预警。追踪过程中复用"沉"步沉淀的 Source 和逻辑框架，让你持续判断主线还成不成立。
+      </div>
+      <div class="chapter-links">
+        <a class="ch-link" href="dashboard.html" target="_blank"><span class="ico">▦</span>前瞻追踪看板</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Closing -->
+<section class="closing">
+  <h2>六步，从零到主线</h2>
+  <p class="sub">你不需要信任这个 Agent。你只需要看到它查了什么、发现了什么、以及什么没能验证。</p>
+  <a class="back" href="index.html">← 返回首页，开始你的研究</a>
+</section>
+
+<script>
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el) });
+</script>
+</body>
+</html>

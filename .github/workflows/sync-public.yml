@@ -12,13 +12,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PUBLIC_REPO_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name "Wild-KD"
+          git config --global user.email "valliamtune@gmail.com"
+
       - name: Push to public repo
-        uses: cpina/github-action-push-to-another-repository@v1.7.2
         env:
-          SSH_DEPLOY_KEY: ${{ secrets.PUBLIC_REPO_DEPLOY_KEY }}
-        with:
-          source-directory: '.'
-          destination-github-username: 'Wild-KD'
-          destination-repository-name: 'ucws-deep-research'
-          target-branch: 'main'
-          commit-message: 'Sync from private repo'
+          GIT_SSH_COMMAND: "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no"
+        run: |
+          git remote add public git@github.com:Wild-KD/ucws-deep-research.git
+          git push public main --force

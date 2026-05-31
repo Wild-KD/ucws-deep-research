@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>白银 · 前瞻监控看板</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',system-ui,sans-serif;background:oklch(97.5% 0.003 250);color:oklch(25% 0.01 250);font-size:12px;line-height:1.5}
+
+.topbar{padding:14px 24px;display:flex;align-items:baseline;gap:16px;border-bottom:1px solid oklch(90% 0.005 250);background:oklch(99% 0.002 250)}
+.topbar h1{font-size:16px;font-weight:700;letter-spacing:-0.02em}
+.topbar .ts{font-size:10px;color:oklch(55% 0.01 250);margin-left:auto}
+
+.price-section{padding:16px 24px 12px;background:oklch(99% 0.002 250);border-bottom:1px solid oklch(90% 0.005 250)}
+.price-header{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.price-header h2{font-size:13px;font-weight:600}
+.price-header .spot{font-size:22px;font-weight:700;color:oklch(25% 0.01 250);margin-left:8px}
+.price-header .chg{font-size:11px;font-weight:600;margin-left:4px}
+.range-btns{display:flex;gap:2px;margin-left:auto}
+.range-btns button{border:none;background:oklch(95% 0.005 250);color:oklch(45% 0.01 250);font-size:9px;padding:3px 10px;border-radius:3px;cursor:pointer;font-weight:600}
+.range-btns button.active{background:oklch(40% 0.12 250);color:oklch(98% 0.005 250)}
+.price-chart{height:180px;position:relative}
+
+.summary{display:flex;padding:10px 24px;gap:2px;background:oklch(98.5% 0.003 250);border-bottom:1px solid oklch(90% 0.005 250)}
+.s-item{flex:1;padding:8px 10px;border-radius:5px}
+.s-label{font-size:9px;color:oklch(55% 0.01 250);font-weight:600;text-transform:uppercase;letter-spacing:0.03em}
+.s-val{font-size:17px;font-weight:700;color:oklch(22% 0.01 250);margin-top:1px;letter-spacing:-0.02em}
+.s-sub{font-size:8px;color:oklch(65% 0.01 250);margin-top:1px}
+
+.section{border-bottom:1px solid oklch(88% 0.005 250)}
+.section-header{padding:10px 24px 6px;display:flex;align-items:center;gap:10px}
+.section-header h2{font-size:12px;font-weight:700;color:oklch(30% 0.01 250);letter-spacing:0.02em}
+.section-header .line{flex:1;height:1px;background:oklch(88% 0.005 250)}
+.section-header .freq{font-size:9px;color:oklch(60% 0.01 250)}
+
+.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding:0 24px 14px}
+.col{padding:10px 14px 12px;border:1px solid oklch(92% 0.005 250);border-radius:6px;background:oklch(99.5% 0.002 250)}
+.col:not(:last-child){margin-right:8px}
+.col h3{font-size:11px;font-weight:600;color:oklch(30% 0.01 250);display:flex;align-items:center;gap:6px;margin-bottom:1px}
+.col .tag{font-size:8px;color:oklch(60% 0.01 250);font-weight:500;margin-left:auto;background:oklch(95% 0.005 250);padding:1px 6px;border-radius:3px}
+.col .src{font-size:8px;color:oklch(68% 0.01 250);margin-bottom:6px}
+.ch{height:130px;position:relative}
+
+table.sd{width:100%;border-collapse:collapse;font-size:9px;margin-bottom:4px}
+table.sd th{padding:3px 4px;text-align:right;color:oklch(55% 0.01 250);font-weight:700;border-bottom:1px solid oklch(88% 0.005 250);font-size:8px;letter-spacing:0.03em}
+table.sd th:first-child{text-align:left}
+table.sd td{padding:2px 4px;text-align:right;color:oklch(30% 0.01 250);border-bottom:1px solid oklch(95% 0.005 250)}
+table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:600}
+.neg{color:oklch(50% 0.15 25)}
+.pos{color:oklch(48% 0.12 155)}
+.em{font-weight:700;color:oklch(20% 0.01 250)}
+
+.analysis{margin-top:8px;padding-top:6px;border-top:1px solid oklch(94% 0.004 250)}
+.a-block{margin-bottom:5px}
+.a-block:last-child{margin-bottom:0}
+.a-label{font-size:8px;font-weight:700;color:oklch(50% 0.01 250);letter-spacing:0.04em;margin-bottom:1px}
+.a-label.alert{color:oklch(50% 0.14 50)}
+.a-text{font-size:10px;color:oklch(38% 0.01 250);line-height:1.45}
+
+.footer{padding:10px 24px;font-size:9px;color:oklch(68% 0.01 250);border-top:1px solid oklch(90% 0.005 250)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>白银 · 前瞻监控看板</h1>
+  <div class="ts">数据截至 2026.5.29 · 一手来源: CME · Bloomberg · Silver Institute · LBMA · ICE</div>
+</div>
+
+<!-- 白银价格走势 -->
+<div class="price-section">
+  <div class="price-header">
+    <h2>COMEX 白银</h2>
+    <span class="spot">$75.24</span>
+    <span class="chg neg">-2.5% MTD</span>
+    <div class="range-btns">
+      <button>1M</button><button>3M</button><button class="active">YTD</button><button>1Y</button><button>3Y</button>
+    </div>
+  </div>
+  <div class="price-chart"><canvas id="cPrice"></canvas></div>
+</div>
+
+<!-- Summary KPIs -->
+<div class="summary">
+  <div class="s-item"><div class="s-label">现价</div><div class="s-val">$75.24</div><div class="s-sub">COMEX SI1! · 日度</div></div>
+  <div class="s-item"><div class="s-label">2025 Deficit</div><div class="s-val neg">-40.3 Moz</div><div class="s-sub">Silver Institute WSS 2026</div></div>
+  <div class="s-item"><div class="s-label">2026E Deficit</div><div class="s-val neg">-46.3 Moz</div><div class="s-sub">Silver Institute WSS 2026</div></div>
+  <div class="s-item"><div class="s-label">Lease Rate 1M</div><div class="s-val" style="color:oklch(50% 0.14 50)">~20%</div><div class="s-sub">Bloomberg · 日度</div></div>
+  <div class="s-item"><div class="s-label">FedWatch 不降息</div><div class="s-val">70%</div><div class="s-sub">CME · 周度</div></div>
+  <div class="s-item"><div class="s-label">金银比</div><div class="s-val">55:1</div><div class="s-sub">交易所 · 日度</div></div>
+</div>
+
+<!-- ═══ 供需面 ═══ -->
+<div class="section">
+  <div class="section-header">
+    <h2>供需面</h2>
+    <div class="line"></div>
+    <div class="freq">年度 / 季度</div>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <h3>供需平衡表 <span class="tag">年度 · WSS 2026</span></h3>
+      <div class="src">Silver Institute World Silver Survey 2026 (2026.4发布)</div>
+      <table class="sd">
+        <tr><th></th><th>2023</th><th>2024</th><th>2025</th><th>2026E</th></tr>
+        <tr><td>矿产银</td><td>812.7</td><td>819.7</td><td>846.6</td><td>~855</td></tr>
+        <tr><td>再生+其他</td><td>199</td><td>195</td><td>—</td><td>—</td></tr>
+        <tr><td class="em">总供给</td><td class="em">1012</td><td class="em">1015</td><td class="em">—</td><td class="em">~1050</td></tr>
+        <tr><td>工业需求</td><td>657</td><td>681</td><td>—</td><td>—</td></tr>
+        <tr><td>  光伏</td><td>193</td><td>193</td><td>—</td><td>—</td></tr>
+        <tr><td class="em">总需求</td><td class="em">1234</td><td class="em">1164</td><td class="em">1131</td><td class="em">—</td></tr>
+        <tr><td class="em">Deficit</td><td class="neg">-201</td><td class="neg">-149</td><td class="neg">-40.3</td><td class="neg">-46.3E</td></tr>
+      </table>
+      <div style="font-size:7px;color:oklch(68% 0.01 250)">累计库存消耗 762Moz (2021-2025)</div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">连续第5年结构性供需缺口。2025年缺口收窄至40.3Moz，主因矿产银小幅增产至846.6Moz，但需求端仍远超供给。5年累计消耗库存762Moz，可用库存持续萎缩。</div></div>
+        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">WSS 2026预测2026年缺口将再度扩大至46.3Moz。光伏用银持续高增长是核心拉动因素，工业需求结构性上移已不可逆。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>缺口趋势 <span class="tag">年度 · 2021-2026E</span></h3>
+      <div class="src">Physical Deficit (Moz) · Silver Institute</div>
+      <div class="ch"><canvas id="cDeficit"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">2022年缺口峰值250Moz后逐年收窄，但始终未回到平衡。结构性短缺已成为银市基本面常态。</div></div>
+        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">2025→2026E缺口由40.3扩大至46.3Moz，收窄趋势逆转，供给增量不足以匹配需求增长。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>ETF 持仓 (SLV) <span class="tag">周度 · W21</span></h3>
+      <div class="src">iShares Silver Trust 持仓 (Moz) · SEC / iShares</div>
+      <div class="ch"><canvas id="cETF"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初以来ETF持仓持续减少，从520Moz降至480Moz，资金持续流出。投资者偏好从纸银转向实物。</div></div>
+        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月跌破490Moz关口后继续走低，与现货市场借贷紧张形成背离——实物紧但ETF在减仓。</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 现货面 ═══ -->
+<div class="section">
+  <div class="section-header">
+    <h2>现货面</h2>
+    <div class="line"></div>
+    <div class="freq">日度 / 月度</div>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <h3>LBMA 库存 <span class="tag">月度 · 2026.4</span></h3>
+      <div class="src">伦敦金库月末值 (吨) · LBMA</div>
+      <div class="ch"><canvas id="cLBMA"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">2026年以来在27,000-27,500吨区间窄幅波动，较2025年中的24,000吨低点有所回升，但仍远低于2020年峰值33,000+吨。</div></div>
+        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">4月小幅回升至27,454吨，整体企稳。但伦敦与COMEX之间的库存搬迁仍在持续，需关注跨市场套利流动。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>COMEX 库存 <span class="tag">日度 · 2026.5.29</span></h3>
+      <div class="src">注册+合格库存 (Moz) · CME Group</div>
+      <div class="ch"><canvas id="cCOMEX"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初440Moz持续下降至340Moz，年内降幅约23%。注册库存占比走低，可交割实物持续收紧。</div></div>
+        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月加速下降，月内再降20Moz。若持续按此速率消耗，年底可能触及300Moz以下的关键水位。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>Lease Rate 1M <span class="tag">日度 · 2026.5.29</span></h3>
+      <div class="src">伦敦1个月 Implied Lease Rate (%) · Bloomberg</div>
+      <div class="ch"><canvas id="cLease"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">全年大部分时间在5-10%区间运行，远高于历史均值(长期&lt;1%)。现货借贷成本处于历史性高位，反映实物白银极度紧张。</div></div>
+        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月飙升至约20%，为2025年10月以来最高水平。上次出现类似水平时触发了逼空行情，需密切关注是否重演。</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 宏观面 ═══ -->
+<div class="section">
+  <div class="section-header">
+    <h2>宏观面</h2>
+    <div class="line"></div>
+    <div class="freq">日度 / 周度</div>
+  </div>
+  <div class="cols">
+    <div class="col">
+      <h3>FedWatch 不降息概率 <span class="tag">周度 · 2026.5.29</span></h3>
+      <div class="src">30-Day Fed Funds Implied Prob, Year-end 2026 (%) · CME</div>
+      <div class="ch"><canvas id="cFed"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">不降息概率从年初15%持续攀升至70%，市场预期从"两次降息"大幅转向"维持利率不变"。对白银金融属性构成压制。</div></div>
+        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">5月稳定在60-70%区间，市场基本已price in不降息。若6月FOMC释放鸽派信号，该概率可能快速回落，利好银价。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>金银比 <span class="tag">日度 · 2026.5.29</span></h3>
+      <div class="src">金价 ÷ 银价 · 交易所行情</div>
+      <div class="ch"><canvas id="cRatio"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初58:1大幅波动，1月底银价冲高时一度跌至46:1(白银相对黄金极端强势)，后随银价回调反弹至62:1。</div></div>
+        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">5月回落至55:1，白银相对黄金再度走强。历史均值约75:1，当前水平仍显示银价被相对高估，或黄金被低估。</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>美元指数 DXY <span class="tag">日度 · 2026.5.29</span></h3>
+      <div class="src">ICE U.S. Dollar Index · ICE</div>
+      <div class="ch"><canvas id="cDXY"></canvas></div>
+      <div class="analysis">
+        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初以来缓慢走弱，从100.3降至99.0。美元走弱通常利好以美元计价的贵金属。</div></div>
+        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">整体趋势偏弱但降幅有限，尚未形成明确的趋势性下跌。若跌破98关口可能加速贵金属上行。</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Demo数据基于联网搜索近似值 · 实际产品应接入 Bloomberg Terminal / CME DataMine / LBMA API / Silver Institute<br>
+  更新频率: 价格(日) · Lease Rate(日) · 库存(日/月) · 供需(年) · FedWatch(周) · ETF(周)
+</div>
+
+<script>
+const A = 'oklch(42% 0.12 250)';
+const gridC = 'oklch(94% 0.003 250)';
+const txtC = 'oklch(55% 0.01 250)';
+
+const base = {
+  responsive:true, maintainAspectRatio:false,
+  interaction:{intersect:false,mode:'index'},
+  plugins:{
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:'oklch(99% 0.003 250)',
+      titleColor:'oklch(30% 0.01 250)',
+      bodyColor:'oklch(20% 0.01 250)',
+      borderColor:'oklch(88% 0.005 250)',
+      borderWidth:1,
+      titleFont:{size:10,weight:'600'},
+      bodyFont:{size:11,weight:'700'},
+      padding:8,cornerRadius:4,displayColors:false
+    }
+  },
+  scales:{
+    x:{grid:{display:false},ticks:{font:{size:8},color:txtC,maxRotation:0},border:{display:false}},
+    y:{grid:{color:gridC},ticks:{font:{size:8},color:txtC},border:{display:false}}
+  }
+};
+
+function mk(id,labels,data,color,unit,fillBelow){
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  new Chart(ctx,{type:'line',data:{labels,datasets:[{
+    data, borderColor:color, borderWidth:1.5, pointRadius:0, pointHoverRadius:4,
+    pointHoverBackgroundColor:color,
+    fill: fillBelow ? {target:'origin',above: fillBelow} : false,
+    tension:0.3
+  }]},options:{...base,
+    plugins:{...base.plugins,tooltip:{...base.plugins.tooltip,
+      callbacks:{label:function(c){return c.parsed.y + (unit?' '+unit:'')}}}},
+    scales:{...base.scales,y:{...base.scales.y,
+      title:{display:!!unit,text:unit||'',font:{size:8},color:txtC}}}}});
+}
+
+function mkBar(id,labels,data,colors,unit){
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  new Chart(ctx,{type:'bar',data:{labels,datasets:[{
+    data, backgroundColor:colors, borderRadius:2, barPercentage:0.7
+  }]},options:{...base,
+    plugins:{...base.plugins,tooltip:{...base.plugins.tooltip,
+      callbacks:{label:function(c){return c.parsed.y + (unit?' '+unit:'')}}}},
+    scales:{...base.scales,y:{...base.scales.y,
+      title:{display:!!unit,text:unit||'',font:{size:8},color:txtC}}}}});
+}
+
+mk('cPrice',
+  ['1.2','1.9','1.16','1.23','1.29','2.5','2.12','2.19','2.26','3.5','3.12','3.19','3.26','4.2','4.9','4.16','4.23','4.30','5.7','5.14','5.21','5.29'],
+  [80,88,98,110,121.6,100,86,81,78,76,75,77,76,74,73,76,75,74,76,75,77,75.2],
+  A,'USD/oz','oklch(90% 0.04 250)');
+
+var deficitC = [
+  'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(50% 0.14 25)',
+  'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(60% 0.10 25)'
+];
+mkBar('cDeficit',['2021','2022','2023','2024','2025','2026E'],
+  [-52,-250,-201,-149,-40.3,-46.3],deficitC,'Moz');
+
+mk('cETF',['2025.9','10','11','12','2026.1','2','3','4','5'],
+  [492,510,520,529,520,505,491,485,480],
+  'oklch(50% 0.12 300)','Moz');
+
+mk('cLBMA',['2025.6','7','8','9','10','11','12','2026.1','2','3','4'],
+  [24199,25500,26265,25800,27000,27187,27818,27500,27200,27300,27454],
+  'oklch(48% 0.12 155)','吨');
+
+mk('cCOMEX',['2025.6','7','8','9','10','11','12','2026.1','2','3','4','5'],
+  [350,400,450,490,532,500,470,440,410,380,360,340],
+  A,'Moz');
+
+mk('cLease',['2025.8','9','10初','10.10','11','12','2026.1','2','3','4','5'],
+  [2,3,5,39,5,7.8,8,6.1,7,8,20],
+  'oklch(52% 0.15 50)','%');
+
+mk('cFed',['2025.12','2026.1','2','3','4','5'],
+  [20,15,30,45,60,70],
+  'oklch(50% 0.14 25)','%');
+
+mk('cRatio',['2026.1初','1.29','2','3','4','5初','5.29'],
+  [58,46,55,62,62,62,55],
+  'oklch(50% 0.10 200)','');
+
+mk('cDXY',['2026.1','2','3','4','5'],
+  [100.3,101.3,100.0,99.8,99.0],
+  'oklch(48% 0.08 250)','');
+</script>
+</body>
+</html>

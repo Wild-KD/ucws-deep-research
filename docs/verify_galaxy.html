@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>中国银河 · 白银验证地图</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
+  .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .header h1 { font-size: 14px; color: #1a1a2e; }
+  .legend { font-size: 9px; color: #666; display: flex; gap: 12px; margin-left: auto; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .ldot { width: 14px; height: 14px; border-radius: 3px; display: inline-block; border: 2px solid; background: #fff; }
+  .stats { font-size: 10px; color: #666; padding: 4px 20px; border-bottom: 1px solid #eee; }
+  .map-wrap { width: 100vw; height: calc(100vh - 74px); }
+  .map-wrap svg { width: 100%; height: 100%; }
+  #wpanel { display:none; position:fixed; right:12px; top:60px; width:340px; max-height:70vh; overflow-y:auto; background:#fff; border:1px solid #ddd; border-radius:8px; padding:14px 16px; box-shadow:0 4px 20px rgba(0,0,0,.1); font-size:11px; z-index:20; }
+  .wp-close { float:right; cursor:pointer; color:#999; border:1px solid #ddd; padding:1px 6px; border-radius:3px; font-size:10px; }
+  .wp-title { font-size:12px; font-weight:600; color:#1a1a2e; margin-bottom:8px; padding-right:24px; }
+  .wp-label { font-size:9px; color:#999; font-weight:600; text-transform:uppercase; margin-top:8px; }
+  .wp-src { color:#005EB8; margin:2px 0; font-size:10px; }
+  .wp-finding { color:#333; line-height:1.6; }
+  .wp-verdict { font-weight:600; margin-top:4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>中国银河 · 白银验证地图</h1>
+  <div class="legend">
+    <span><span class="ldot" style="border-color:#009A44"></span>验证通过</span>
+    <span><span class="ldot" style="border-color:#D4A843"></span>有source未验证</span>
+    <span><span class="ldot" style="border-color:#CC0000"></span>有冲突</span>
+    <span><span class="ldot" style="border-color:#333"></span>结构/常识</span>
+  </div>
+</div>
+<div class="stats">数据节点: <b style="color:#009A44">1🟢</b> · <b style="color:#D4A843">3🟡</b> · <b style="color:#CC0000">1🔴</b></div>
+<div class="map-wrap"><svg id="mm"></svg></div>
+<div id="wpanel"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+const BLUE = '#005EB8';
+const G = '#009A44', Y = '#D4A843', R = '#CC0000', B = '#333';
+
+const verifyColors = [
+  ['鲍威尔', Y], ['央行独立性', Y],
+  ['CPI', Y], ['降息升温', Y],
+  ['13.37%', R], ['2.23%', R],
+  ['80美元', G], ['4600', G],
+  ['高度相关', Y],
+  ['光伏', Y], ['新能源', Y], ['供应端紧张', Y],
+  ['获利了结', Y], ['回调', Y],
+  ['100美元', Y],
+  ['降低贵金属持有成本', Y],
+  ['波动更大', Y],
+  ['中长期底部支撑', Y],
+];
+
+const workpapers = {
+  '鲍威尔': {color:'🟡',claim:'美联储主席鲍威尔被调查引发央行独立性担忧',structured:true,
+    conclusion:'🟡 事实正确, 但source归因不精确',
+    subclaims:[{text:'事实: 鲍威尔是否被调查?',status:'🟢',
+      finding:'2026年1月DOJ向美联储发出大陪审团传票。鲍威尔2026.1.11通过美联储官方声明确认, 称调查是因美联储未按总统偏好设定利率的报复。调查后于2026年3月被法官撤销, 4月DOJ撤案。',
+      quote:'',
+      sources:[{title:'Powell Statement on DOJ Investigation',author:'Federal Reserve, 2026.1.11',url:'https://www.federalreserve.gov/newsevents/speech/powell20260111a.htm'},
+        {title:'DOJ Launches Criminal Investigation into Fed Chair Powell',author:'ABC News',url:'https://abcnews.com/Politics/doj-launches-criminal-investigation-fed-chair-jerome-powell/story?id=129114228'}]}]},
+
+  '13.37': {color:'🔴',claim:'本周COMEX白银上涨13.37%, 黄金上涨2.23%',structured:true,
+    conclusion:'🔴 具体百分比与第三方数据不匹配',
+    subclaims:[{text:'事实: 周涨幅是否为13.37%/2.23%?',status:'🔴',
+      finding:'五矿期货周报(2025.12.13)显示同周COMEX白银涨11.20%(非13.37%), 黄金涨1.68%(非2.23%)。方向正确但具体数字偏差约2个百分点。可能因不同合约/截止日期。',
+      quote:'',
+      sources:[{title:'五矿期货贵金属周报 2025.12.13',author:'五矿期货',url:'https://www.wkjyqh.com/ueditor/jsp/upload/file/20251213/1765622953626000446.pdf'}]}]},
+
+  '80美元': {color:'🟢',claim:'银价首次突破80美元/盎司, 金价超4600美元/盎司',structured:true,
+    conclusion:'🟢 两个价格里程碑均有多源确认',
+    subclaims:[{text:'事实: 银价是否首破80$?',status:'🟢',
+      finding:'COMEX白银2025.12.28首破80$/oz, 盘中触及83$。',
+      quote:'',
+      sources:[{title:'白银价格突破80美元报道',author:'新华社, 2025.12.29',url:'http://www.news.cn/fortune/20251229/9421370d20da423d98020d635b5f106d/c.html'}]},
+    {text:'事实: 金价是否破4600$?',status:'🟢',
+      finding:'伦敦金现2026.1.12首破4600$/oz至4601.38$。',
+      quote:'',
+      sources:[{title:'金价突破4600美元报道',author:'21世纪经济报道, 2026.1.12',url:'https://www.21jingji.com/article/20260112/herald/cba91a0b8e3384c972fdf210eeebbad1.html'}]}]},
+
+  'CPI': {color:'🟡',claim:'2025年12月CPI低于预期, 市场押注3月降息升温',structured:true,
+    conclusion:'🟡 CPI低于预期正确, 但"3月降息升温"有夸大',
+    subclaims:[{text:'事实: CPI是否低于预期?',status:'🟢',
+      finding:'2024年12月CPI(2025.1.15发布): 核心CPI同比3.2%(预期3.3%), 环比0.2%(预期0.3%), 确实低于预期。',
+      quote:'',
+      sources:[{title:'Consumer Price Index December 2024',author:'BLS, 2025.1.15',url:'https://www.bls.gov/news.release/archives/cpi_01152025.htm'}]},
+    {text:'逻辑: 是否推升了3月降息预期?',status:'🟡',
+      finding:'FedWatch显示市场预期首次降息在5-6月, 非3月。"3月降息升温"有夸大。',
+      quote:'',
+      sources:[{title:'CPI Report December 2024 Analysis',author:'CNBC, 2025.1.15',url:'https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html'}]}]},
+
+  '高度相关': {color:'🟡',claim:'长期以来金银价格走势具备高度相关性',structured:true,
+    conclusion:'🟡 定性正确(相关系数~0.8-0.92), 但近期相关性创20年新低',
+    subclaims:[{text:'事实: 金银是否高度相关?',status:'🟡',
+      finding:'CME Group数据: 2004年以来一年滚动相关系数约0.68-0.95, 均值~0.8。但2025年CME报告指出相关性降至20年最低。报告未给具体系数。',
+      quote:'',
+      sources:[{title:'Four Factors Driving Gold Prices Relative to Silver',author:'CME Group, 2024',url:'https://www.cmegroup.com/insights/economic-research/2024/four-factors-driving-gold-prices-relative-to-silver.html'}]}]},
+};
+
+function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
+function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
+function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
+function getNodeColor(node) {
+  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
+  if (text.includes('常识')) return B;
+  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
+  if (hasKids(node)) return B;
+  return Y;
+}
+
+const md = `
+# 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16)*
+
+## 美联储政策不确定性+CPI低于预期利好贵金属
+
+### 央行独立性担忧引发避险情绪
+- <span style="color:${BLUE};font-weight:bold">美联储主席鲍威尔被调查, 副主席候选人沃什成为下任主席热门</span><br>*(美国司法部; 公开报道)*
+
+### CPI低于预期推升降息预期
+- <span style="color:${BLUE};font-weight:bold">美联储维持利率不变, 2025年12月CPI低于预期, 市场押注2025年3月降息升温</span><br>*(美联储声明; 美国劳工部)*
+
+## 金融属性驱动白银跟随黄金上涨
+
+### 白银跟随黄金且波动更大
+- <span style="color:${BLUE};font-weight:bold">本周COMEX白银上涨13.37%, 黄金上涨2.23%; 银价首次突破80美元/盎司, 金价超4600美元/盎司</span><br>*(COMEX; 交易所行情)*
+- <span style="color:#008800;font-weight:bold">白银跟随黄金上涨, 长期金银价格走势高度相关</span><br>*(银河分析)*
+
+### 工业属性为白银提供中长期底部支撑
+- <span style="color:#008800;font-weight:bold">光伏、新能源等领域对白银需求提供坚实的中长期支撑; 供应端紧张状态不会长期改变</span><br>*(银河分析)*
+
+## 前瞻: 短期回调风险但中长期看多
+
+### 短期存在获利了结压力
+- <span style="color:#008800;font-weight:bold">下周白银可能面临资金获利了结的回调</span><br>*(银河分析)*
+
+### 中长期上涨逻辑稳固
+- <span style="color:#008800;font-weight:bold">白银价格上涨逻辑依然稳固, 不排除进一步上行至100美元/盎司</span><br>*(银河分析, 无模型支撑)*
+`;
+
+const { Transformer, Markmap } = window.markmap;
+const transformer = new Transformer();
+Markmap.create('#mm', { color: getNodeColor, colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 }, transformer.transform(md).root);
+
+function showWorkpaper(text) {
+  var decoded = decodeHtml(text.replace(/<[^>]*>/g,''));
+  var found = null;
+  for (var kw in workpapers) { if (decoded.includes(kw)) { found = workpapers[kw]; break; } }
+  var panel = document.getElementById('wpanel');
+  if (!found) { panel.style.display='none'; return; }
+  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">✕</span>';
+  if (found.structured) {
+    h += '<div class="wp-title">'+found.claim+'</div>';
+    h += '<div class="wp-verdict" style="padding:6px 8px;background:#f0f8f0;border-radius:4px">'+found.conclusion+'</div>';
+    found.subclaims.forEach(function(sc,i){
+      var bc = sc.status==='🟢'?'#009A44':sc.status==='🟡'?'#D4A843':'#CC0000';
+      var did = 'sc'+i;
+      h += '<div style="margin-top:8px;border-left:3px solid '+bc+';border-radius:4px">';
+      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' ▼</div>';
+      h += '<div id="'+did+'" style="display:none;padding:6px 8px"><div class="wp-finding">'+sc.finding+'</div>';
+      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">• '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' — <i>'+s.author+'</i></div>'; });
+      h += '</div></div>';
+    });
+  } else {
+    h += '<div class="wp-title">'+found.color+' '+found.claim+'</div>';
+    h += '<div class="wp-finding">'+found.finding+'</div>';
+    h += '<div class="wp-verdict">'+found.verdict+'</div>';
+  }
+  panel.innerHTML = h; panel.style.display = 'block';
+}
+setTimeout(function(){ document.querySelectorAll('g.markmap-node').forEach(function(g){ g.style.cursor='pointer'; g.addEventListener('click',function(e){ var fo=g.querySelector('foreignObject'); if(fo)showWorkpaper(fo.innerHTML); e.stopPropagation(); }); }); },1500);
+</script>
+</body>
+</html>

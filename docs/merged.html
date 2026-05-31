@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>白银 · 合并验证图</title>
+<style>
+  body{margin:0;font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#fff}
+  .header{padding:10px 20px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .header h1{font-size:14px;color:#1a1a2e}
+  .legend{font-size:9px;color:#666;display:flex;gap:10px;margin-left:auto}
+  .legend span{display:flex;align-items:center;gap:3px}
+  .ldot{width:14px;height:14px;border-radius:3px;display:inline-block;border:2px solid;background:#fff}
+  .stats{font-size:10px;color:#666;padding:4px 20px;border-bottom:1px solid #eee}
+  .map-wrap{width:100vw;height:calc(100vh - 74px)}
+  .map-wrap svg{width:100%;height:100%}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>白银 · 三报告合并验证图</h1>
+  <div class="legend">
+    <span><span class="ldot" style="border-color:#009A44"></span>验证通过</span>
+    <span><span class="ldot" style="border-color:#D4A843"></span>有source未验证</span>
+    <span><span class="ldot" style="border-color:#333"></span>结构</span>
+    <span style="margin-left:6px;font-size:8px;color:#999"><span style="color:#2e7d32">国泰</span> · <span style="color:#1565c0">银河</span> · <span style="color:#e65100">方正</span></span>
+  </div>
+</div>
+<div class="stats">数据来源: 方正图表7(世界白银协会) + 国泰p31/p35/p40 + 银河p4 | 验证agent: 34个并发</div>
+<div class="map-wrap"><svg id="mm"></svg></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
+<script>
+const BLUE='#005EB8',G='#009A44',Y='#D4A843',B='#333';
+const vc=[
+['1015.1',G],['819.7',Y],['193.9',G],['680.5',Y],['192.7',Y],
+['1164.1',G],['148.9',G],['8209',Y],['4185',Y],
+['3.4万亿',G],['CBO',G],['降息两次',G],['3.25%',G],['FedWatch',G],
+['鲍威尔',Y],['80美元',G],['4600',G],
+['72',Y],['74%',Y],['伴生矿',Y],
+['增长6%',G],['12年最高',G],
+['58.5%',Y],['17%',Y],
+['225百万',G],['136百万',G],['关键矿产清单',G],
+['ETF锁仓',G],['SLV禁止',G],['42640',Y],['27187',Y],['23749',Y],
+['lease rate',G],['7.8%',G],['9.8%',G],
+['TD递延',G],['380吨',G],
+['4659',G],['8567',G],['54%',G],['出口许可证',Y],
+['2008',Y],['57%',Y],['80%',Y],['相关系数',Y],
+['6亿',Y],['CAPEX',Y],['292',Y],
+['供需结构性缺口',G],['关税预期触发',G],['多项市场指标',G],
+['财政扩张侵蚀',G],['中国白银供不应求',G],['三重力量',G],
+['降息延续降低',G],['UPDATE',B],
+['460.5',Y],['243.5',Y],['190.9',Y],['3908',G],
+];
+function decodeHtml(h){var e=document.createElement('div');e.innerHTML=h;return e.textContent||'';}
+function findContent(o,d){if(!o||d>5)return '';if(o.content)return o.content;if(o.v)return o.v;if(o.data)return findContent(o.data,d+1);return '';}
+function hasKids(o){return(o.children&&o.children.length>0)||(o.data&&o.data.children&&o.data.children.length>0);}
+function getColor(node){
+  var t=decodeHtml(findContent(node,0).replace(/<[^>]*>/g,''));
+  if(t.includes('常识'))return B;
+  for(var i=0;i<vc.length;i++){if(t.includes(vc[i][0]))return vc[i][1];}
+  if(hasKids(node))return B;
+  return Y;
+}
+
+const md = `
+# 白银上涨有供需基本面、现货结构和宏观环境三重支撑
+
+## WHY: 供需基本面 — 总供给1015Moz vs 总需求1164Moz → deficit 149Moz
+
+### 供给端: 总供给1015.1Moz, 增长受限
+
+#### 矿产供给: 819.7Moz, 同比仅+0.9%
+- <span style="color:${BLUE};font-weight:bold">2024年全球矿产银819.7Moz, 同比+0.9%</span> <small style="color:#e65100">方正</small><br>*(方正图表7, source=世界白银协会)*
+- <span style="color:${BLUE};font-weight:bold">约72-74%来自伴生矿, 产量取决于铜锌非银价</span> <small style="color:#2e7d32">国泰</small><small style="color:#e65100">方正</small><br>*(世界白银协会: 72.2%; WoodMac: 74%)*
+- <span style="color:#008800;font-weight:bold">CAPEX回升至292亿美元, 但产能释放需1-2年</span> <small style="color:#2e7d32">国泰</small><br>*(国泰p36, 各企业年报)*
+
+#### 再生供给: 193.9Moz, +6%但仅占19%
+- <span style="color:${BLUE};font-weight:bold">2024年白银回收量193.9Moz, 同比+6%, 达近12年最高, 占总供应约19%</span> <small style="color:#e65100">方正</small><br>*(方正图表7, source=世界白银协会)*
+
+#### 佐证 — 中国供给严重不足(自给率仅54%)
+- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量4659吨 vs 工业需求8567吨, 缺口3908吨</span> <small style="color:#e65100">方正</small><br>*(CCTV; 中新社)*
+- <span style="color:${BLUE};font-weight:bold">2026.1.1起白银出口许可证(自2019年起每年续期)</span> <small style="color:#2e7d32">国泰</small><small style="color:#e65100">方正</small><br>*(商务部公告2025年第69号)*
+
+### 需求端: 总需求1164.1Moz, 工业主导
+
+#### 工业需求: 680.5Moz (58.5%)
+- <span style="color:${BLUE};font-weight:bold">2024年工业需求680.5Moz(占58.5%), 其中电子电气460.5Moz, 光伏192.7Moz(占17%)</span> <small style="color:#e65100">方正</small><br>*(方正图表7, source=世界白银协会)*
+
+#### 其他需求: 珠宝+银器+投资+摄影
+- <span style="color:${BLUE};font-weight:bold">珠宝243.5Moz + 银器54.2Moz + 银币银条190.9Moz + 摄影25.4Moz</span> <small style="color:#e65100">方正</small><br>*(方正图表7, source=世界白银协会)*
+
+### 供需平衡: 1015 - 1164 = deficit 149Moz, 2021年起连续为负
+
+#### 基础deficit: -148.9Moz (不含ETF)
+- <span style="color:${BLUE};font-weight:bold">2024年净供差-148.9Moz; 2021年起连续deficit, 2022年高达272Moz</span> <small style="color:#e65100">方正</small><br>*(方正图表7, source=世界白银协会)*
+
+#### 扣除ETF后deficit更大: 约-8209吨/年 (国泰口径)
+- <span style="color:#000;font-weight:bold">国泰将ETF净增仓从需求端扣除后, 2024年供需缺口扩大至-8209吨(约-264Moz)</span> <small style="color:#2e7d32">国泰</small><br>*(国泰p40, 国泰自算)*
+
+## HOW: 现货市场 — 供需缺口如何演变成伦敦流动性危机
+
+### 伦敦是全球白银现货定价核心
+- <span style="color:#000;font-weight:bold">伦敦(LBMA)是全球最大白银实物交割和存储中心, 现货定价以伦敦为锚</span>
+
+### 库存水平: 年复一年的deficit使库存降至低位
+
+#### 显性库存处于低位
+- <span style="color:${BLUE};font-weight:bold">截至2025年11月全球白银显性库存42640吨</span> <small style="color:#2e7d32">国泰</small><br>*(国泰p31, LBMA+COMEX+SHFE+SGE)*
+
+#### 库存持仓比历史绝对低位
+- <span style="color:${BLUE};font-weight:bold">国内期货+TD库存持仓比9.8%, 意味着相对于期货头寸实物严重不足</span> <small style="color:#2e7d32">国泰</small><br>*(上海黄金交易所, 国泰p35)*
+
+### 流动性抽离: 两股力量在低库存基础上加速消耗
+
+#### 关税套利: 约225Moz从伦敦搬至纽约
+- <span style="color:${BLUE};font-weight:bold">白银纳入关键矿产清单后, 约225百万盎司从伦敦搬至COMEX, 伦敦可用库存降至136百万盎司历史低位</span> <small style="color:#2e7d32">国泰</small><br>*(USGS; StoneX; CME Group; Kitco)*
+
+#### ETF锁仓: LBMA 27187吨中23749吨被锁住
+- <span style="color:${BLUE};font-weight:bold">LBMA白银总库存27187吨, 其中ETF持仓23749吨; SLV禁止托管人出借</span> <small style="color:#2e7d32">国泰</small><br>*(国泰p31; SEC SLV 10-Q)*
+- <span style="color:${BLUE};font-weight:bold">ETF持仓从约6亿盎司趋势性攀升</span> <small style="color:#e65100">方正</small><br>*(SLV/PSLV数据)*
+
+### 结果: 库存低+流动性被抽 → 逼空推高价格
+- <span style="color:#000;font-weight:bold">[常识: 当可流通实物极度稀缺时, 需要交割的买家被迫出更高价抢购; 空头(卖方)找不到实物交割, 被迫高价买回平仓 → 推高价格(逼空效应)]</span>
+- <span style="color:${BLUE};font-weight:bold">lease rate 7.8%(截至2025.12.19) — 借白银的利息飙升确认实物极度稀缺</span> <small style="color:#2e7d32">国泰</small><br>*(Bloomberg, 国泰p35)*
+- <span style="color:${BLUE};font-weight:bold">2025.10.10伦敦白银市场一度零流动性, 市场冻结</span> <small style="color:#2e7d32">国泰</small><br>*(Bloomberg)*
+- <span style="color:#008800;font-weight:bold">⚠ 但TD递延费已转空付多, 累库380吨, 部分缓解</span> <small style="color:#2e7d32">国泰</small><br>*(上海黄金交易所, 国泰p34)*
+
+## CONTEXT: 宏观环境 — 政策→资金→价格的传导链
+
+### 政策面: 降息预期+财政扩张
+
+#### 降息延续降低贵金属持有成本 🟢
+- <span style="color:${BLUE};font-weight:bold">截至2025.12, FedWatch显示市场预期2026年降息两次至3.00-3.25%</span> <small style="color:#2e7d32">国泰</small><br>*(CME FedWatch, 国泰p10)*
+- <span style="color:#000;font-weight:bold">⚠ UPDATE: 截至2026.5, 67%概率零次降息, 预期已大幅转向</span>
+
+#### 财政扩张侵蚀美元信用 🟢
+- <span style="color:${BLUE};font-weight:bold">《大美丽法案》10年增赤字3.4万亿美元</span> <small style="color:#2e7d32">国泰</small><br>*(CBO Publication 61570, 国泰p17)*
+
+### 资金面: 机会成本降低+美元信用稀释 → 资金流向贵金属
+
+#### 美联储独立性担忧叠加避险需求
+- <span style="color:${BLUE};font-weight:bold">鲍威尔被调查引发央行独立性担忧</span> <small style="color:#1565c0">银河</small><br>*(Federal Reserve声明; ABC News)*
+
+#### 金银高度相关, 白银弹性更大
+- <span style="color:${BLUE};font-weight:bold">白银与黄金自2004年以来滚动相关系数约80%</span> <small style="color:#e65100">方正</small><small style="color:#1565c0">银河</small><br>*(CME Group — 近期相关性创20年新低)*
+
+### 价格确认: 趋势里程碑 🟢
+- <span style="color:${BLUE};font-weight:bold">2025.12白银首次突破80美元/盎司, 2026.1金价超4600美元/盎司</span> <small style="color:#1565c0">银河</small><br>*(新华社; 21世纪经济报道)*
+
+## ⚠ RISK: 极端流动性危机下白银可能先崩再涨
+
+### 2008年历史警示
+- <span style="color:${BLUE};font-weight:bold">2008年次贷危机中白银暴跌约57%, 之后才反弹</span> <small style="color:#e65100">方正</small><br>*(Bullion-Rates.com, 方正p16)*
+- <span style="color:#000;font-weight:bold">说明"避险=白银涨"在全面流动性危机中不成立</span>
+`;
+
+const {Transformer,Markmap}=window.markmap;
+Markmap.create('#mm',{color:getColor,colorFreezeLevel:0,initialExpandLevel:-1,maxWidth:500,paddingX:14},new Transformer().transform(md).root);
+</script>
+</body>
+</html>

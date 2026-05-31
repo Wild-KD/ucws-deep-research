@@ -335,12 +335,12 @@ body {
       <div class="chapter-en">Search</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"我想研究今年年初白银暴涨的原因。此前只有基本常识，不知从何看起。"</div>
-      <h2 class="chapter-title">自己找到了<em>三篇不同范式</em>的研报</h2>
+      <div class="chapter-narrative">"最近业务上需要 cover 一下白银，之前完全没看过这个品种。想快速搞清楚，但又不想花太多时间，也知道研报里有些东西不一定靠谱。"</div>
+      <h2 class="chapter-title">先找到<em>靠谱的报告</em>再说</h2>
       <div class="chapter-body">
-        我从白银领域的权威信息源中，找到了三篇覆盖不同研究范式的研报：<strong>国泰君安</strong>（期货展望，最详细的 45 页）、<strong>方正证券</strong>（供需结构 + 历史复盘，23 页）、<strong>银河证券</strong>（宏观周报视角，13 页）。
+        我翻了一圈，挑了三篇视角不太一样的：<strong>国泰君安</strong>做期货的，写了 45 页，最详细；<strong>方正证券</strong>从供需结构切入，还做了历史复盘，23 页；<strong>银河证券</strong>是宏观周报里的一段，13 页。
         <br><br>
-        三篇加起来 81 页。如果自行阅读，起码需要 3 到 4 个小时。我把它们上传到系统，让 AI 帮我消化。
+        三篇加起来 81 页。要是自己啃，怎么也得三四个小时。上传到系统，让它先帮我过一遍。
       </div>
     </div>
   </div>
@@ -357,14 +357,14 @@ body {
       <div class="chapter-en">Read</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"光是国泰那篇就 45 页。我需要快速消化核心要点，同时担心研报数据不准或逻辑有跳步。"</div>
-      <h2 class="chapter-title">金字塔原则<em>严格拆解</em>每篇研报</h2>
+      <div class="chapter-narrative">"81 页读不完是肯定的。但只看摘要的话，又怕漏掉关键假设，到时候跟人聊起来说不清楚。"</div>
+      <h2 class="chapter-title">每篇报告，<em>一页看完核心逻辑</em></h2>
       <div class="chapter-body">
-        两个核心需求：<strong>快速消化</strong>三篇研报的核心要点，以及<strong>严格拆解</strong>每个结论背后的逻辑链条，复核数据是否准确。
+        系统把每篇报告按金字塔原则拆开：每个标题不是"供给端"这种标签，而是"供给短期收缩，伴生矿制约增产"这样的结论句。看标题就知道报告在说什么。
         <br><br>
-        系统严格遵循 Minto 金字塔原理拆解逻辑，用 <strong>IB Color Code</strong> 标注数据可信度（<span style="color:#4a9eff">蓝=引用</span>、<span style="color:#4ade80">绿=假设</span>、黑=计算），补充逻辑跳步让新入门读者也能看懂。
+        数据用 <strong>IB Color Code</strong> 标颜色（<span style="color:#4a9eff">蓝=引用别人的</span>、<span style="color:#4ade80">绿=作者自己猜的</span>、黑=算出来的），一眼看出哪些是事实哪些是判断。不懂的地方自动补了常识解释。
         <br><br>
-        支持在<strong>原文复刻</strong>（忠实原报告推导逻辑）和<strong>逻辑重组</strong>（对原逻辑进行再度重组优化）两种视图间切换。
+        两种看法：<strong>原文复刻</strong>忠实还原报告自己的思路，<strong>逻辑重组</strong>把思路重新理了一遍。可以来回切。
       </div>
       <div class="chapter-links">
         <a class="ch-link" href="/investment/demo/silver/markmap_guotai.html" target="_blank"><span class="ico">△</span>国泰君安 · 金字塔</a>
@@ -386,14 +386,14 @@ body {
       <div class="chapter-en">Verify</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"报告里的数据靠谱吗？那些'因为 A 所以 B'的推导，真的站得住脚吗？"</div>
-      <h2 class="chapter-title">多 Agent 并发：<em>既审数据，也审逻辑</em></h2>
+      <div class="chapter-narrative">"读是读完了，但券商报告嘛，有些数据不知道从哪来的，有些推理跳得挺快。本来就知道不能全信，得核一下才放心。"</div>
+      <h2 class="chapter-title">每个数据、每条推理，<em>逐条过一遍</em></h2>
       <div class="chapter-body">
-        <strong>审数据</strong>：每个数据节点分配独立的验证 Agent，溯源到一手来源（Silver Institute、CME、LBMA），比对数据是否有误。
+        <strong>数据对不对？</strong> 比如报告说"矿产银 846.6 Moz"，系统直接去 Silver Institute 官网查，对上了就标绿，对不上标红。每条都有来源链接，你可以自己点进去看。
         <br><br>
-        <strong>审逻辑</strong>：每条因果推理独立检验，判断逻辑推导是否严密，有没有关键跳步。
+        <strong>逻辑通不通？</strong> 比如"供需缺口 → 价格上涨"，中间是不是跳了一步？逼空机制是怎么传导的？每条推理都单独检验。
         <br><br>
-        全部 Agent 并发执行，大幅加速审计效率。
+        几十个验证任务同时跑，几分钟出结果。要是我自己核，又是半天。
       </div>
       <div class="color-row">
         <span class="color-chip cc-green">绿 · 验证通过</span>
@@ -423,14 +423,14 @@ body {
       <div class="chapter-en">Distill</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"验证完了这么多数据点，哪些是正确的核心判断？哪些 Source 以后还用得上？"</div>
-      <h2 class="chapter-title">沉淀<em>正确的核心判断</em>与<em>可追踪的知识资产</em></h2>
+      <div class="chapter-narrative">"三篇报告核完了，一堆绿标黄标红标。但不是所有对的东西都重要，我得把真正有用的留下来。"</div>
+      <h2 class="chapter-title">把<em>值得记住的</em>留下来</h2>
       <div class="chapter-body">
-        从验证结果中沉淀两类资产：
+        两件事值得沉淀：
         <br><br>
-        <strong>核心判断</strong>：经过验证的、对投资主线有决定性贡献的关键事实。红色剔除，黄色择优，绿色中只保留对故事有贡献的。
+        <strong>核心判断</strong>：不是"所有验证通过的"，而是"对这条投资主线真正有决定性影响的"。比如"连续五年缺口累计消耗 762 Moz 库存"比"某矿企去年产量微增 3%"重要得多。
         <br><br>
-        <strong>知识资产库</strong>：从不同 Source 获取的定量数据，按分类整理成结构化表格，每条都有可追踪的一手来源 URL。这不是一次性产物，而是未来持续追踪和深入研究的起点。
+        <strong>数据源</strong>：Silver Institute 的年度供需表、CME 的库存日报、LBMA 的月度数据。这些 Source 以后还要反复用，不能每次都从头找。整理成表格存起来。
       </div>
     </div>
   </div>
@@ -447,12 +447,14 @@ body {
       <div class="chapter-en">Merge</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"三篇报告加起来有四五十个零散维度。国泰从期货角度看，方正从供需看，银河从宏观看。我需要一个大一统的视角。"</div>
-      <h2 class="chapter-title">从零散维度中，<em>合成一条逻辑主线</em></h2>
+      <div class="chapter-narrative">"现在我手上有三份拆好的报告、一堆验证过的数据点。但国泰讲期货，方正讲供需，银河讲宏观，各说各的。我脑子里还是没有一条线。"</div>
+      <h2 class="chapter-title">三篇报告，<em>理出一条线</em></h2>
       <div class="chapter-body">
-        让 AI 结合金字塔原理，从四五十个零散维度中寻找一个"大一统"视角，把逻辑理清楚。按 <strong>WHY</strong>（为什么有结构性问题）、<strong>HOW</strong>（问题怎么变成危机）、<strong>CONTEXT</strong>（宏观大背景）、<strong>RISK</strong>（什么情况会反转）组织。
+        系统从四五十个零散维度里，帮我找到一个统一视角：<strong>白银面临结构性供需缺口，现货市场机制正在把缺口转化为逼空风险</strong>。
         <br><br>
-        每个结论都标明已验证还是未验证。像是你自己花一整天读完 81 页后，在脑子里形成的那条主线。
+        围绕这条线，按 <strong>WHY</strong>（为什么有缺口）、<strong>HOW</strong>（缺口怎么变成危机）、<strong>CONTEXT</strong>（宏观在帮忙还是拖后腿）、<strong>RISK</strong>（什么情况下这条线会断）组织。每个结论标明了哪些是验证过的、哪些还没有。
+        <br><br>
+        说白了就是：如果我自己花一整天读完 81 页，脑子里大概也会形成这么一条线。现在不用了。
       </div>
       <div class="data-chain">
         <div class="label">完整供需数据链</div>
@@ -478,12 +480,12 @@ body {
       <div class="chapter-en">Track</div>
     </div>
     <div class="chapter-right fade-in">
-      <div class="chapter-narrative">"主线懂了。但白银的故事还在继续，接下来具体该盯哪些数据？"</div>
-      <h2 class="chapter-title">按逻辑主线，<em>AI 告诉你该追踪什么</em></h2>
+      <div class="chapter-narrative">"主线搞清楚了，跟人聊起来也能说个一二三。但这个品种我以后还得持续关注，不可能每次都从头来。"</div>
+      <h2 class="chapter-title">主线告诉你<em>该盯什么</em></h2>
       <div class="chapter-body">
-        根据"合"出的数据线，AI 确定后续应关注的具体数据，按<strong>供需面</strong>（供需平衡、缺口趋势、ETF 持仓）、<strong>现货面</strong>（COMEX 库存、LBMA 库存、Lease Rate）、<strong>宏观面</strong>（FedWatch、金银比、DXY）三大框架组织。
+        既然主线是"供需缺口 + 逼空风险"，那该盯的就很清楚了：<strong>供需面</strong>看缺口有没有在收窄、<strong>现货面</strong>看库存和 Lease Rate 有没有异动、<strong>宏观面</strong>看美联储会不会突然转向。
         <br><br>
-        支持自定义看板追踪。追踪过程中复用"沉"步沉淀的 Source 和逻辑框架，让你持续判断主线还成不成立、什么时候该修正判断。
+        系统按这条逻辑自动生成看板，每个指标从"沉"步留下的 Source 里拉最新数据。哪天某个指标突然不对劲，说明主线可能要修正了。
       </div>
       <div class="chapter-links">
         <a class="ch-link" href="/investment/demo/silver/dashboard.html" target="_blank"><span class="ico">▦</span>前瞻追踪看板</a>

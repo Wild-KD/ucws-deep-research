@@ -10,7 +10,10 @@ class AnthropicProvider(LLMProvider):
 
     def __init__(self, config: LLMConfig):
         self.config = config
-        self.client = anthropic.AsyncAnthropic(api_key=config.api_key)
+        kwargs = {"api_key": config.api_key}
+        if config.base_url:
+            kwargs["base_url"] = config.base_url
+        self.client = anthropic.AsyncAnthropic(**kwargs)
 
     async def chat(
         self,

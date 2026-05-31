@@ -26,6 +26,7 @@ class LLMConfig:
                 provider="anthropic",
                 model=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
                 api_key=os.getenv("ANTHROPIC_API_KEY", ""),
+                base_url=os.getenv("ANTHROPIC_BASE_URL"),
             )
         elif provider == "openai":
             return cls(

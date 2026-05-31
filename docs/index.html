@@ -13,12 +13,11 @@
   --t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--t5:#3f3f46;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;min-height:100vh}
+body{font-family:'Inter',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;min-height:100vh}
 body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
 
 .wrap{max-width:900px;margin:0 auto;padding:0 20px}
 
-/* nav */
 nav{padding:24px 0 16px;display:flex;align-items:center}
 .brand{display:flex;align-items:center;gap:10px}
 .brand-bar{width:2px;height:24px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
@@ -29,97 +28,77 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .nav-right a:hover{color:var(--accent)}
 
 /* hero */
-.hero{margin:72px 0 40px;max-width:600px}
-.hero h1{font-size:42px;font-weight:200;letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.hero{margin:64px 0 20px;max-width:620px}
+.hero h1{font-size:38px;font-weight:200;letter-spacing:-0.02em;line-height:1.2;margin-bottom:20px}
 .hero h1 strong{font-weight:200;color:var(--accent)}
-.hero .sub{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:28px}
-.hero .sub b{color:var(--fg);font-weight:500}
 
-/* input card */
+.pain{margin-bottom:28px}
+.pain p{font-size:14px;color:var(--t2);line-height:1.8;margin-bottom:6px}
+.pain b{color:var(--fg);font-weight:500}
+
+.value{font-size:15px;color:var(--fg);line-height:1.7;margin-bottom:28px;font-weight:300}
+.value em{font-style:normal;color:var(--accent);font-weight:400}
+
+/* input */
 .input-card{
   border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);
-  padding:28px;margin-bottom:48px;
+  padding:24px 28px;margin-bottom:48px;
 }
-.input-card label{
-  display:block;font-size:11px;font-weight:500;letter-spacing:0.12em;
-  text-transform:uppercase;color:var(--t3);margin-bottom:10px;
-}
+.input-card label{display:block;font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
 .input-row{display:flex;gap:12px;align-items:center}
-.input-field{
-  flex:1;background:transparent;border:none;border-bottom:1px solid var(--card-border);
-  color:var(--fg);font-size:18px;font-weight:300;padding:8px 0;outline:none;
-  font-family:inherit;transition:border-color 0.2s;
-}
+.input-field{flex:1;background:transparent;border:none;border-bottom:1px solid var(--card-border);color:var(--fg);font-size:18px;font-weight:300;padding:8px 0;outline:none;font-family:inherit;transition:border-color 0.2s}
 .input-field:focus{border-bottom-color:var(--accent)}
 .input-field::placeholder{color:var(--t4)}
-.start-btn{
-  padding:10px 24px;background:var(--accent);color:#000;font-size:13px;font-weight:500;
-  border:none;border-radius:4px;cursor:pointer;font-family:inherit;
-  letter-spacing:0.02em;transition:background 0.15s;white-space:nowrap;
-}
+.start-btn{padding:10px 24px;background:var(--accent);color:#000;font-size:13px;font-weight:500;border:none;border-radius:4px;cursor:pointer;font-family:inherit;letter-spacing:0.02em;transition:background 0.15s;white-space:nowrap;text-decoration:none;display:inline-block}
 .start-btn:hover{background:#dfb97e}
 .input-hint{font-size:11px;color:var(--t4);margin-top:10px}
 
-/* flow steps */
-.flow{display:flex;gap:0;margin-top:20px;align-items:flex-start}
-.flow-step{flex:1;text-align:center;position:relative}
-.flow-step .num{
-  font-size:10px;font-weight:600;color:var(--t4);letter-spacing:0.05em;margin-bottom:4px;
-}
-.flow-step .label{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:2px}
-.flow-step .desc{font-size:10px;color:var(--t4);line-height:1.4}
-.flow-arrow{flex:0 0 20px;display:flex;align-items:center;justify-content:center;color:var(--t5);font-size:11px;padding-top:14px}
-
-/* section divider */
-.divider{
-  display:flex;align-items:center;gap:10px;margin:48px 0 20px;
-}
+/* divider */
+.divider{display:flex;align-items:center;gap:10px;margin:48px 0 20px}
 .divider::before{content:'';width:24px;height:1px;background:var(--accent)}
 .divider span{font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--t3)}
 
-/* demo grid */
-.demo-intro{font-size:13px;color:var(--t3);margin-bottom:20px;line-height:1.6}
-.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.demo-link{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 16px;border-radius:8px;text-decoration:none;color:var(--fg);
-  border:1px solid var(--card-border);background:var(--card-bg);transition:all 0.15s;
-}
+/* flow */
+.flow-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-bottom:40px}
+.flow-step{text-align:center;position:relative;padding:0 4px}
+.flow-step .zh{font-size:26px;font-weight:300;color:var(--fg);margin-bottom:4px;letter-spacing:0.08em}
+.flow-step .en{font-size:9px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+.flow-step .desc{font-size:11px;color:var(--t3);line-height:1.45}
+.flow-step.hl .zh{color:var(--accent)}
+.flow-arrow{position:absolute;right:-6px;top:14px;color:var(--t5);font-size:11px}
+
+/* principles */
+.principles{margin-bottom:48px}
+.principle-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.principle{padding:16px 18px;border-bottom:1px solid var(--card-border)}
+.principle:nth-child(odd){border-right:1px solid var(--card-border)}
+.principle dt{font-size:13px;font-weight:600;color:var(--fg);margin-bottom:4px}
+.principle dd{font-size:12px;color:var(--t3);line-height:1.55}
+
+/* demo */
+.demo-intro{font-size:13px;color:var(--t3);margin-bottom:6px;line-height:1.6}
+.demo-story{font-size:12px;color:var(--t4);margin-bottom:20px;line-height:1.6;font-style:italic}
+.demo-group-label{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin:16px 0 8px}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.demo-link{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:8px;text-decoration:none;color:var(--fg);border:1px solid var(--card-border);background:var(--card-bg);transition:all 0.15s}
 .demo-link:hover{border-color:rgba(212,167,106,0.3);background:rgba(212,167,106,0.03)}
-.demo-link .ico{
-  width:32px;height:32px;border-radius:6px;background:rgba(212,167,106,0.08);
-  display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--accent);flex-shrink:0;
-}
+.demo-link .ico{width:32px;height:32px;border-radius:6px;background:rgba(212,167,106,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--accent);flex-shrink:0}
 .demo-link h4{font-size:12px;font-weight:500;margin-bottom:1px}
 .demo-link p{font-size:10px;color:var(--t3);line-height:1.3}
-.demo-group-label{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin:16px 0 8px}
 
-/* pipeline detail (collapsed by default) */
-.pipeline-toggle{
-  font-size:11px;color:var(--accent);cursor:pointer;border:none;background:none;
-  font-family:inherit;padding:0;margin-top:20px;transition:color 0.15s;
-}
-.pipeline-toggle:hover{color:#dfb97e}
-.pipeline-detail{display:none;margin-top:16px}
-.pipeline-detail.open{display:block}
-.pipeline-table{width:100%;border-collapse:collapse;font-size:11px}
-.pipeline-table th{text-align:left;color:var(--t3);font-weight:600;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--card-border)}
-.pipeline-table td{padding:8px;color:var(--t2);border-bottom:1px solid rgba(255,255,255,0.03)}
-.pipeline-table td:first-child{color:var(--fg);font-weight:500;white-space:nowrap}
-.pipeline-table .hl{color:var(--accent)}
-
-/* footer */
 footer{border-top:1px solid var(--card-border);padding:28px 0;text-align:center;margin-top:48px}
 footer p{font-size:11px;color:var(--t4);margin-bottom:3px}
 footer a{color:var(--accent);text-decoration:none}
 footer a:hover{text-decoration:underline}
 
 @media(max-width:640px){
-  .hero h1{font-size:28px}
+  .hero h1{font-size:26px}
   .input-row{flex-direction:column}
   .start-btn{width:100%}
-  .flow{flex-wrap:wrap;gap:8px}
+  .flow-grid{grid-template-columns:repeat(3,1fr);gap:12px 0}
   .flow-arrow{display:none}
+  .principle-grid{grid-template-columns:1fr}
+  .principle{border-right:none !important}
   .demo-grid{grid-template-columns:1fr}
 }
 </style>
@@ -139,67 +118,115 @@ footer a:hover{text-decoration:underline}
   </div>
 </nav>
 
+<!-- Hero -->
 <div class="hero">
-  <h1>投资研报<br><strong>逻辑审计</strong></h1>
-  <p class="sub">
-    上传研报，AI 自动<b>拆解论点</b>、<b>验证数据</b>、<b>合并结论</b>、生成可审查的交互式知识图谱。
-  </p>
+  <h1>AI 帮你<strong>读透研报</strong></h1>
+
+  <div class="pain">
+    <p>做投资研究时，你是不是也觉得：</p>
+    <p><b>无法快速且深入地了解</b>一个行业、一家公司或一个投资课题；</p>
+    <p>AI 每次给你的知识点<b>很散、没有主线、不知道该信哪个</b>。</p>
+  </div>
+
+  <div class="value">
+    这个产品帮你解决这两个问题。<br>
+    我们从<em>权威源搜索</em>高质量研报，<em>拆解逻辑框架</em>，<em>验证数据真伪</em>，<em>合并成一条清晰的投资主线</em>，最后帮你<em>持续追踪</em>。
+  </div>
 </div>
 
-<!-- Main input -->
+<!-- Input -->
 <div class="input-card">
-  <label>研究标的 / Topic</label>
+  <label>研究标的</label>
   <div class="input-row">
-    <input type="text" class="input-field" id="topicInput" placeholder="例如：白银、特斯拉、光伏产业链...">
+    <input type="text" class="input-field" id="topicInput" placeholder="输入你想研究的标的，例如：白银、特斯拉、光伏产业链...">
     <a href="app.html" class="start-btn" id="startBtn">开始审计</a>
   </div>
-  <div class="input-hint">输入标的后跳转审计页面，支持上传PDF研报或由AI自动搜索</div>
+  <div class="input-hint">上传研报 PDF 或由 AI 自动搜索权威信息源</div>
+</div>
 
-  <div class="flow">
-    <div class="flow-step"><div class="num">01</div><div class="label">上传研报</div><div class="desc">PDF 或 AI 搜索</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="num">02</div><div class="label">拆解论点</div><div class="desc">金字塔 + MECE</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="num">03</div><div class="label">验证数据</div><div class="desc">多Agent并发</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="num">04</div><div class="label">合并结论</div><div class="desc">共识树</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="num">05</div><div class="label">生成图谱</div><div class="desc">markmap</div></div>
+<!-- 六步流程 -->
+<div class="divider"><span>六步工作流</span></div>
+
+<div class="flow-grid">
+  <div class="flow-step">
+    <div class="zh">搜</div>
+    <div class="en">Search</div>
+    <div class="desc">在权威数据库中搜索高质量研报与信息源</div>
+    <span class="flow-arrow">→</span>
+  </div>
+  <div class="flow-step">
+    <div class="zh">读</div>
+    <div class="en">Read</div>
+    <div class="desc">金字塔式拆解，一眼看穿文章叙事与逻辑</div>
+    <span class="flow-arrow">→</span>
+  </div>
+  <div class="flow-step hl">
+    <div class="zh">审</div>
+    <div class="en">Verify</div>
+    <div class="desc">多 Agent 并发验证数据来源与逻辑推导</div>
+    <span class="flow-arrow">→</span>
+  </div>
+  <div class="flow-step">
+    <div class="zh">合</div>
+    <div class="en">Merge</div>
+    <div class="desc">多篇研报合并为一条清晰的投资主线</div>
+    <span class="flow-arrow">→</span>
+  </div>
+  <div class="flow-step">
+    <div class="zh">展</div>
+    <div class="en">Show</div>
+    <div class="desc">交互式知识图谱，关键事实与核心逻辑一目了然</div>
+    <span class="flow-arrow">→</span>
+  </div>
+  <div class="flow-step">
+    <div class="zh">追</div>
+    <div class="en">Track</div>
+    <div class="desc">定制化看板，持续追踪核心指标与逻辑变化</div>
   </div>
 </div>
 
-<!-- Demo section -->
-<div class="divider"><span>Demo · 白银投资论点审计</span></div>
-<p class="demo-intro">3 篇中国券商研报（共 81 页）完整跑通六步管线的产出。点击查看交互式结果。</p>
-
-<div class="demo-group-label">单报告拆解 + 验证</div>
-<div class="demo-grid">
-  <a class="demo-link" href="markmap_guotai.html"><div class="ico">△</div><div><h4>国泰君安 · 金字塔</h4><p>45页 · 期货展望 · 原文+重组</p></div></a>
-  <a class="demo-link" href="verify_guotai.html"><div class="ico">✓</div><div><h4>国泰君安 · 验证图</h4><p>19个子Agent · 四色染色 · 可点击底稿</p></div></a>
-  <a class="demo-link" href="markmap_galaxy.html"><div class="ico">△</div><div><h4>银河证券 · 金字塔</h4><p>13页 · 宏观周报</p></div></a>
-  <a class="demo-link" href="verify_galaxy.html"><div class="ico">✓</div><div><h4>银河证券 · 验证图</h4><p>数据+逻辑独立验证</p></div></a>
-  <a class="demo-link" href="markmap_founder.html"><div class="ico">△</div><div><h4>方正证券 · 金字塔</h4><p>23页 · 供需+历史复盘</p></div></a>
-  <a class="demo-link" href="verify_founder.html"><div class="ico">✓</div><div><h4>方正证券 · 验证图</h4><p>数据节点+因果边验证</p></div></a>
+<!-- 核心原则 -->
+<div class="divider"><span>核心原则</span></div>
+<div class="principles">
+  <dl class="principle-grid">
+    <div class="principle">
+      <dt>投行级 Color Code</dt>
+      <dd>用投行的颜色标注体系标识数据可信度：蓝色=引用、绿色=假设、黑色=计算。一眼区分事实与判断。</dd>
+    </div>
+    <div class="principle">
+      <dt>咨询业方法论</dt>
+      <dd>MECE 原则（相互独立、完全穷尽）+ Storytelling 方法，讲出一条优于市面水平的逻辑主线。</dd>
+    </div>
+    <div class="principle">
+      <dt>自创验证范式</dt>
+      <dd>四色染色体系（绿=验证通过、金=待验证、红=有冲突、黑=结构），把主观表述转化为可验证的严谨推导。</dd>
+    </div>
+    <div class="principle">
+      <dt>反幻觉与验证时点</dt>
+      <dd>只用报告原文数据，禁止自行计算或编造。以报告发布时点为基准验证，不用"现在"否定"当时"。</dd>
+    </div>
+  </dl>
 </div>
 
-<div class="demo-group-label">跨报告合并</div>
+<!-- Demo -->
+<div class="divider"><span>Demo · 白银投资主线</span></div>
+<p class="demo-intro">我们拆解了 3 篇券商研报（共 81 页），各自形成一条逻辑线，再合并为一条完整的投资主线。</p>
+<p class="demo-story">3 篇研报 → 3 条逻辑线 → 验证染色 → 合并为 1 条主线 → 生成监控看板</p>
+
+<div class="demo-group-label">第一步：每篇研报拆解 + 验证</div>
 <div class="demo-grid">
-  <a class="demo-link" href="merged.html"><div class="ico">◆</div><div><h4>合并共识树</h4><p>WHY/HOW/CONTEXT/RISK · 供需数据链</p></div></a>
-  <a class="demo-link" href="dashboard.html"><div class="ico">▦</div><div><h4>前瞻监控看板</h4><p>供需/现货/宏观 · YTD趋势+异动分析</p></div></a>
+  <a class="demo-link" href="markmap_guotai.html"><div class="ico">△</div><div><h4>国泰君安 · 逻辑拆解</h4><p>45页 · 期货展望 · 金字塔结构</p></div></a>
+  <a class="demo-link" href="verify_guotai.html"><div class="ico">✓</div><div><h4>国泰君安 · 验证染色</h4><p>19个子Agent并发验证 · 四色标注</p></div></a>
+  <a class="demo-link" href="markmap_galaxy.html"><div class="ico">△</div><div><h4>银河证券 · 逻辑拆解</h4><p>13页 · 宏观视角</p></div></a>
+  <a class="demo-link" href="verify_galaxy.html"><div class="ico">✓</div><div><h4>银河证券 · 验证染色</h4><p>数据+逻辑独立验证</p></div></a>
+  <a class="demo-link" href="markmap_founder.html"><div class="ico">△</div><div><h4>方正证券 · 逻辑拆解</h4><p>23页 · 供需+历史复盘</p></div></a>
+  <a class="demo-link" href="verify_founder.html"><div class="ico">✓</div><div><h4>方正证券 · 验证染色</h4><p>数据节点+因果边验证</p></div></a>
 </div>
 
-<!-- Pipeline detail -->
-<button class="pipeline-toggle" onclick="document.getElementById('pipelineDetail').classList.toggle('open');this.textContent=this.textContent.includes('展开')?'收起管线详情 ▲':'展开管线详情 ▼'">展开管线详情 ▼</button>
-<div class="pipeline-detail" id="pipelineDetail">
-  <table class="pipeline-table">
-    <tr><th>Step</th><th>Name</th><th>What it does</th><th>Tools</th></tr>
-    <tr><td>01 搜</td><td>Search</td><td>搜索3+篇不同范式的研报</td><td>web_search</td></tr>
-    <tr><td>02 读</td><td>Decompose</td><td>金字塔拆解 + 逻辑重组 (Minto + MECE)</td><td>pdf_reader</td></tr>
-    <tr><td class="hl">03 审</td><td class="hl">Verify</td><td>多Agent并发验证 + 四色染色 + 底稿</td><td>web_search</td></tr>
-    <tr><td>04 合</td><td>Merge</td><td>Storyteller驱动合并 (WHY/HOW/CONTEXT/RISK)</td><td></td></tr>
-    <tr><td>05 图</td><td>Visualize</td><td>交互式markmap + 验证色</td><td>html_writer</td></tr>
-    <tr><td>06 讲</td><td>Dashboard</td><td>前瞻看板 + AI分析</td><td>web_search</td></tr>
-  </table>
+<div class="demo-group-label">第二步：合并为一条投资主线 + 追踪看板</div>
+<div class="demo-grid">
+  <a class="demo-link" href="merged.html"><div class="ico">◆</div><div><h4>合并投资主线</h4><p>WHY/HOW/CONTEXT/RISK · 完整供需数据链</p></div></a>
+  <a class="demo-link" href="dashboard.html"><div class="ico">▦</div><div><h4>前瞻追踪看板</h4><p>供需/现货/宏观 · 核心指标持续监控</p></div></a>
 </div>
 
 </div>
@@ -207,7 +234,7 @@ footer a:hover{text-decoration:underline}
 <footer>
   <div class="wrap">
     <p><strong>Team KDLD</strong> · UCWS Singapore 2026 · MiroMind Deep Research</p>
-    <p>Built with Claude + MiroMind API · <a href="https://github.com/Wild-KD/ucws-deep-research">Source</a></p>
+    <p><a href="https://www.askmbb.com">AskMBB</a> · <a href="https://github.com/Wild-KD/ucws-deep-research">GitHub</a></p>
   </div>
 </footer>
 

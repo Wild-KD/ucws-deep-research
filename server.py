@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,15 +49,41 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # ── Rate limiting (in-memory, per IP) ──
+    request_counts: dict[str, list[float]] = {}
+    MAX_REQUESTS_PER_HOUR = 10
+    MAX_CONCURRENT_RUNS = 3
+    MAX_UPLOAD_SIZE_MB = 20
+
+    def check_rate_limit(ip: str) -> bool:
+        import time
+        now = time.time()
+        if ip not in request_counts:
+            request_counts[ip] = []
+        request_counts[ip] = [t for t in request_counts[ip] if now - t < 3600]
+        if len(request_counts[ip]) >= MAX_REQUESTS_PER_HOUR:
+            return False
+        request_counts[ip].append(now)
+        return True
+
     # ── API Routes ──
 
     @app.post("/api/run")
     async def start_run(
+        request: Request,
         topic: str = Form(...),
         files: list[UploadFile] = File(default=[]),
         provider: str = Form(default="anthropic"),
     ):
         """Start a new pipeline run. Upload PDFs and/or let the agent search."""
+        client_ip = request.client.host if request.client else "unknown"
+        if not check_rate_limit(client_ip):
+            return JSONResponse({"error": "Rate limit exceeded (10/hour)"}, status_code=429)
+
+        active = sum(1 for r in runs.values() if r["status"] == "running")
+        if active >= MAX_CONCURRENT_RUNS:
+            return JSONResponse({"error": "Too many concurrent runs, try later"}, status_code=503)
+
         run_id = str(uuid.uuid4())[:8]
         run_dir = OUTPUT_DIR / run_id
         run_dir.mkdir(parents=True, exist_ok=True)

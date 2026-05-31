@@ -30,7 +30,7 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .nav-demo:hover{border-color:var(--accent) !important}
 
 /* hero 3/4 + 1/4 */
-.hero-row{display:grid;grid-template-columns:3fr 1fr;gap:32px;margin:56px 0 48px;align-items:start}
+.hero-row{display:grid;grid-template-columns:3fr 1fr;gap:32px;margin:56px 0 48px;align-items:stretch}
 
 /* left 3/4 */
 .hero-left h1{font-size:42px;font-weight:200;letter-spacing:-0.02em;line-height:1.15;margin-bottom:12px}
@@ -64,6 +64,12 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .journey-card .jc-stats .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
 .jc-btn{display:block;text-align:center;padding:10px;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:12px;font-weight:500;text-decoration:none;transition:all 0.15s}
 .jc-btn:hover{background:var(--accent);color:#000}
+.jc-flow{margin-top:12px}
+.jc-flow-item{padding:8px 10px;border:1px solid var(--card-border);border-radius:6px;background:rgba(255,255,255,0.015);margin-bottom:0}
+.jc-flow-item.jc-flow-out{border-color:rgba(212,167,106,0.2);background:rgba(212,167,106,0.03)}
+.jc-flow-label{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin-bottom:2px}
+.jc-flow-val{font-size:11px;color:var(--t2);line-height:1.4}
+.jc-flow-arrow{text-align:center;color:var(--t5);font-size:10px;padding:2px 0}
 
 /* divider */
 .divider{display:flex;align-items:center;gap:10px;margin:48px 0 20px}
@@ -152,13 +158,20 @@ footer a{color:var(--accent);text-decoration:none}
     <a class="jc-btn" href="markmap_guotai.html" style="margin-bottom:16px">查看完整 Demo →</a>
     <h3><span class="ico">◆</span> 白银投资主线</h3>
     <div class="jc-sub">一个研究员从零开始读懂白银的完整旅程</div>
-    <ul class="jc-stats">
-      <li><span class="dot"></span>3 篇券商研报，81 页</li>
-      <li><span class="dot"></span>3 条逻辑线拆解</li>
-      <li><span class="dot"></span>19 个 Agent 并发验证</li>
-      <li><span class="dot"></span>1 条合并投资主线</li>
-      <li><span class="dot"></span>定制追踪看板</li>
-    </ul>
+    <div class="jc-flow">
+      <div class="jc-flow-item"><div class="jc-flow-label">输入</div><div class="jc-flow-val">3 篇券商研报</div></div>
+      <div class="jc-flow-arrow">↓</div>
+      <div class="jc-flow-item"><div class="jc-flow-label">拆解</div><div class="jc-flow-val">3 条逻辑线</div></div>
+      <div class="jc-flow-arrow">↓</div>
+      <div class="jc-flow-item"><div class="jc-flow-label">验证</div><div class="jc-flow-val">多 Agent 并发</div></div>
+      <div class="jc-flow-arrow">↓</div>
+      <div class="jc-flow-item jc-flow-out">
+        <div class="jc-flow-label">产出</div>
+        <div class="jc-flow-val">1 条投资主线</div>
+        <div class="jc-flow-val">验证事实底稿</div>
+        <div class="jc-flow-val">定制追踪看板</div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -228,12 +241,12 @@ footer a{color:var(--accent);text-decoration:none}
 
 <script>
 var details = [
-  {title:'搜 · 权威源搜索', text:'支持自己上传研报 PDF，也支持系统自动搜索权威文章。<br><br>· 在 Bloomberg、Wind、Silver Institute 等权威数据库中搜索<br>· 覆盖卖方研报、买方观点、财经媒体等多种范式<br>· 只搜一手来源，不用二手转述<br>· 未来支持自定义接入数据库（开发中）'},
-  {title:'读 · 金字塔式逻辑拆解', text:'用金字塔原则对每份研报进行单独的逻辑拆解与整理。<br><br>· Minto 结论先行：每个标题是结论，不是分类标签<br>· IB Color Code 标注：蓝=引用、绿=假设、黑=计算<br>· 补充常识跳步，让非专业读者也能看懂<br>· 支持原文复刻与逻辑重组两种视图切换'},
-  {title:'审 · 多 Agent 并发验证', text:'通过多 Agent 并发去验证每一个数据节点，以及逻辑流的关键推导。<br><br>· 每个数据点分配一个独立验证 Agent，全部并发执行<br>· 45 页报告可产生 19 个并发验证任务<br>· 每个 Agent 独立搜索一手来源、比对数据、检验逻辑<br>· 三色染色：绿=验证通过、黄=待验证、红=有冲突'},
-  {title:'沉 · 沉淀关键事实与核心 Source', text:'沉淀有帮助的关键事实，以及该领域研究需要的核心 Source。<br><br>· 筛选出对投资主线真正有贡献的关键事实<br>· 每个数据点记录一手来源 URL<br>· 形成可追踪的知识资产库<br>· 无关但正确的数据降级为佐证，主线保持清晰'},
-  {title:'合 · 多报告合并为投资主线', text:'把多份报告合并为一条完整的投资主线，形成主线叙事。<br><br>· 用 Storyteller 方法先确定故事主线<br>· 按 WHY / HOW / CONTEXT / RISK 搭建共识树<br>· 包含可验算的完整供需数据链<br>· 三篇研报的逻辑线在此合并为一条主线'},
-  {title:'追 · 定制化看板持续追踪', text:'追踪需要关注的核心指标、看板数据，包括最新趋势和最新异动。<br><br>· 按供需面 / 现货面 / 宏观面三大框架组织<br>· 每个指标自动从一手来源拉取最新数据<br>· 附 YTD 趋势分析和近期异动预警<br>· 让你知道主线还成不成立、什么时候该修正判断'}
+  {title:'搜 · 识别权威来源', text:'识别权威来源的权威文章和研报内容。<br><br>· 识别并搜索该领域的权威信息源与高质量研报<br>· 支持互联网搜索，也支持自己上传研报 PDF<br>· 支持自定义接入数据库（开发中）'},
+  {title:'读 · 金字塔式深度拆解', text:'严格遵循金字塔原理，对原文进行深入的逻辑拆解，严格按照 Color Code 标注。<br><br>· 对原文的逻辑进行忠实重塑（原文复刻视图）<br>· 重新组织为新的逻辑框架（逻辑重组视图）<br>· 补充逻辑跳步与概括，让非专业读者也能看懂<br>· IB Color Code：蓝=引用、绿=假设、黑=计算'},
+  {title:'审 · 多 Agent 并发审计', text:'通过多 Agent 并发加速审计，既审数据来源，也审逻辑推导。<br><br>· 每个数据节点：独立溯源到一手来源，验证数据准确性<br>· 每条逻辑推导：独立检验因果关系是否成立<br>· 全部 Agent 并发执行，大幅加速审计效率<br>· 三色染色：绿=验证通过、黄=待验证、红=有冲突'},
+  {title:'沉 · 沉淀关键事实', text:'沉淀正确的核心判断，以及对未来研究有价值的、可追踪的知识资产。<br><br>· 沉淀经过验证的核心事实与关键判断<br>· 沉淀该领域研究需要的核心 Source 与数据来源<br>· 构建可追踪的知识资产库，供后续研究复用'},
+  {title:'合 · 合成逻辑主线', text:'结合金字塔原理，把提炼出来的逻辑框架合成新的逻辑主线。像你自己读完这些文章后形成的那条主线。<br><br>· 符合 MECE 原则：相互独立、完全穷尽<br>· 按 WHY / HOW / CONTEXT / RISK 搭建共识树<br>· 包含可验算的完整供需数据链<br>· 多篇研报的逻辑线合并为一条清晰的投资主线'},
+  {title:'追 · 定制化看板追踪', text:'根据逻辑主线确定追踪对象，通过自定义看板持续追踪，追踪过程中复用之前沉淀的逻辑。<br><br>· 从主线导出需要关注的核心指标<br>· 自定义看板，追踪最新趋势与最新异动<br>· 复用"沉"步沉淀的 Source 和逻辑框架<br>· 让你知道主线还成不成立、什么时候该修正判断'}
 ];
 
 function showStep(i) {

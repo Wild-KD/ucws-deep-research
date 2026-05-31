@@ -31,6 +31,8 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 
 /* hero 3/4 + 1/4 */
 .hero-row{display:grid;grid-template-columns:3fr 1fr;gap:32px;margin:56px 0 48px;align-items:stretch}
+.hero-left{display:flex;flex-direction:column}
+.hero-left .input-card{margin-top:auto}
 
 /* left 3/4 */
 .hero-left h1{font-size:42px;font-weight:200;letter-spacing:-0.02em;line-height:1.15;margin-bottom:12px}
@@ -53,7 +55,7 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .upload-name{font-size:10px;color:var(--t4);margin-left:4px}
 
 /* right 1/4 journey card */
-.journey-card{border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);padding:20px;transition:border-color 0.2s}
+.journey-card{border:1px solid var(--card-border);border-radius:12px;background:var(--card-bg);padding:20px;transition:border-color 0.2s;display:flex;flex-direction:column;height:100%}
 .journey-card:hover{border-color:rgba(212,167,106,0.3)}
 .journey-card h3{font-size:14px;font-weight:500;color:var(--fg);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .journey-card h3 .ico{color:var(--accent)}
@@ -64,7 +66,7 @@ nav{padding:24px 0 16px;display:flex;align-items:center}
 .journey-card .jc-stats .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
 .jc-btn{display:block;text-align:center;padding:10px;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:12px;font-weight:500;text-decoration:none;transition:all 0.15s}
 .jc-btn:hover{background:var(--accent);color:#000}
-.jc-flow{margin-top:12px}
+.jc-flow{margin-top:auto;padding-top:12px}
 .jc-flow-item{padding:8px 10px;border:1px solid var(--card-border);border-radius:6px;background:rgba(255,255,255,0.015);margin-bottom:0}
 .jc-flow-item.jc-flow-out{border-color:rgba(212,167,106,0.2);background:rgba(212,167,106,0.03)}
 .jc-flow-label{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t4);margin-bottom:2px}

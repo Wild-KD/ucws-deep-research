@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    if: ${{ secrets.SSH_PRIVATE_KEY != '' }}
+    if: github.repository == 'Wild-KD/investment-research-engine'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy via SSH

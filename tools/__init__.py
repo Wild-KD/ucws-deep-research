@@ -1,8 +1,8 @@
-from .web_search import WebSearchTool
-from .web_fetch import WebFetchTool
-from .pdf_reader import PDFReaderTool
-from .html_writer import HTMLWriterTool
-from .registry import TOOL_REGISTRY, get_tool_definitions
+from tools.web_search import WebSearchTool
+from tools.web_fetch import WebFetchTool
+from tools.pdf_reader import PDFReaderTool
+from tools.html_writer import HTMLWriterTool
+from tools.registry import TOOL_REGISTRY, get_tool_definitions
 
 __all__ = [
     "WebSearchTool",

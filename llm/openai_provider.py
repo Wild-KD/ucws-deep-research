@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import json
 import httpx
-from .base import LLMProvider, LLMResponse, ToolCall
-from ..config import LLMConfig
+from llm.base import LLMProvider, LLMResponse, ToolCall
+from config import LLMConfig
 
 
 class OpenAIProvider(LLMProvider):

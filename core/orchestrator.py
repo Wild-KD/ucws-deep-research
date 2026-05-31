@@ -10,10 +10,10 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
-from .agent import BaseAgent
-from ..config import Config
-from ..llm import create_provider
-from ..tools import WebSearchTool, WebFetchTool, PDFReaderTool, HTMLWriterTool
+from core.agent import BaseAgent
+from config import Config
+from llm import create_provider
+from tools import WebSearchTool, WebFetchTool, PDFReaderTool, HTMLWriterTool
 
 logger = logging.getLogger(__name__)
 

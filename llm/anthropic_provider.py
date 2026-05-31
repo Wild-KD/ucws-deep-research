@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import anthropic
-from .base import LLMProvider, LLMResponse, ToolCall
-from ..config import LLMConfig
+from llm.base import LLMProvider, LLMResponse, ToolCall
+from config import LLMConfig
 
 
 class AnthropicProvider(LLMProvider):

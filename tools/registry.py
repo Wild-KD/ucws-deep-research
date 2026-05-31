@@ -1,10 +1,10 @@
 """Tool registry: maps tool names to instances and provides Anthropic tool definitions."""
 from __future__ import annotations
 
-from .web_search import WebSearchTool
-from .web_fetch import WebFetchTool
-from .pdf_reader import PDFReaderTool
-from .html_writer import HTMLWriterTool
+from tools.web_search import WebSearchTool
+from tools.web_fetch import WebFetchTool
+from tools.pdf_reader import PDFReaderTool
+from tools.html_writer import HTMLWriterTool
 
 TOOL_CLASSES = [WebSearchTool, WebFetchTool, PDFReaderTool, HTMLWriterTool]
 

@@ -8,8 +8,8 @@ import json
 import logging
 from pathlib import Path
 
-from ..llm.base import LLMProvider, LLMResponse
-from ..tools.registry import TOOL_REGISTRY
+from llm.base import LLMProvider, LLMResponse
+from tools.registry import TOOL_REGISTRY
 
 logger = logging.getLogger(__name__)
 

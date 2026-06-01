@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>沉 · 核心判断与知识资产 — 白银</title>
+<title>沉 · Source 注册表 — 白银</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#141417;--fg:#e8e8ed;--accent:#d4a76a;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--card-border:rgba(255,255,255,0.07);--green:#4ade80;--gold:#d4a843;--red:#f87171}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,-apple-system,'PingFang SC',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;padding:0}
+body{font-family:'Inter',system-ui,-apple-system,'PingFang SC',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
 body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
 
 .topbar{padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--card-border)}
@@ -17,37 +17,37 @@ body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-5
 .topbar a{font-size:11px;color:var(--t3);text-decoration:none}
 .topbar a:hover{color:var(--accent)}
 
-.wrap{max-width:1100px;margin:0 auto;padding:40px 32px 60px}
-
+.wrap{max-width:1200px;margin:0 auto;padding:40px 32px 60px}
 h1{font-size:32px;font-weight:200;letter-spacing:-0.02em;margin-bottom:8px}
 h1 em{font-style:normal;color:var(--accent);font-weight:300}
-.subtitle{font-size:14px;color:var(--t3);margin-bottom:40px;line-height:1.6}
+.subtitle{font-size:14px;color:var(--t3);margin-bottom:12px;line-height:1.6}
+.stats{display:flex;gap:20px;margin-bottom:40px;font-size:12px;color:var(--t4)}
+.stats b{color:var(--accent);font-weight:600;font-size:14px;margin-right:2px}
 
-.section-label{display:flex;align-items:center;gap:10px;margin:40px 0 16px}
+.section-label{display:flex;align-items:center;gap:10px;margin:36px 0 14px}
 .section-label::before{content:'';width:20px;height:1px;background:var(--accent)}
 .section-label span{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3)}
+.section-desc{font-size:12px;color:var(--t4);margin-bottom:14px}
 
-/* tables */
-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:32px}
-thead th{text-align:left;font-weight:600;color:var(--t3);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;padding:10px 12px;border-bottom:2px solid rgba(212,167,106,0.25);background:rgba(212,167,106,0.04)}
-tbody td{padding:10px 12px;border-bottom:1px solid var(--card-border);color:var(--t2);vertical-align:top;line-height:1.5}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+thead th{text-align:left;font-weight:600;color:var(--t3);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;padding:10px 10px;border-bottom:2px solid rgba(212,167,106,0.25);background:rgba(212,167,106,0.04);white-space:nowrap}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--card-border);color:var(--t2);vertical-align:top;line-height:1.5}
 tbody tr:hover td{background:rgba(255,255,255,0.015)}
-td:first-child{color:var(--fg);font-weight:500}
-.color-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
-.dot-green{background:var(--green)}
-.dot-gold{background:var(--gold)}
-.dot-red{background:var(--red)}
-a.src-link{color:var(--accent);text-decoration:none;font-size:11px;word-break:break-all}
+td:first-child{color:var(--fg);font-weight:500;white-space:nowrap}
+a.src-link{color:var(--accent);text-decoration:none;font-size:11px}
 a.src-link:hover{text-decoration:underline}
-.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:500}
+.tag{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;letter-spacing:0.02em}
 .tag-auth{background:rgba(74,222,128,0.1);color:var(--green)}
-.tag-reliable{background:rgba(212,167,106,0.1);color:var(--accent)}
+.tag-rel{background:rgba(212,167,106,0.1);color:var(--accent)}
 .tag-ref{background:rgba(255,255,255,0.05);color:var(--t3)}
 .tag-free{background:rgba(74,222,128,0.08);color:var(--green)}
 .tag-paid{background:rgba(248,113,113,0.08);color:var(--red)}
+.tag-reg{background:rgba(212,167,106,0.08);color:var(--gold)}
 .freq{font-size:10px;color:var(--t4)}
+.cited{font-size:10px;color:var(--t4)}
+.data-list{font-size:11px;color:var(--t3);line-height:1.5}
 
-.note{font-size:11px;color:var(--t4);margin-top:8px;line-height:1.5;font-style:italic}
+.note{font-size:11px;color:var(--t4);margin:16px 0 0;line-height:1.5;font-style:italic}
 </style>
 </head>
 <body>
@@ -59,125 +59,210 @@ a.src-link:hover{text-decoration:underline}
 
 <div class="wrap">
 
-<h1>沉 · 核心判断与<em>知识资产</em></h1>
-<p class="subtitle">从三篇研报的验证结果中，沉淀下来的两样东西：对投资主线有决定性影响的核心判断，以及未来持续追踪需要的数据源。</p>
+<h1>沉 · <em>Source 注册表</em></h1>
+<p class="subtitle">从三篇研报中提取的所有一手数据来源。每个 Source 登记了它提供什么数据、更新频率、访问方式。这张表是"追"步看板的数据基础。</p>
+<div class="stats">
+  <span><b>3</b> 篇研报</span>
+  <span><b>100+</b> 处引用</span>
+  <span><b>7</b> 类数据源</span>
+  <span><b>30+</b> 个独立 Source</span>
+</div>
 
-<!-- Core Judgments -->
-<div class="section-label"><span>核心判断</span></div>
-
+<!-- 供需基本面 -->
+<div class="section-label"><span>供需基本面数据</span></div>
+<div class="section-desc">白银供给、需求、库存、缺口的核心数据源</div>
 <table>
-<thead>
-  <tr><th style="width:30px">#</th><th>判断</th><th style="width:60px">验证</th><th style="width:180px">来源</th></tr>
-</thead>
-<tbody>
-  <tr>
-    <td>1</td>
-    <td>白银连续第五年供需缺口，2021-2025 累计消耗库存 <strong>762 Moz</strong></td>
-    <td><span class="color-dot dot-green"></span>绿</td>
-    <td>Silver Institute WSS 2026<br><span class="freq">国泰 p.36 / 方正 p.8</span></td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>2025 年缺口 <strong>-40.3 Moz</strong>，2026E 预计扩大至 <strong>-46.3 Moz</strong></td>
-    <td><span class="color-dot dot-green"></span>绿</td>
-    <td>Silver Institute WSS 2026<br><span class="freq">WSS 2026 (2026.4发布)</span></td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>光伏用银占工业需求比重持续上升，2024 年达 <strong>193 Moz</strong>，结构性增量不可逆</td>
-    <td><span class="color-dot dot-green"></span>绿</td>
-    <td>Silver Institute / CRU<br><span class="freq">国泰 p.28 / 方正 p.15</span></td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>矿产银受伴生矿比例（~70%）制约，即使银价上涨也难大幅增产</td>
-    <td><span class="color-dot dot-green"></span>绿</td>
-    <td>USGS / 国泰 p.33<br><span class="freq">结构性约束，长期有效</span></td>
-  </tr>
-  <tr>
-    <td>5</td>
-    <td>COMEX 注册库存持续下降，2026 年 5 月约 <strong>340 Moz</strong>，年内降幅约 23%</td>
-    <td><span class="color-dot dot-gold"></span>黄</td>
-    <td>CME Group<br><span class="freq">日度数据，近似值</span></td>
-  </tr>
-  <tr>
-    <td>6</td>
-    <td>Lease Rate 1M 在 2026 年 5 月飙升至约 <strong>20%</strong>，远超长期均值（<1%），显示现货极度紧张</td>
-    <td><span class="color-dot dot-gold"></span>黄</td>
-    <td>Bloomberg<br><span class="freq">日度，付费源</span></td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>FedWatch 不降息概率从年初 15% 升至 <strong>70%</strong>，宏观面从利好转向中性偏空</td>
-    <td><span class="color-dot dot-green"></span>绿</td>
-    <td>CME FedWatch<br><span class="freq">周度，免费</span></td>
-  </tr>
-</tbody>
-</table>
-
-<p class="note">筛选标准："如果这个事实不存在，投资主线会改变吗？"会 → 核心判断。不会 → 支撑细节，不列入。<br>例如"某矿企去年产量微增 3%"验证为绿，但对主线无决定性影响，不在此表。</p>
-
-<!-- Source Registry -->
-<div class="section-label"><span>Source 注册表 · 知识资产</span></div>
-
-<table>
-<thead>
-  <tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>可用性</th></tr>
-</thead>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr>
     <td>Silver Institute<br><a class="src-link" href="https://www.silverinstitute.org" target="_blank">silverinstitute.org</a></td>
     <td><span class="tag tag-auth">权威</span></td>
-    <td>· 年度供需平衡表（2015-2026E）<br>· 矿产银/再生银产量<br>· 工业需求分项（含光伏）<br>· 供需缺口</td>
+    <td class="data-list">· 全球白银供需平衡表 (2016-2025F)<br>· 矿产银/再生银产量<br>· 工业需求分项 (光伏/电子/钎焊)<br>· 投资需求/珠宝/银器<br>· 供需缺口<br>· 前十矿产生产国产量<br>· 矿产类型结构 (原生银/金/铜/铅锌)</td>
     <td><span class="freq">年度</span></td>
     <td><span class="tag tag-free">免费摘要</span></td>
+    <td class="cited">国泰 p.40<br>方正 p.7-16</td>
   </tr>
   <tr>
-    <td>CME Group<br><a class="src-link" href="https://www.cmegroup.com" target="_blank">cmegroup.com</a></td>
-    <td><span class="tag tag-auth">权威</span></td>
-    <td>· COMEX 白银库存（注册+合格）<br>· 期货持仓报告<br>· FedWatch 利率概率</td>
-    <td><span class="freq">日度/周度</span></td>
-    <td><span class="tag tag-free">免费</span></td>
-  </tr>
-  <tr>
-    <td>LBMA<br><a class="src-link" href="https://www.lbma.org.uk" target="_blank">lbma.org.uk</a></td>
-    <td><span class="tag tag-auth">权威</span></td>
-    <td>· 伦敦金库白银库存<br>· 银价定盘价</td>
-    <td><span class="freq">月度/日度</span></td>
-    <td><span class="tag tag-free">免费</span></td>
-  </tr>
-  <tr>
-    <td>Bloomberg<br><a class="src-link" href="https://www.bloomberg.com" target="_blank">bloomberg.com</a></td>
-    <td><span class="tag tag-reliable">可靠</span></td>
-    <td>· Lease Rate 1M/3M/6M<br>· 金银比<br>· ETF 持仓（SLV/PSLV）</td>
-    <td><span class="freq">日度</span></td>
+    <td>WoodMackenzie<br><a class="src-link" href="https://www.woodmac.com" target="_blank">woodmac.com</a></td>
+    <td><span class="tag tag-rel">可靠</span></td>
+    <td class="data-list">· 铜锌矿产量展望<br>· 白银矿产供给预测 (2026-2030)</td>
+    <td><span class="freq">年度</span></td>
     <td><span class="tag tag-paid">付费</span></td>
+    <td class="cited">国泰 p.37</td>
   </tr>
   <tr>
-    <td>ICE<br><a class="src-link" href="https://www.ice.com" target="_blank">ice.com</a></td>
+    <td>USGS 美国地质调查局<br><a class="src-link" href="https://www.usgs.gov" target="_blank">usgs.gov</a></td>
     <td><span class="tag tag-auth">权威</span></td>
-    <td>· 美元指数 DXY</td>
-    <td><span class="freq">日度</span></td>
-    <td><span class="tag tag-free">免费</span></td>
-  </tr>
-  <tr>
-    <td>USGS<br><a class="src-link" href="https://www.usgs.gov" target="_blank">usgs.gov</a></td>
-    <td><span class="tag tag-auth">权威</span></td>
-    <td>· 全球银矿分布与储量<br>· 伴生矿比例统计</td>
+    <td class="data-list">· 全球银矿储量分布<br>· 伴生矿比例 (~70%)<br>· 关键矿产清单 (2025.11发布)</td>
     <td><span class="freq">年度</span></td>
     <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">方正 p.20</td>
   </tr>
   <tr>
-    <td>iShares (SLV)<br><a class="src-link" href="https://www.ishares.com" target="_blank">ishares.com</a></td>
-    <td><span class="tag tag-reliable">可靠</span></td>
-    <td>· SLV 持仓量（Moz）<br>· 资金流入流出</td>
-    <td><span class="freq">日度</span></td>
+    <td>SMM 上海有色金属网<br><a class="src-link" href="https://www.smm.cn" target="_blank">smm.cn</a></td>
+    <td><span class="tag tag-rel">可靠</span></td>
+    <td class="data-list">· 国内白银社会库存<br>· 矿产银月度产量<br>· 国内白银月度产量<br>· TOPCon电池片银浆单耗 (11-13mg/W)</td>
+    <td><span class="freq">月度</span></td>
+    <td><span class="tag tag-reg">需注册</span></td>
+    <td class="cited">国泰 p.31,33,34<br>方正 p.20</td>
+  </tr>
+  <tr>
+    <td>各矿企年报<br><span class="freq">弗雷斯尼洛/泛美银矿/科尔矿业 等15家</span></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· 核心银矿企业产量<br>· CAPEX 资本开支<br>· 产量指引</td>
+    <td><span class="freq">季度/年度</span></td>
     <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">国泰 p.36</td>
+  </tr>
+  <tr>
+    <td>同花顺 iFinD<br><a class="src-link" href="https://www.51ifind.com" target="_blank">51ifind.com</a></td>
+    <td><span class="tag tag-rel">可靠</span></td>
+    <td class="data-list">· 中国白银产量与消费<br>· 再生银/矿产银分项<br>· 国内工业需求/实物投资/珠宝</td>
+    <td><span class="freq">年度</span></td>
+    <td><span class="tag tag-paid">付费</span></td>
+    <td class="cited">方正 p.19</td>
   </tr>
 </tbody>
 </table>
 
-<p class="note">以上 Source 均在验证步骤中实际使用过，URL 已验证可访问。付费源标记为付费，仅登记不依赖。<br>这张表是"追"步看板的数据基础：每个指标从这里的 Source 拉取最新数据。</p>
+<!-- 交易所与库存 -->
+<div class="section-label"><span>交易所与库存数据</span></div>
+<div class="section-desc">全球白银交易所的库存、持仓、价格数据</div>
+<table>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr>
+    <td>CME Group / COMEX<br><a class="src-link" href="https://www.cmegroup.com" target="_blank">cmegroup.com</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· COMEX 白银期货价格<br>· 注册+合格库存 (Moz)<br>· 期货持仓报告<br>· FedWatch 利率概率</td>
+    <td><span class="freq">日度/周度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">三篇均引用</td>
+  </tr>
+  <tr>
+    <td>LBMA<br><a class="src-link" href="https://www.lbma.org.uk" target="_blank">lbma.org.uk</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· 伦敦金库白银库存 (吨)<br>· 银价定盘价<br>· LBMA-COMEX 价差<br>· 伦敦可流动货源估算</td>
+    <td><span class="freq">月度/日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">国泰 p.31,32,35<br>方正 p.16</td>
+  </tr>
+  <tr>
+    <td>上期所 SHFE<br><a class="src-link" href="https://www.shfe.com.cn" target="_blank">shfe.com.cn</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· 国内白银期货库存/仓单<br>· 期货持仓量<br>· 沪银期货价格</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">国泰 p.34,35<br>方正 p.17</td>
+  </tr>
+  <tr>
+    <td>上海金交所 SGE<br><a class="src-link" href="https://www.sge.com.cn" target="_blank">sge.com.cn</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· 白银库存<br>· 白银T+D 递延费方向<br>· 白银1#对TD升贴水</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">国泰 p.32,34,35</td>
+  </tr>
+  <tr>
+    <td>ICE 洲际交易所<br><a class="src-link" href="https://www.ice.com" target="_blank">ice.com</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· 美元指数 DXY<br>· 布伦特原油价格</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+    <td class="cited">银河 p.3,5</td>
+  </tr>
+</tbody>
+</table>
+
+<!-- ETF 持仓 -->
+<div class="section-label"><span>ETF 持仓数据</span></div>
+<div class="section-desc">全球主要白银ETF的持仓量与资金流动</div>
+<table>
+<thead><tr><th>Source</th><th>产品</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr><td>iShares (贝莱德)<br><a class="src-link" href="https://www.ishares.com" target="_blank">ishares.com</a></td><td>SLV</td><td class="data-list">持仓量 (Moz) / 总价值 / 资金流入流出</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.31<br>方正 p.15,18</td></tr>
+  <tr><td>Sprott<br><a class="src-link" href="https://www.sprott.com" target="_blank">sprott.com</a></td><td>PSLV</td><td class="data-list">持仓量 / 总价值</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.18</td></tr>
+  <tr><td>WisdomTree<br><a class="src-link" href="https://www.wisdomtree.com" target="_blank">wisdomtree.com</a></td><td>PHAG</td><td class="data-list">持仓量 / 总价值</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.31<br>方正 p.18</td></tr>
+  <tr><td>Abrdn<br><a class="src-link" href="https://www.abrdn.com" target="_blank">abrdn.com</a></td><td>SIVR</td><td class="data-list">持仓量 / 总价值</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.31</td></tr>
+</tbody>
+</table>
+
+<!-- 金融终端 -->
+<div class="section-label"><span>金融终端 / 综合数据源</span></div>
+<div class="section-desc">三篇研报的底层数据供应商</div>
+<table>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr>
+    <td>Wind 万得<br><a class="src-link" href="https://www.wind.com.cn" target="_blank">wind.com.cn</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">三篇报告最核心的综合终端：价格/库存/宏观/CPI/通胀/财政/货币/金银比/内外价差 等几乎所有图表数据</td>
+    <td><span class="freq">实时</span></td>
+    <td><span class="tag tag-paid">付费</span></td>
+    <td class="cited">三篇均大量使用</td>
+  </tr>
+  <tr>
+    <td>Bloomberg 彭博<br><a class="src-link" href="https://www.bloomberg.com" target="_blank">bloomberg.com</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td class="data-list">· Lease Rate 1M/3M/6M<br>· 金银比 / 利率相关性<br>· 美国就业/PMI/消费者信心<br>· VIX/流动性指标<br>· SOFR期货</td>
+    <td><span class="freq">实时</span></td>
+    <td><span class="tag tag-paid">付费</span></td>
+    <td class="cited">国泰 p.6-35<br>银河全文</td>
+  </tr>
+  <tr>
+    <td>文华财经<br><a class="src-link" href="https://www.wenhua.com.cn" target="_blank">wenhua.com.cn</a></td>
+    <td><span class="tag tag-rel">可靠</span></td>
+    <td class="data-list">· COMEX 黄金/白银 K线走势<br>· 期货行情数据</td>
+    <td><span class="freq">实时</span></td>
+    <td><span class="tag tag-paid">付费</span></td>
+    <td class="cited">国泰 p.4,5,6</td>
+  </tr>
+</tbody>
+</table>
+
+<!-- 宏观经济 -->
+<div class="section-label"><span>宏观经济数据</span></div>
+<div class="section-desc">央行政策、通胀、就业、财政等宏观数据源</div>
+<table>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr><td>美联储 Federal Reserve<br><a class="src-link" href="https://www.federalreserve.gov" target="_blank">federalreserve.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 联邦基金利率 / FOMC 决议<br>· SRF 常备回购 / ON RRP<br>· 扩表/缩表政策<br>· 准备金管理购买 (RMP)</td><td><span class="freq">实时</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">三篇均引用</td></tr>
+  <tr><td>BLS 美国劳工统计局<br><a class="src-link" href="https://www.bls.gov" target="_blank">bls.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· CPI/核心CPI (同比/环比)<br>· PPI<br>· 初请/持续失业金<br>· 非农时薪</td><td><span class="freq">月度/周度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.7,13<br>银河 p.7,8</td></tr>
+  <tr><td>CBO / IMF / OECD<br><span class="freq">多个国际机构</span></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 美国财政赤字/GDP 预测<br>· 债务占GDP比重<br>· 关税影响测算</td><td><span class="freq">年度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.17,18</td></tr>
+  <tr><td>密歇根大学 / 纽约联储 / 克利夫兰联储</td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 通胀预期 (1年期)<br>· 家庭收入增长率预期<br>· 实时CPI追踪</td><td><span class="freq">月度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.13,14</td></tr>
+</tbody>
+</table>
+
+<!-- 光伏产业 -->
+<div class="section-label"><span>光伏 / 工业需求数据</span></div>
+<div class="section-desc">光伏装机是白银工业需求的核心增量</div>
+<table>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr><td>BNEF 彭博新能源财经<br><a class="src-link" href="https://about.bnef.com" target="_blank">about.bnef.com</a></td><td><span class="tag tag-rel">可靠</span></td><td class="data-list">· 全球光伏新增装机数据及预测</td><td><span class="freq">年度</span></td><td><span class="tag tag-paid">付费</span></td><td class="cited">国泰 p.38</td></tr>
+  <tr><td>SolarPower Europe<br><a class="src-link" href="https://www.solarpowereurope.org" target="_blank">solarpowereurope.org</a></td><td><span class="tag tag-rel">可靠</span></td><td class="data-list">· 欧洲光伏装机数据</td><td><span class="freq">年度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.38</td></tr>
+  <tr><td>EIA 美国能源信息署<br><a class="src-link" href="https://www.eia.gov" target="_blank">eia.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 美国光伏/可再生能源装机<br>· 炼油厂产能利用率</td><td><span class="freq">月度/年度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.38</td></tr>
+  <tr><td>各国光伏机构<br><span class="freq">JPEA(日) / APVI(澳) / ABSOLAR(巴) / Bundesnetzagentur(德) 等</span></td><td><span class="tag tag-ref">参考</span></td><td class="data-list">· 各国光伏新增装机数据</td><td><span class="freq">年度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.38</td></tr>
+</tbody>
+</table>
+
+<!-- 政策 -->
+<div class="section-label"><span>政策与监管数据</span></div>
+<div class="section-desc">影响白银进出口和战略定位的政策信息</div>
+<table>
+<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<tbody>
+  <tr><td>中国海关总署<br><a class="src-link" href="http://www.customs.gov.cn" target="_blank">customs.gov.cn</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银进出口量/金额</td><td><span class="freq">月度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.19-20</td></tr>
+  <tr><td>中国商务部<br><a class="src-link" href="https://www.mofcom.gov.cn" target="_blank">mofcom.gov.cn</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银出口配额管理<br>· 2026年出口审批制度</td><td><span class="freq">不定期</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.19-20</td></tr>
+  <tr><td>美国商务部<br><a class="src-link" href="https://www.commerce.gov" target="_blank">commerce.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银纳入关键矿产清单<br>· 232调查</td><td><span class="freq">不定期</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.32</td></tr>
+  <tr><td>财政部 & 税务总局</td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银出口退税率调整 (13%→5%→0%→13%)</td><td><span class="freq">不定期</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.19</td></tr>
+</tbody>
+</table>
+
+<p class="note">
+  以上 Source 均从三篇研报原文中逐页提取。URL 为各机构官网首页，具体数据页面需进一步深挖（"沉·探"技能）。<br>
+  付费源（Wind/Bloomberg/WoodMac）标记为付费，不作为追踪看板的数据基础；追踪看板优先使用免费的一手数据源。
+</p>
 
 </div>
 </body>

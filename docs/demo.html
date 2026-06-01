@@ -228,6 +228,17 @@ body {
   opacity: 0.85;
   transition: opacity 0.2s;
 }
+.cover-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--card-border);
+}
+.cover-duo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .cover-item:hover img { opacity: 1 }
 .cover-label {
   padding: 8px 12px;
@@ -383,7 +394,10 @@ body {
       </div>
       <div class="report-covers">
         <div class="cover-item">
-          <img src="/investment/docs/img/guotai_cover.png" alt="国泰君安期货研报封面">
+          <div class="cover-duo">
+            <img src="/investment/docs/img/guotai_cover.png" alt="国泰君安研报目录">
+            <img src="/investment/docs/img/guotai_cover2.png" alt="国泰君安研报内页">
+          </div>
           <div class="cover-label">国泰君安 · 45页</div>
         </div>
         <div class="cover-item">
@@ -417,7 +431,10 @@ body {
         <br><br>
         数据用 <strong>IB Color Code</strong> 标颜色（<span style="color:#4a9eff">蓝=引用别人的</span>、<span style="color:#4ade80">绿=作者自己猜的</span>、黑=算出来的），一眼看出哪些是事实哪些是判断。不懂的地方自动补了常识解释。
         <br><br>
-        两种看法：<strong>原文复刻</strong>忠实还原报告自己的思路，<strong>逻辑重组</strong>把思路重新理了一遍。可以来回切。
+        两种看法，可以来回切：
+        <br><br>
+        · <strong>原文复刻</strong>：忠实还原报告自己的推导思路<br>
+        · <strong>逻辑重组</strong>：把思路重新理了一遍，按因果逻辑重建
       </div>
       <div class="chapter-links">
         <a class="ch-link" href="/investment/demo/silver/markmap_guotai.html" target="_blank"><span class="ico">△</span>国泰君安 · 金字塔</a>

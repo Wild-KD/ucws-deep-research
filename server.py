@@ -94,6 +94,11 @@ def create_app() -> FastAPI:
             if f.filename and f.filename.endswith(".pdf"):
                 save_path = UPLOAD_DIR / f"{run_id}_{f.filename}"
                 content = await f.read()
+                if len(content) > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+                    return JSONResponse(
+                        {"error": f"File too large. Max size is {MAX_UPLOAD_SIZE_MB}MB"},
+                        status_code=413,
+                    )
                 save_path.write_bytes(content)
                 report_paths.append(str(save_path))
                 logger.info(f"Saved upload: {save_path} ({len(content)} bytes)")

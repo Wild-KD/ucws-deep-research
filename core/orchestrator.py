@@ -5,6 +5,7 @@ Pipeline Orchestrator: runs the 6-step research pipeline.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import json
 import logging
 from pathlib import Path
@@ -86,15 +87,17 @@ class Orchestrator:
         run_dir = self.output_dir / f"{topic}_{timestamp}"
         run_dir.mkdir(parents=True, exist_ok=True)
 
-        def progress(step, status, detail=""):
+        async def progress(step, status, detail=""):
             logger.info(f"[{step}] {status}: {detail}")
             if on_progress:
-                on_progress(step, status, detail)
+                result = on_progress(step, status, detail)
+                if inspect.isawaitable(result):
+                    await result
 
         results = {}
 
         # ── Step 1: 搜 ──────────────────────────────────────────
-        progress("s1_search", "started")
+        await progress("s1_search", "started")
         if report_paths:
             reports_data = json.dumps(
                 {
@@ -105,18 +108,18 @@ class Orchestrator:
                 },
                 ensure_ascii=False,
             )
-            progress("s1_search", "skipped", "Reports provided by user")
+            await progress("s1_search", "skipped", "Reports provided by user")
         else:
             agent = self._make_agent("search", self.search_tools)
             reports_data = await agent.run(
                 f"Search for at least 3 diverse research reports on: {topic}"
             )
             self._save_step_output(run_dir, "s1_search", reports_data)
-            progress("s1_search", "completed")
+            await progress("s1_search", "completed")
         results["s1"] = reports_data
 
         # ── Step 2: 读 (parallel per report) ─────────────────────
-        progress("s2_decompose", "started")
+        await progress("s2_decompose", "started")
         report_list = json.loads(reports_data).get("reports", [])
 
         async def decompose_one(report: dict) -> str:
@@ -131,11 +134,11 @@ class Orchestrator:
         )
         for i, p in enumerate(pyramids):
             self._save_step_output(run_dir, f"s2_pyramid_{i}", p)
-        progress("s2_decompose", "completed", f"{len(pyramids)} reports decomposed")
+        await progress("s2_decompose", "completed", f"{len(pyramids)} reports decomposed")
         results["s2"] = pyramids
 
         # ── Step 3: 审 (fan-out verification) ─────────────────────
-        progress("s3_verify", "started")
+        await progress("s3_verify", "started")
 
         async def verify_one(pyramid_data: str) -> str:
             agent = self._make_agent("verify", self.verify_tools)
@@ -149,22 +152,22 @@ class Orchestrator:
         )
         for i, v in enumerate(verified):
             self._save_step_output(run_dir, f"s3_verified_{i}", v)
-        progress("s3_verify", "completed", f"{len(verified)} reports verified")
+        await progress("s3_verify", "completed", f"{len(verified)} reports verified")
         results["s3"] = verified
 
         # ── Step 4: 合 ───────────────────────────────────────────
-        progress("s4_merge", "started")
+        await progress("s4_merge", "started")
         agent = self._make_agent("merge")
         merged = await agent.run(
             f"Merge these {len(verified)} verified pyramids into a consensus tree.",
             context={"verified_trees": [json.loads(v) if isinstance(v, str) else v for v in verified]},
         )
         self._save_step_output(run_dir, "s4_merged", merged)
-        progress("s4_merge", "completed")
+        await progress("s4_merge", "completed")
         results["s4"] = merged
 
         # ── Step 5: 图 ───────────────────────────────────────────
-        progress("s5_visualize", "started")
+        await progress("s5_visualize", "started")
         agent = self._make_agent("visualize", self.write_tools)
         viz_result = await agent.run(
             "Generate markmap HTML visualizations for all pyramids and the merged tree.",
@@ -175,11 +178,11 @@ class Orchestrator:
                 "output_dir": str(run_dir),
             },
         )
-        progress("s5_visualize", "completed")
+        await progress("s5_visualize", "completed")
         results["s5"] = viz_result
 
         # ── Step 6: 讲 ───────────────────────────────────────────
-        progress("s6_dashboard", "started")
+        await progress("s6_dashboard", "started")
         agent = self._make_agent("dashboard", self.dashboard_tools)
         dashboard = await agent.run(
             f"Generate a forward monitoring dashboard for: {topic}",
@@ -188,10 +191,10 @@ class Orchestrator:
                 "output_dir": str(run_dir),
             },
         )
-        progress("s6_dashboard", "completed")
+        await progress("s6_dashboard", "completed")
         results["s6"] = dashboard
 
-        progress("pipeline", "completed", f"All outputs in {run_dir}")
+        await progress("pipeline", "completed", f"All outputs in {run_dir}")
         return {
             "run_dir": str(run_dir),
             "topic": topic,

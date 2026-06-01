@@ -225,6 +225,7 @@ table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:60
 const A = 'oklch(42% 0.12 250)';
 const gridC = 'oklch(94% 0.003 250)';
 const txtC = 'oklch(55% 0.01 250)';
+var charts = [];
 
 const base = {
   responsive:true, maintainAspectRatio:false,
@@ -251,7 +252,7 @@ const base = {
 function mk(id,labels,data,color,unit,fillBelow){
   const ctx = document.getElementById(id);
   if(!ctx) return;
-  new Chart(ctx,{type:'line',data:{labels,datasets:[{
+  var chart = new Chart(ctx,{type:'line',data:{labels,datasets:[{
     data, borderColor:color, borderWidth:1.5, pointRadius:0, pointHoverRadius:4,
     pointHoverBackgroundColor:color,
     fill: fillBelow ? {target:'origin',above: fillBelow} : false,
@@ -261,62 +262,85 @@ function mk(id,labels,data,color,unit,fillBelow){
       callbacks:{label:function(c){return c.parsed.y + (unit?' '+unit:'')}}}},
     scales:{...base.scales,y:{...base.scales.y,
       title:{display:!!unit,text:unit||'',font:{size:8},color:txtC}}}}});
+  charts.push(chart);
+  return chart;
 }
 
 function mkBar(id,labels,data,colors,unit){
   const ctx = document.getElementById(id);
   if(!ctx) return;
-  new Chart(ctx,{type:'bar',data:{labels,datasets:[{
+  var chart = new Chart(ctx,{type:'bar',data:{labels,datasets:[{
     data, backgroundColor:colors, borderRadius:2, barPercentage:0.7
   }]},options:{...base,
     plugins:{...base.plugins,tooltip:{...base.plugins.tooltip,
       callbacks:{label:function(c){return c.parsed.y + (unit?' '+unit:'')}}}},
     scales:{...base.scales,y:{...base.scales.y,
       title:{display:!!unit,text:unit||'',font:{size:8},color:txtC}}}}});
+  charts.push(chart);
+  return chart;
 }
 
-mk('cPrice',
-  ['1.2','1.9','1.16','1.23','1.29','2.5','2.12','2.19','2.26','3.5','3.12','3.19','3.26','4.2','4.9','4.16','4.23','4.30','5.7','5.14','5.21','5.29'],
-  [80,88,98,110,121.6,100,86,81,78,76,75,77,76,74,73,76,75,74,76,75,77,75.2],
-  A,'USD/oz','oklch(90% 0.04 250)');
+function destroyCharts(){
+  charts.forEach(function(chart){ chart.destroy(); });
+  charts = [];
+}
 
-var deficitC = [
-  'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(50% 0.14 25)',
-  'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(60% 0.10 25)'
-];
-mkBar('cDeficit',['2021','2022','2023','2024','2025','2026E'],
-  [-52,-250,-201,-149,-40.3,-46.3],deficitC,'Moz');
+function renderDashboardCharts(lang){
+  lang = lang === 'zh' ? 'zh' : 'en';
+  destroyCharts();
 
-mk('cETF',['2025.9','10','11','12','2026.1','2','3','4','5'],
-  [492,510,520,529,520,505,491,485,480],
-  'oklch(50% 0.12 300)','Moz');
+  mk('cPrice',
+    ['1.2','1.9','1.16','1.23','1.29','2.5','2.12','2.19','2.26','3.5','3.12','3.19','3.26','4.2','4.9','4.16','4.23','4.30','5.7','5.14','5.21','5.29'],
+    [80,88,98,110,121.6,100,86,81,78,76,75,77,76,74,73,76,75,74,76,75,77,75.2],
+    A,'USD/oz','oklch(90% 0.04 250)');
 
-mk('cLBMA',['2025.6','7','8','9','10','11','12','2026.1','2','3','4'],
-  [24199,25500,26265,25800,27000,27187,27818,27500,27200,27300,27454],
-  'oklch(48% 0.12 155)','吨');
+  var deficitC = [
+    'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(50% 0.14 25)',
+    'oklch(50% 0.14 25)','oklch(50% 0.14 25)','oklch(60% 0.10 25)'
+  ];
+  mkBar('cDeficit',['2021','2022','2023','2024','2025','2026E'],
+    [-52,-250,-201,-149,-40.3,-46.3],deficitC,'Moz');
 
-mk('cCOMEX',['2025.6','7','8','9','10','11','12','2026.1','2','3','4','5'],
-  [350,400,450,490,532,500,470,440,410,380,360,340],
-  A,'Moz');
+  mk('cETF',['2025.9','10','11','12','2026.1','2','3','4','5'],
+    [492,510,520,529,520,505,491,485,480],
+    'oklch(50% 0.12 300)','Moz');
 
-mk('cLease',['2025.8','9','10初','10.10','11','12','2026.1','2','3','4','5'],
-  [2,3,5,39,5,7.8,8,6.1,7,8,20],
-  'oklch(52% 0.15 50)','%');
+  mk('cLBMA',['2025.6','7','8','9','10','11','12','2026.1','2','3','4'],
+    [24199,25500,26265,25800,27000,27187,27818,27500,27200,27300,27454],
+    'oklch(48% 0.12 155)', lang === 'zh' ? '吨' : 'tonnes');
 
-mk('cFed',['2025.12','2026.1','2','3','4','5'],
-  [20,15,30,45,60,70],
-  'oklch(50% 0.14 25)','%');
+  mk('cCOMEX',['2025.6','7','8','9','10','11','12','2026.1','2','3','4','5'],
+    [350,400,450,490,532,500,470,440,410,380,360,340],
+    A,'Moz');
 
-mk('cRatio',['2026.1初','1.29','2','3','4','5初','5.29'],
-  [58,46,55,62,62,62,55],
-  'oklch(50% 0.10 200)','');
+  mk('cLease', lang === 'zh'
+      ? ['2025.8','9','10初','10.10','11','12','2026.1','2','3','4','5']
+      : ['2025.8','9','early Oct','10.10','11','12','2026.1','2','3','4','5'],
+    [2,3,5,39,5,7.8,8,6.1,7,8,20],
+    'oklch(52% 0.15 50)','%');
 
-mk('cDXY',['2026.1','2','3','4','5'],
-  [100.3,101.3,100.0,99.8,99.0],
-  'oklch(48% 0.08 250)','');
+  mk('cFed',['2025.12','2026.1','2','3','4','5'],
+    [20,15,30,45,60,70],
+    'oklch(50% 0.14 25)','%');
+
+  mk('cRatio', lang === 'zh'
+      ? ['2026.1初','1.29','2','3','4','5初','5.29']
+      : ['early Jan','1.29','2','3','4','early May','5.29'],
+    [58,46,55,62,62,62,55],
+    'oklch(50% 0.10 200)','');
+
+  mk('cDXY',['2026.1','2','3','4','5'],
+    [100.3,101.3,100.0,99.8,99.0],
+    'oklch(48% 0.08 250)','');
+}
+
+window.onResearchLangChange = renderDashboardCharts;
 </script>
 
 <script src="/investment/docs/lang.js"></script>
-<script>initLang();</script>
+<script>
+window.RESEARCH_TITLE_EN = 'Silver · Forward Monitoring Dashboard';
+initLang();
+</script>
 </body>
 </html>

@@ -65,7 +65,7 @@ def serve_demo(args):
         from server import create_app
         import uvicorn
 
-        app = create_app(demo_dir=args.demo_dir or "demo")
+        app = create_app()
         print(f"\n  Serving demo at http://localhost:{args.port}")
         print(f"  Demo directory: {args.demo_dir or 'demo'}\n")
         uvicorn.run(app, host="0.0.0.0", port=args.port)

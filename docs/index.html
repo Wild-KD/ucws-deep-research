@@ -184,12 +184,12 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="divider"><span data-en="Six-Step Workflow">六步工作流</span></div>
 
 <div class="wf-steps" id="wfSteps">
-  <div class="wf-step active" data-step="0"><div class="zh">搜</div><div class="en">Search</div><div class="brief" data-en="Authoritative Sources">权威源搜索</div></div>
-  <div class="wf-step" data-step="1"><div class="zh">读</div><div class="en">Read</div><div class="brief" data-en="Pyramid Decomposition">金字塔拆解</div></div>
-  <div class="wf-step" data-step="2"><div class="zh">审</div><div class="en">Verify</div><div class="brief" data-en="Multi-Agent Audit">多Agent验证</div></div>
-  <div class="wf-step" data-step="3"><div class="zh">沉</div><div class="en">Distill</div><div class="brief" data-en="Distill Key Facts">沉淀关键事实</div></div>
-  <div class="wf-step" data-step="4"><div class="zh">合</div><div class="en">Merge</div><div class="brief" data-en="Merge Thesis">合并主线</div></div>
-  <div class="wf-step" data-step="5"><div class="zh">追</div><div class="en">Track</div><div class="brief" data-en="Continuous Tracking">持续追踪</div></div>
+  <div class="wf-step active" data-step="0"><div class="zh" data-en="01">搜</div><div class="en">Search</div><div class="brief" data-en="Authoritative Sources">权威源搜索</div></div>
+  <div class="wf-step" data-step="1"><div class="zh" data-en="02">读</div><div class="en">Read</div><div class="brief" data-en="Pyramid Decomposition">金字塔拆解</div></div>
+  <div class="wf-step" data-step="2"><div class="zh" data-en="03">审</div><div class="en">Verify</div><div class="brief" data-en="Multi-Agent Audit">多Agent验证</div></div>
+  <div class="wf-step" data-step="3"><div class="zh" data-en="04">沉</div><div class="en">Distill</div><div class="brief" data-en="Distill Key Facts">沉淀关键事实</div></div>
+  <div class="wf-step" data-step="4"><div class="zh" data-en="05">合</div><div class="en">Merge</div><div class="brief" data-en="Merge Thesis">合并主线</div></div>
+  <div class="wf-step" data-step="5"><div class="zh" data-en="06">追</div><div class="en">Track</div><div class="brief" data-en="Continuous Tracking">持续追踪</div></div>
 </div>
 <div class="wf-detail active" id="wfDetail">
   <!-- Content set by JS -->
@@ -245,6 +245,7 @@ footer a{color:var(--accent);text-decoration:none}
 
 <script src="/investment/docs/lang.js"></script>
 <script>
+window.RESEARCH_TITLE_EN = 'Research Engine · AI Investment Detective';
 var details = {
   zh: [
     {title:'搜 · 识别权威来源', text:'识别权威来源的权威文章和研报内容。<br><br>· 识别并搜索该领域的权威信息源与高质量研报<br>· 支持互联网搜索，也支持自己上传研报 PDF<br>· 支持自定义接入数据库（开发中）'},
@@ -264,26 +265,33 @@ var details = {
   ]
 };
 
+function currentLang() {
+  if (window.getResearchLang) return window.getResearchLang();
+  return localStorage.getItem('research-engine-lang') || 'en';
+}
+
 function showStep(i) {
   document.querySelectorAll('.wf-step').forEach(function(el,idx){
     el.classList.toggle('active', idx===i);
   });
-  var lang = localStorage.getItem('research-engine-lang') || 'zh';
+  var lang = currentLang();
   var d = document.getElementById('wfDetail');
   var item = details[lang][i];
   d.innerHTML = '<h4>'+item.title+'</h4><p>'+item.text+'</p>';
   d.classList.add('active');
 }
-var _origToggle = window.toggleLang;
-window.toggleLang = function(){ _origToggle(); showStep(document.querySelector('.wf-step.active').dataset.step|0); };
+
+window.onResearchLangChange = function(){
+  showStep(document.querySelector('.wf-step.active').dataset.step|0);
+};
 
 document.getElementById('wfSteps').addEventListener('click', function(e){
   var step = e.target.closest('.wf-step');
   if(step) showStep(parseInt(step.dataset.step));
 });
 
-showStep(0);
 initLang();
+showStep(0);
 
 function showFileName(input){
   var names = [];

@@ -27,6 +27,6 @@
   };
 
   window.initLang = function () {
-    applyLang(localStorage.getItem(KEY) || 'zh');
+    applyLang(localStorage.getItem(KEY) || 'en');
   };
 })();

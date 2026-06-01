@@ -128,7 +128,8 @@ footer a{color:var(--accent);text-decoration:none}
     <span class="brand-name">Research<em>Engine</em></span>
   </div>
   <div class="nav-right">
-    <a href="/investment/docs/demo.html" class="nav-demo">查看 Demo</a>
+    <button id="langToggle" onclick="toggleLang()" style="border:1px solid var(--card-border);background:transparent;color:var(--t3);font-size:10px;padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit">EN</button>
+    <a href="/investment/docs/demo.html" class="nav-demo" data-en="View Demo">查看 Demo</a>
     <a href="https://www.askmbb.com" target="_blank">AskMBB</a>
     <a href="https://github.com/Wild-KD/ucws-deep-research" target="_blank">GitHub</a>
   </div>
@@ -138,41 +139,41 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="hero-row">
 
   <div class="hero-left">
-    <h1>AI 投资研究<strong>新范式</strong></h1>
-    <div class="subtitle">人类擅长深度，AI 擅长<em>广度</em></div>
-    <div class="sub2">人类与 AI 的最佳配合：<b>你定方向、提问题</b>，AI 帮你搜遍权威源、拆透逻辑、验证数据、合成主线。<br><br>像拥有一个<b>读完 50 篇研报的研究员</b>，随时给你定制化讲解。</div>
+    <h1 data-en="AI Investment Research<strong>Reimagined</strong>">AI 投资研究<strong>新范式</strong></h1>
+    <div class="subtitle" data-en="Humans go deep. AI goes <em>wide</em>.">人类擅长深度，AI 擅长<em>广度</em></div>
+    <div class="sub2" data-en="The best human-AI collaboration: <b>you set the direction and ask questions</b>, AI searches authoritative sources, deconstructs logic, verifies data, and synthesizes the thesis.<br><br>Like having a <b>research analyst who read 50 reports</b>, ready to brief you anytime.">人类与 AI 的最佳配合：<b>你定方向、提问题</b>，AI 帮你搜遍权威源、拆透逻辑、验证数据、合成主线。<br><br>像拥有一个<b>读完 50 篇研报的研究员</b>，随时给你定制化讲解。</div>
 
     <div class="input-card">
-      <label>研究投资问题</label>
-      <input type="text" class="input-field" id="topicInput" placeholder="今年年初白银为什么暴涨？">
+      <label data-en="Research Question">研究投资问题</label>
+      <input type="text" class="input-field" id="topicInput" placeholder="今年年初白银为什么暴涨？" data-ph-en="Why did silver surge in early 2026?">
       <div class="btn-row">
-        <label class="upload-btn" for="fileInput">
+        <label class="upload-btn" for="fileInput" data-en="📄 Upload PDF Reports">
           📄 上传研报 PDF
           <input type="file" id="fileInput" accept=".pdf" multiple style="display:none" onchange="showFileName(this)">
         </label>
         <span class="upload-name" id="fileName"></span>
-        <a href="/investment/docs/app.html" class="start-btn" id="startBtn" style="margin-left:auto">开始深度研究</a>
+        <a href="/investment/docs/app.html" class="start-btn" id="startBtn" style="margin-left:auto" data-en="Start Deep Research">开始深度研究</a>
       </div>
     </div>
   </div>
 
   <!-- Journey card 1/4 -->
   <div class="journey-card" id="journey-section">
-    <a class="jc-btn" href="/investment/docs/demo.html" style="margin-bottom:16px">查看完整 Demo →</a>
-    <h3><span class="ico">◆</span> 白银投资主线</h3>
-    <div class="jc-sub">一个研究员从零开始读懂白银的完整旅程</div>
+    <a class="jc-btn" href="/investment/docs/demo.html" style="margin-bottom:16px" data-en="View Full Demo →">查看完整 Demo →</a>
+    <h3><span class="ico">◆</span> <span data-en="Silver Investment Thesis">白银投资主线</span></h3>
+    <div class="jc-sub" data-en="A researcher's complete journey to understand silver from scratch">一个研究员从零开始读懂白银的完整旅程</div>
     <div class="jc-flow">
-      <div class="jc-flow-item"><div class="jc-flow-label">输入</div><div class="jc-flow-val">3 篇券商研报</div></div>
+      <div class="jc-flow-item"><div class="jc-flow-label" data-en="Input">输入</div><div class="jc-flow-val" data-en="3 Broker Reports">3 篇券商研报</div></div>
       <div class="jc-flow-arrow">↓</div>
-      <div class="jc-flow-item"><div class="jc-flow-label">拆解</div><div class="jc-flow-val">3 条逻辑线</div></div>
+      <div class="jc-flow-item"><div class="jc-flow-label" data-en="Decompose">拆解</div><div class="jc-flow-val" data-en="3 Logic Lines">3 条逻辑线</div></div>
       <div class="jc-flow-arrow">↓</div>
-      <div class="jc-flow-item"><div class="jc-flow-label">验证</div><div class="jc-flow-val">多 Agent 并发</div></div>
+      <div class="jc-flow-item"><div class="jc-flow-label" data-en="Verify">验证</div><div class="jc-flow-val" data-en="Multi-Agent Parallel">多 Agent 并发</div></div>
       <div class="jc-flow-arrow">↓</div>
       <div class="jc-flow-item jc-flow-out">
-        <div class="jc-flow-label">产出</div>
-        <div class="jc-flow-val">1 条投资主线</div>
-        <div class="jc-flow-val">验证事实底稿</div>
-        <div class="jc-flow-val">定制追踪看板</div>
+        <div class="jc-flow-label" data-en="Output">产出</div>
+        <div class="jc-flow-val" data-en="1 Investment Thesis">1 条投资主线</div>
+        <div class="jc-flow-val" data-en="Verified Fact Workpapers">验证事实底稿</div>
+        <div class="jc-flow-val" data-en="Custom Tracking Dashboard">定制追踪看板</div>
       </div>
     </div>
   </div>
@@ -180,56 +181,56 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Workflow -->
-<div class="divider"><span>六步工作流</span></div>
+<div class="divider"><span data-en="Six-Step Workflow">六步工作流</span></div>
 
 <div class="wf-steps" id="wfSteps">
-  <div class="wf-step active" data-step="0"><div class="zh">搜</div><div class="en">Search</div><div class="brief">权威源搜索</div></div>
-  <div class="wf-step" data-step="1"><div class="zh">读</div><div class="en">Read</div><div class="brief">金字塔拆解</div></div>
-  <div class="wf-step" data-step="2"><div class="zh">审</div><div class="en">Verify</div><div class="brief">多Agent验证</div></div>
-  <div class="wf-step" data-step="3"><div class="zh">沉</div><div class="en">Distill</div><div class="brief">沉淀关键事实</div></div>
-  <div class="wf-step" data-step="4"><div class="zh">合</div><div class="en">Merge</div><div class="brief">合并主线</div></div>
-  <div class="wf-step" data-step="5"><div class="zh">追</div><div class="en">Track</div><div class="brief">持续追踪</div></div>
+  <div class="wf-step active" data-step="0"><div class="zh">搜</div><div class="en">Search</div><div class="brief" data-en="Authoritative Sources">权威源搜索</div></div>
+  <div class="wf-step" data-step="1"><div class="zh">读</div><div class="en">Read</div><div class="brief" data-en="Pyramid Decomposition">金字塔拆解</div></div>
+  <div class="wf-step" data-step="2"><div class="zh">审</div><div class="en">Verify</div><div class="brief" data-en="Multi-Agent Audit">多Agent验证</div></div>
+  <div class="wf-step" data-step="3"><div class="zh">沉</div><div class="en">Distill</div><div class="brief" data-en="Distill Key Facts">沉淀关键事实</div></div>
+  <div class="wf-step" data-step="4"><div class="zh">合</div><div class="en">Merge</div><div class="brief" data-en="Merge Thesis">合并主线</div></div>
+  <div class="wf-step" data-step="5"><div class="zh">追</div><div class="en">Track</div><div class="brief" data-en="Continuous Tracking">持续追踪</div></div>
 </div>
 <div class="wf-detail active" id="wfDetail">
   <!-- Content set by JS -->
 </div>
 
 <!-- Principles -->
-<div class="divider"><span>专业优先 · 核心方法论</span></div>
+<div class="divider"><span data-en="Professional First · Core Methodology">专业优先 · 核心方法论</span></div>
 
 <div class="principles">
   <div class="principle">
-    <div class="badge">投行规范</div>
+    <div class="badge" data-en="IB Standard">投行规范</div>
     <h4>Financial Model Color Code</h4>
-    <p>借鉴投行财务模型的颜色标注体系：</p>
+    <p data-en="Adapted from investment banking financial model color conventions:">借鉴投行财务模型的颜色标注体系：</p>
     <ul class="p-list">
-      <li><strong style="color:#4a9eff">蓝色</strong> = 引用外部数据源</li>
-      <li><strong style="color:#4ade80">绿色</strong> = 假设与预测</li>
-      <li><strong style="color:var(--fg)">黑色</strong> = 计算结果</li>
+      <li data-en="<strong style='color:#4a9eff'>Blue</strong> = External data reference"><strong style="color:#4a9eff">蓝色</strong> = 引用外部数据源</li>
+      <li data-en="<strong style='color:#4ade80'>Green</strong> = Assumptions &amp; forecasts"><strong style="color:#4ade80">绿色</strong> = 假设与预测</li>
+      <li data-en="<strong style='color:var(--fg)'>Black</strong> = Calculated results"><strong style="color:var(--fg)">黑色</strong> = 计算结果</li>
     </ul>
-    <p style="margin-top:8px">一眼区分哪些是事实、哪些是判断。</p>
+    <p style="margin-top:8px" data-en="Instantly distinguish facts from judgments.">一眼区分哪些是事实、哪些是判断。</p>
   </div>
   <div class="principle">
-    <div class="badge">咨询方法论</div>
+    <div class="badge" data-en="Consulting">咨询方法论</div>
     <h4>MECE + Storytelling</h4>
-    <p>像顶级咨询顾问一样组织信息：</p>
+    <p data-en="Organize information like a top-tier consultant:">像顶级咨询顾问一样组织信息：</p>
     <ul class="p-list">
-      <li><strong>MECE 原则</strong>：相互独立、完全穷尽，确保不遗漏、不重复</li>
-      <li><strong>Storytelling</strong>：把零散的数据点串成一个有说服力的投资故事</li>
-      <li><strong>金字塔原则</strong>：结论先行，每个标题都是方向性判断</li>
+      <li data-en="<strong>MECE</strong>: Mutually Exclusive, Collectively Exhaustive"><strong>MECE 原则</strong>：相互独立、完全穷尽，确保不遗漏、不重复</li>
+      <li data-en="<strong>Storytelling</strong>: Weave scattered data into a compelling investment narrative"><strong>Storytelling</strong>：把零散的数据点串成一个有说服力的投资故事</li>
+      <li data-en="<strong>Pyramid Principle</strong>: Conclusion-first, every heading is a directional judgment"><strong>金字塔原则</strong>：结论先行，每个标题都是方向性判断</li>
     </ul>
-    <p style="margin-top:8px">不是罗列事实，而是讲出一条逻辑主线。</p>
+    <p style="margin-top:8px" data-en="Not listing facts, but telling a coherent thesis.">不是罗列事实，而是讲出一条逻辑主线。</p>
   </div>
   <div class="principle">
-    <div class="badge">社科验证</div>
-    <h4>交叉验证 · 反模型幻觉</h4>
-    <p>用社会科学的研究范式验证 AI 产出：</p>
+    <div class="badge" data-en="Social Science">社科验证</div>
+    <h4 data-en="Cross-Verification · Anti-Hallucination">交叉验证 · 反模型幻觉</h4>
+    <p data-en="Validate AI output with social science research methodology:">用社会科学的研究范式验证 AI 产出：</p>
     <ul class="p-list">
-      <li><strong>数据节点验证</strong>：每个数据独立溯源到一手来源</li>
-      <li><strong>逻辑推导验证</strong>：每条因果关系独立检验</li>
-      <li><strong>多 Agent 交叉验证</strong>：多个 Agent 各自独立验证，交叉比对</li>
+      <li data-en="<strong>Data node verification</strong>: Trace each data point to its primary source"><strong>数据节点验证</strong>：每个数据独立溯源到一手来源</li>
+      <li data-en="<strong>Logic verification</strong>: Independently examine each causal relationship"><strong>逻辑推导验证</strong>：每条因果关系独立检验</li>
+      <li data-en="<strong>Multi-Agent cross-verification</strong>: Multiple agents verify independently, then cross-compare"><strong>多 Agent 交叉验证</strong>：多个 Agent 各自独立验证，交叉比对</li>
     </ul>
-    <p style="margin-top:8px">把"听起来对但经不起推敲"的幻觉筛出来。</p>
+    <p style="margin-top:8px" data-en="Filter out hallucinations that sound right but don't hold up.">把"听起来对但经不起推敲"的幻觉筛出来。</p>
   </div>
 </div>
 
@@ -242,24 +243,39 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </footer>
 
+<script src="/investment/docs/lang.js"></script>
 <script>
-var details = [
-  {title:'搜 · 识别权威来源', text:'识别权威来源的权威文章和研报内容。<br><br>· 识别并搜索该领域的权威信息源与高质量研报<br>· 支持互联网搜索，也支持自己上传研报 PDF<br>· 支持自定义接入数据库（开发中）'},
-  {title:'读 · 金字塔式深度拆解', text:'严格遵循金字塔原理，对原文进行深入的逻辑拆解，严格按照 Color Code 标注。<br><br>· 对原文的逻辑进行忠实重塑（原文复刻视图）<br>· 重新组织为新的逻辑框架（逻辑重组视图）<br>· 补充逻辑跳步与概括，让非专业读者也能看懂<br>· IB Color Code：蓝=引用、绿=假设、黑=计算'},
-  {title:'审 · 多 Agent 并发审计', text:'通过多 Agent 并发加速审计，既审数据来源，也审逻辑推导。<br><br>· 每个数据节点：独立溯源到一手来源，验证数据准确性<br>· 每条逻辑推导：独立检验因果关系是否成立<br>· 全部 Agent 并发执行，大幅加速审计效率<br>· 三色染色：绿=验证通过、黄=待验证、红=有冲突'},
-  {title:'沉 · 沉淀关键事实', text:'沉淀正确的核心判断，以及对未来研究有价值的、可追踪的知识资产。<br><br>· 沉淀经过验证的核心事实与关键判断<br>· 沉淀该领域研究需要的核心 Source 与数据来源<br>· 构建可追踪的知识资产库，供后续研究复用'},
-  {title:'合 · 合成逻辑主线', text:'结合金字塔原理，把提炼出来的逻辑框架合成新的逻辑主线。像你自己读完这些文章后形成的那条主线。<br><br>· 符合 MECE 原则：相互独立、完全穷尽<br>· 按 WHY / HOW / CONTEXT / RISK 搭建共识树<br>· 包含可验算的完整供需数据链<br>· 多篇研报的逻辑线合并为一条清晰的投资主线'},
-  {title:'追 · 定制化看板追踪', text:'根据逻辑主线确定追踪对象，通过自定义看板持续追踪，追踪过程中复用之前沉淀的逻辑。<br><br>· 从主线导出需要关注的核心指标<br>· 自定义看板，追踪最新趋势与最新异动<br>· 复用"沉"步沉淀的 Source 和逻辑框架<br>· 让你知道主线还成不成立、什么时候该修正判断'}
-];
+var details = {
+  zh: [
+    {title:'搜 · 识别权威来源', text:'识别权威来源的权威文章和研报内容。<br><br>· 识别并搜索该领域的权威信息源与高质量研报<br>· 支持互联网搜索，也支持自己上传研报 PDF<br>· 支持自定义接入数据库（开发中）'},
+    {title:'读 · 金字塔式深度拆解', text:'严格遵循金字塔原理，对原文进行深入的逻辑拆解，严格按照 Color Code 标注。<br><br>· 对原文的逻辑进行忠实重塑（原文复刻视图）<br>· 重新组织为新的逻辑框架（逻辑重组视图）<br>· 补充逻辑跳步与概括，让非专业读者也能看懂<br>· IB Color Code：蓝=引用、绿=假设、黑=计算'},
+    {title:'审 · 多 Agent 并发审计', text:'通过多 Agent 并发加速审计，既审数据来源，也审逻辑推导。<br><br>· 每个数据节点：独立溯源到一手来源，验证数据准确性<br>· 每条逻辑推导：独立检验因果关系是否成立<br>· 全部 Agent 并发执行，大幅加速审计效率<br>· 三色染色：绿=验证通过、黄=待验证、红=有冲突'},
+    {title:'沉 · 沉淀关键事实', text:'沉淀正确的核心判断，以及对未来研究有价值的、可追踪的知识资产。<br><br>· 沉淀经过验证的核心事实与关键判断<br>· 沉淀该领域研究需要的核心 Source 与数据来源<br>· 构建可追踪的知识资产库，供后续研究复用'},
+    {title:'合 · 合成逻辑主线', text:'结合金字塔原理，把提炼出来的逻辑框架合成新的逻辑主线。像你自己读完这些文章后形成的那条主线。<br><br>· 符合 MECE 原则：相互独立、完全穷尽<br>· 按 WHY / HOW / CONTEXT / RISK 搭建共识树<br>· 包含可验算的完整供需数据链<br>· 多篇研报的逻辑线合并为一条清晰的投资主线'},
+    {title:'追 · 定制化看板追踪', text:'根据逻辑主线确定追踪对象，通过自定义看板持续追踪，追踪过程中复用之前沉淀的逻辑。<br><br>· 从主线导出需要关注的核心指标<br>· 自定义看板，追踪最新趋势与最新异动<br>· 复用"沉"步沉淀的 Source 和逻辑框架<br>· 让你知道主线还成不成立、什么时候该修正判断'}
+  ],
+  en: [
+    {title:'Search · Identify Authoritative Sources', text:'Identify authoritative articles and research reports.<br><br>· Search for authoritative sources and high-quality reports in the field<br>· Supports web search and manual PDF upload<br>· Custom database integration (coming soon)'},
+    {title:'Read · Pyramid-Style Deep Decomposition', text:'Strictly follow the Pyramid Principle for deep logical decomposition, with IB Color Code annotations.<br><br>· Faithful reconstruction of original report logic (Original View)<br>· Reorganized into new logical framework (Reorganized View)<br>· Gap-filling and summarization for non-expert readers<br>· IB Color Code: Blue=Reference, Green=Assumption, Black=Calculated'},
+    {title:'Verify · Multi-Agent Concurrent Audit', text:'Multi-Agent concurrent execution to audit both data sources and logical reasoning.<br><br>· Each data node: independently traced to primary source<br>· Each logical inference: independently examined for causal validity<br>· All Agents run concurrently for maximum efficiency<br>· 3-color coding: Green=Verified, Gold=Unverified, Red=Conflict'},
+    {title:'Distill · Distill Key Facts', text:'Distill verified core judgments and trackable knowledge assets for future research.<br><br>· Distill verified core facts and key judgments<br>· Distill core Sources and data providers for the field<br>· Build a trackable knowledge asset library for ongoing research'},
+    {title:'Merge · Synthesize Investment Thesis', text:'Combine extracted logical frameworks into a new unified thesis using the Pyramid Principle. The thesis you would form after reading all reports yourself.<br><br>· MECE: Mutually Exclusive, Collectively Exhaustive<br>· Structured as WHY / HOW / CONTEXT / RISK consensus tree<br>· Complete verifiable supply-demand data chain<br>· Multiple report logic lines merged into one clear thesis'},
+    {title:'Track · Custom Dashboard Tracking', text:'Determine tracking targets from the thesis, continuously monitor via custom dashboards, reusing previously distilled logic.<br><br>· Derive key indicators from the thesis<br>· Custom dashboards tracking latest trends and anomalies<br>· Reuse Sources and logic from the Distill step<br>· Know when the thesis still holds or needs revision'}
+  ]
+};
 
 function showStep(i) {
   document.querySelectorAll('.wf-step').forEach(function(el,idx){
     el.classList.toggle('active', idx===i);
   });
+  var lang = localStorage.getItem('research-engine-lang') || 'zh';
   var d = document.getElementById('wfDetail');
-  d.innerHTML = '<h4>'+details[i].title+'</h4><p>'+details[i].text+'</p>';
+  var item = details[lang][i];
+  d.innerHTML = '<h4>'+item.title+'</h4><p>'+item.text+'</p>';
   d.classList.add('active');
 }
+var _origToggle = window.toggleLang;
+window.toggleLang = function(){ _origToggle(); showStep(document.querySelector('.wf-step.active').dataset.step|0); };
 
 document.getElementById('wfSteps').addEventListener('click', function(e){
   var step = e.target.closest('.wf-step');
@@ -267,6 +283,7 @@ document.getElementById('wfSteps').addEventListener('click', function(e){
 });
 
 showStep(0);
+initLang();
 
 function showFileName(input){
   var names = [];

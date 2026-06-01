@@ -1045,6 +1045,17 @@ function toggleK() {
   roots = getMarkmapRoots();
   mm.setData(showK ? roots.rootWithK : roots.rootNoK);
   setTimeout(function() { mm.fit(); }, 100);
+  // Re-attach click listeners after setData replaces DOM nodes
+  setTimeout(function(){
+    document.querySelectorAll('g.markmap-node').forEach(function(g){
+      g.style.cursor = 'pointer';
+      g.addEventListener('click', function(e){
+        var fo = g.querySelector('foreignObject');
+        if(fo) showWorkpaper(fo.innerHTML);
+        e.stopPropagation();
+      });
+    });
+  }, 600);
 }
 
 // ===== Language switch: re-render markmap + update button =====

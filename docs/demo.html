@@ -203,6 +203,41 @@ body {
 }
 .ch-link .ico { color: var(--accent); font-size: 15px }
 
+/* report covers */
+.report-covers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+.cover-item {
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  transition: border-color 0.2s, transform 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+.cover-item:hover {
+  border-color: rgba(212,167,106,0.3);
+  transform: translateY(-2px);
+}
+.cover-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.cover-item:hover img { opacity: 1 }
+.cover-label {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--t2);
+  text-align: center;
+  border-top: 1px solid var(--card-border);
+}
+
 /* dividers between chapters */
 .chapter-divider {
   height: 1px;
@@ -341,6 +376,20 @@ body {
         我翻了一圈，挑了三篇视角不太一样的：<strong>国泰君安</strong>做期货的，写了 45 页，最详细；<strong>方正证券</strong>从供需结构切入，还做了历史复盘，23 页；<strong>银河证券</strong>是宏观周报里的一段，13 页。
         <br><br>
         三篇加起来 81 页。要是自己啃，怎么也得三四个小时。上传到系统，让它先帮我过一遍。
+      </div>
+      <div class="report-covers">
+        <div class="cover-item">
+          <img src="/investment/docs/img/guotai_cover.png" alt="国泰君安期货研报封面">
+          <div class="cover-label">国泰君安 · 45页</div>
+        </div>
+        <div class="cover-item">
+          <img src="/investment/docs/img/founder_cover.png" alt="方正证券研报封面">
+          <div class="cover-label">方正证券 · 23页</div>
+        </div>
+        <div class="cover-item">
+          <img src="/investment/docs/img/galaxy_cover.png" alt="银河证券研报封面">
+          <div class="cover-label">银河证券 · 13页</div>
+        </div>
       </div>
     </div>
   </div>

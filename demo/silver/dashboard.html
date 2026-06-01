@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>白银 · 前瞻监控看板</title>
+<title>白银 · 前瞻监控看板 | Silver · Forward Monitoring Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -64,14 +64,15 @@ table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:60
 <body>
 
 <div class="topbar">
-  <h1>白银 · 前瞻监控看板</h1>
-  <div class="ts">数据截至 2026.5.29 · 一手来源: CME · Bloomberg · Silver Institute · LBMA · ICE</div>
+  <h1 data-en="Silver · Forward Monitoring Dashboard">白银 · 前瞻监控看板</h1>
+  <button id="langToggle" onclick="toggleLang()" style="border:1px solid oklch(85% 0.01 250);background:oklch(97% 0.003 250);color:oklch(40% 0.01 250);font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;font-weight:600;white-space:nowrap">EN</button>
+  <div class="ts" data-en="Data as of 2026.5.29 · Primary sources: CME · Bloomberg · Silver Institute · LBMA · ICE">数据截至 2026.5.29 · 一手来源: CME · Bloomberg · Silver Institute · LBMA · ICE</div>
 </div>
 
 <!-- 白银价格走势 -->
 <div class="price-section">
   <div class="price-header">
-    <h2>COMEX 白银</h2>
+    <h2 data-en="COMEX Silver">COMEX 白银</h2>
     <span class="spot">$75.24</span>
     <span class="chg neg">-2.5% MTD</span>
     <div class="range-btns">
@@ -83,57 +84,57 @@ table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:60
 
 <!-- Summary KPIs -->
 <div class="summary">
-  <div class="s-item"><div class="s-label">现价</div><div class="s-val">$75.24</div><div class="s-sub">COMEX SI1! · 日度</div></div>
+  <div class="s-item"><div class="s-label" data-en="Spot Price">现价</div><div class="s-val">$75.24</div><div class="s-sub" data-en="COMEX SI1! · Daily">COMEX SI1! · 日度</div></div>
   <div class="s-item"><div class="s-label">2025 Deficit</div><div class="s-val neg">-40.3 Moz</div><div class="s-sub">Silver Institute WSS 2026</div></div>
   <div class="s-item"><div class="s-label">2026E Deficit</div><div class="s-val neg">-46.3 Moz</div><div class="s-sub">Silver Institute WSS 2026</div></div>
-  <div class="s-item"><div class="s-label">Lease Rate 1M</div><div class="s-val" style="color:oklch(50% 0.14 50)">~20%</div><div class="s-sub">Bloomberg · 日度</div></div>
-  <div class="s-item"><div class="s-label">FedWatch 不降息</div><div class="s-val">70%</div><div class="s-sub">CME · 周度</div></div>
-  <div class="s-item"><div class="s-label">金银比</div><div class="s-val">55:1</div><div class="s-sub">交易所 · 日度</div></div>
+  <div class="s-item"><div class="s-label">Lease Rate 1M</div><div class="s-val" style="color:oklch(50% 0.14 50)">~20%</div><div class="s-sub" data-en="Bloomberg · Daily">Bloomberg · 日度</div></div>
+  <div class="s-item"><div class="s-label" data-en="FedWatch No Cut">FedWatch 不降息</div><div class="s-val">70%</div><div class="s-sub" data-en="CME · Weekly">CME · 周度</div></div>
+  <div class="s-item"><div class="s-label" data-en="Gold/Silver Ratio">金银比</div><div class="s-val">55:1</div><div class="s-sub" data-en="Exchange · Daily">交易所 · 日度</div></div>
 </div>
 
 <!-- ═══ 供需面 ═══ -->
 <div class="section">
   <div class="section-header">
-    <h2>供需面</h2>
+    <h2 data-en="Supply-Demand">供需面</h2>
     <div class="line"></div>
-    <div class="freq">年度 / 季度</div>
+    <div class="freq" data-en="Annual / Quarterly">年度 / 季度</div>
   </div>
   <div class="cols">
     <div class="col">
-      <h3>供需平衡表 <span class="tag">年度 · WSS 2026</span></h3>
-      <div class="src">Silver Institute World Silver Survey 2026 (2026.4发布)</div>
+      <h3><span data-en="S/D Balance Sheet">供需平衡表</span> <span class="tag" data-en="Annual · WSS 2026">年度 · WSS 2026</span></h3>
+      <div class="src" data-en="Silver Institute World Silver Survey 2026 (released 2026.4)">Silver Institute World Silver Survey 2026 (2026.4发布)</div>
       <table class="sd">
         <tr><th></th><th>2023</th><th>2024</th><th>2025</th><th>2026E</th></tr>
-        <tr><td>矿产银</td><td>812.7</td><td>819.7</td><td>846.6</td><td>~855</td></tr>
-        <tr><td>再生+其他</td><td>199</td><td>195</td><td>—</td><td>—</td></tr>
-        <tr><td class="em">总供给</td><td class="em">1012</td><td class="em">1015</td><td class="em">—</td><td class="em">~1050</td></tr>
-        <tr><td>工业需求</td><td>657</td><td>681</td><td>—</td><td>—</td></tr>
-        <tr><td>  光伏</td><td>193</td><td>193</td><td>—</td><td>—</td></tr>
-        <tr><td class="em">总需求</td><td class="em">1234</td><td class="em">1164</td><td class="em">1131</td><td class="em">—</td></tr>
+        <tr><td><span data-en="Mine Production">矿产银</span></td><td>812.7</td><td>819.7</td><td>846.6</td><td>~855</td></tr>
+        <tr><td><span data-en="Recycling+Other">再生+其他</span></td><td>199</td><td>195</td><td>—</td><td>—</td></tr>
+        <tr><td class="em"><span data-en="Total Supply">总供给</span></td><td class="em">1012</td><td class="em">1015</td><td class="em">—</td><td class="em">~1050</td></tr>
+        <tr><td><span data-en="Industrial Demand">工业需求</span></td><td>657</td><td>681</td><td>—</td><td>—</td></tr>
+        <tr><td><span data-en="  Solar PV">  光伏</span></td><td>193</td><td>193</td><td>—</td><td>—</td></tr>
+        <tr><td class="em"><span data-en="Total Demand">总需求</span></td><td class="em">1234</td><td class="em">1164</td><td class="em">1131</td><td class="em">—</td></tr>
         <tr><td class="em">Deficit</td><td class="neg">-201</td><td class="neg">-149</td><td class="neg">-40.3</td><td class="neg">-46.3E</td></tr>
       </table>
-      <div style="font-size:7px;color:oklch(68% 0.01 250)">累计库存消耗 762Moz (2021-2025)</div>
+      <div style="font-size:7px;color:oklch(68% 0.01 250)" data-en="Cumulative inventory drawdown 762Moz (2021-2025)">累计库存消耗 762Moz (2021-2025)</div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">连续第5年结构性供需缺口。2025年缺口收窄至40.3Moz，主因矿产银小幅增产至846.6Moz，但需求端仍远超供给。5年累计消耗库存762Moz，可用库存持续萎缩。</div></div>
-        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">WSS 2026预测2026年缺口将再度扩大至46.3Moz。光伏用银持续高增长是核心拉动因素，工业需求结构性上移已不可逆。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="5th consecutive year of structural supply deficit. 2025 deficit narrowed to 40.3 Moz as mine production rose slightly to 846.6 Moz, but demand still far exceeds supply. 5-year cumulative inventory drawdown of 762 Moz.">连续第5年结构性供需缺口。2025年缺口收窄至40.3Moz，主因矿产银小幅增产至846.6Moz，但需求端仍远超供给。5年累计消耗库存762Moz，可用库存持续萎缩。</div></div>
+        <div class="a-block"><div class="a-label alert" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="WSS 2026 forecasts 2026 deficit widening to 46.3 Moz. Solar silver demand continues rapid growth as the core driver; structural shift in industrial demand is irreversible.">WSS 2026预测2026年缺口将再度扩大至46.3Moz。光伏用银持续高增长是核心拉动因素，工业需求结构性上移已不可逆。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>缺口趋势 <span class="tag">年度 · 2021-2026E</span></h3>
+      <h3><span data-en="Deficit Trend">缺口趋势</span> <span class="tag" data-en="Annual · 2021-2026E">年度 · 2021-2026E</span></h3>
       <div class="src">Physical Deficit (Moz) · Silver Institute</div>
       <div class="ch"><canvas id="cDeficit"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">2022年缺口峰值250Moz后逐年收窄，但始终未回到平衡。结构性短缺已成为银市基本面常态。</div></div>
-        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">2025→2026E缺口由40.3扩大至46.3Moz，收窄趋势逆转，供给增量不足以匹配需求增长。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="After peaking at 250 Moz in 2022, the deficit has narrowed annually but never returned to balance. Structural shortage is now the baseline.">2022年缺口峰值250Moz后逐年收窄，但始终未回到平衡。结构性短缺已成为银市基本面常态。</div></div>
+        <div class="a-block"><div class="a-label alert" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="2025→2026E deficit widens from 40.3 to 46.3 Moz, reversing the narrowing trend. Supply growth insufficient to match demand.">2025→2026E缺口由40.3扩大至46.3Moz，收窄趋势逆转，供给增量不足以匹配需求增长。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>ETF 持仓 (SLV) <span class="tag">周度 · W21</span></h3>
-      <div class="src">iShares Silver Trust 持仓 (Moz) · SEC / iShares</div>
+      <h3><span data-en="ETF Holdings (SLV)">ETF 持仓 (SLV)</span> <span class="tag" data-en="Weekly · W21">周度 · W21</span></h3>
+      <div class="src" data-en="iShares Silver Trust Holdings (Moz) · SEC / iShares">iShares Silver Trust 持仓 (Moz) · SEC / iShares</div>
       <div class="ch"><canvas id="cETF"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初以来ETF持仓持续减少，从520Moz降至480Moz，资金持续流出。投资者偏好从纸银转向实物。</div></div>
-        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月跌破490Moz关口后继续走低，与现货市场借贷紧张形成背离——实物紧但ETF在减仓。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="ETF holdings declining since start of year, from 520 to 480 Moz. Continuous fund outflows. Investors shifting from paper to physical silver.">年初以来ETF持仓持续减少，从520Moz降至480Moz，资金持续流出。投资者偏好从纸银转向实物。</div></div>
+        <div class="a-block"><div class="a-label alert" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Broke below 490 Moz in May and continued lower, diverging from tight physical market — physical scarce but ETF reducing.">5月跌破490Moz关口后继续走低，与现货市场借贷紧张形成背离——实物紧但ETF在减仓。</div></div>
       </div>
     </div>
   </div>
@@ -142,36 +143,36 @@ table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:60
 <!-- ═══ 现货面 ═══ -->
 <div class="section">
   <div class="section-header">
-    <h2>现货面</h2>
+    <h2 data-en="Physical Market">现货面</h2>
     <div class="line"></div>
-    <div class="freq">日度 / 月度</div>
+    <div class="freq" data-en="Daily / Monthly">日度 / 月度</div>
   </div>
   <div class="cols">
     <div class="col">
-      <h3>LBMA 库存 <span class="tag">月度 · 2026.4</span></h3>
-      <div class="src">伦敦金库月末值 (吨) · LBMA</div>
+      <h3><span data-en="LBMA Vault Holdings">LBMA 库存</span> <span class="tag" data-en="Monthly · 2026.4">月度 · 2026.4</span></h3>
+      <div class="src" data-en="London vault end-of-month (tonnes) · LBMA">伦敦金库月末值 (吨) · LBMA</div>
       <div class="ch"><canvas id="cLBMA"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">2026年以来在27,000-27,500吨区间窄幅波动，较2025年中的24,000吨低点有所回升，但仍远低于2020年峰值33,000+吨。</div></div>
-        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">4月小幅回升至27,454吨，整体企稳。但伦敦与COMEX之间的库存搬迁仍在持续，需关注跨市场套利流动。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="Narrow range of 27,000-27,500 tonnes since 2026, rebounding from mid-2025 low of 24,000 tonnes but still well below 2020 peak of 33,000+ tonnes.">2026年以来在27,000-27,500吨区间窄幅波动，较2025年中的24,000吨低点有所回升，但仍远低于2020年峰值33,000+吨。</div></div>
+        <div class="a-block"><div class="a-label" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Slight uptick to 27,454 tonnes in April, stabilizing. Cross-market arbitrage flows between London and COMEX continue.">4月小幅回升至27,454吨，整体企稳。但伦敦与COMEX之间的库存搬迁仍在持续，需关注跨市场套利流动。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>COMEX 库存 <span class="tag">日度 · 2026.5.29</span></h3>
-      <div class="src">注册+合格库存 (Moz) · CME Group</div>
+      <h3><span data-en="COMEX Inventory">COMEX 库存</span> <span class="tag" data-en="Daily · 2026.5.29">日度 · 2026.5.29</span></h3>
+      <div class="src" data-en="Registered + Eligible (Moz) · CME Group">注册+合格库存 (Moz) · CME Group</div>
       <div class="ch"><canvas id="cCOMEX"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初440Moz持续下降至340Moz，年内降幅约23%。注册库存占比走低，可交割实物持续收紧。</div></div>
-        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月加速下降，月内再降20Moz。若持续按此速率消耗，年底可能触及300Moz以下的关键水位。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="Declined from 440 to 340 Moz YTD, down ~23%. Registered inventory share falling, deliverable physical tightening.">年初440Moz持续下降至340Moz，年内降幅约23%。注册库存占比走低，可交割实物持续收紧。</div></div>
+        <div class="a-block"><div class="a-label alert" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Accelerated decline in May, down another 20 Moz. At this rate, could breach critical 300 Moz level by year-end.">5月加速下降，月内再降20Moz。若持续按此速率消耗，年底可能触及300Moz以下的关键水位。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>Lease Rate 1M <span class="tag">日度 · 2026.5.29</span></h3>
-      <div class="src">伦敦1个月 Implied Lease Rate (%) · Bloomberg</div>
+      <h3>Lease Rate 1M <span class="tag" data-en="Daily · 2026.5.29">日度 · 2026.5.29</span></h3>
+      <div class="src" data-en="London 1M Implied Lease Rate (%) · Bloomberg">伦敦1个月 Implied Lease Rate (%) · Bloomberg</div>
       <div class="ch"><canvas id="cLease"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">全年大部分时间在5-10%区间运行，远高于历史均值(长期&lt;1%)。现货借贷成本处于历史性高位，反映实物白银极度紧张。</div></div>
-        <div class="a-block"><div class="a-label alert">近期异动</div><div class="a-text">5月飙升至约20%，为2025年10月以来最高水平。上次出现类似水平时触发了逼空行情，需密切关注是否重演。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="Running 5-10% most of the year, far above historical average (<1%). Physical borrowing costs at historic highs, reflecting extreme physical silver scarcity.">全年大部分时间在5-10%区间运行，远高于历史均值(长期&lt;1%)。现货借贷成本处于历史性高位，反映实物白银极度紧张。</div></div>
+        <div class="a-block"><div class="a-label alert" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Surged to ~20% in May, highest since Oct 2025. Last time similar levels occurred, it triggered a short squeeze. Watch closely.">5月飙升至约20%，为2025年10月以来最高水平。上次出现类似水平时触发了逼空行情，需密切关注是否重演。</div></div>
       </div>
     </div>
   </div>
@@ -180,44 +181,44 @@ table.sd td:first-child{text-align:left;color:oklch(45% 0.01 250);font-weight:60
 <!-- ═══ 宏观面 ═══ -->
 <div class="section">
   <div class="section-header">
-    <h2>宏观面</h2>
+    <h2 data-en="Macro">宏观面</h2>
     <div class="line"></div>
-    <div class="freq">日度 / 周度</div>
+    <div class="freq" data-en="Daily / Weekly">日度 / 周度</div>
   </div>
   <div class="cols">
     <div class="col">
-      <h3>FedWatch 不降息概率 <span class="tag">周度 · 2026.5.29</span></h3>
+      <h3><span data-en="FedWatch No-Cut Probability">FedWatch 不降息概率</span> <span class="tag" data-en="Weekly · 2026.5.29">周度 · 2026.5.29</span></h3>
       <div class="src">30-Day Fed Funds Implied Prob, Year-end 2026 (%) · CME</div>
       <div class="ch"><canvas id="cFed"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">不降息概率从年初15%持续攀升至70%，市场预期从"两次降息"大幅转向"维持利率不变"。对白银金融属性构成压制。</div></div>
-        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">5月稳定在60-70%区间，市场基本已price in不降息。若6月FOMC释放鸽派信号，该概率可能快速回落，利好银价。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="No-cut probability rose from 15% at start of year to 70%. Market expectations shifted dramatically from &quot;two cuts&quot; to &quot;rates on hold.&quot; Pressures silver's financial attributes.">不降息概率从年初15%持续攀升至70%，市场预期从"两次降息"大幅转向"维持利率不变"。对白银金融属性构成压制。</div></div>
+        <div class="a-block"><div class="a-label" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Stabilized at 60-70% in May, market has largely priced in no cuts. If June FOMC signals dovish, probability could drop quickly, bullish for silver.">5月稳定在60-70%区间，市场基本已price in不降息。若6月FOMC释放鸽派信号，该概率可能快速回落，利好银价。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>金银比 <span class="tag">日度 · 2026.5.29</span></h3>
-      <div class="src">金价 ÷ 银价 · 交易所行情</div>
+      <h3><span data-en="Gold/Silver Ratio">金银比</span> <span class="tag" data-en="Daily · 2026.5.29">日度 · 2026.5.29</span></h3>
+      <div class="src" data-en="Gold ÷ Silver · Exchange data">金价 ÷ 银价 · 交易所行情</div>
       <div class="ch"><canvas id="cRatio"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初58:1大幅波动，1月底银价冲高时一度跌至46:1(白银相对黄金极端强势)，后随银价回调反弹至62:1。</div></div>
-        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">5月回落至55:1，白银相对黄金再度走强。历史均值约75:1，当前水平仍显示银价被相对高估，或黄金被低估。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="Volatile from 58:1 at year start, plunged to 46:1 when silver surged in late Jan (extreme silver outperformance), then rebounded to 62:1.">年初58:1大幅波动，1月底银价冲高时一度跌至46:1(白银相对黄金极端强势)，后随银价回调反弹至62:1。</div></div>
+        <div class="a-block"><div class="a-label" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Fell to 55:1 in May, silver strengthening vs gold again. Historical average ~75:1; current level still suggests silver relatively overvalued or gold undervalued.">5月回落至55:1，白银相对黄金再度走强。历史均值约75:1，当前水平仍显示银价被相对高估，或黄金被低估。</div></div>
       </div>
     </div>
     <div class="col">
-      <h3>美元指数 DXY <span class="tag">日度 · 2026.5.29</span></h3>
+      <h3><span data-en="USD Index DXY">美元指数 DXY</span> <span class="tag" data-en="Daily · 2026.5.29">日度 · 2026.5.29</span></h3>
       <div class="src">ICE U.S. Dollar Index · ICE</div>
       <div class="ch"><canvas id="cDXY"></canvas></div>
       <div class="analysis">
-        <div class="a-block"><div class="a-label">YTD 趋势</div><div class="a-text">年初以来缓慢走弱，从100.3降至99.0。美元走弱通常利好以美元计价的贵金属。</div></div>
-        <div class="a-block"><div class="a-label">近期异动</div><div class="a-text">整体趋势偏弱但降幅有限，尚未形成明确的趋势性下跌。若跌破98关口可能加速贵金属上行。</div></div>
+        <div class="a-block"><div class="a-label" data-en="YTD Trend">YTD 趋势</div><div class="a-text" data-en="Gradual weakening since year start, from 100.3 to 99.0. Weaker dollar typically supports USD-denominated precious metals.">年初以来缓慢走弱，从100.3降至99.0。美元走弱通常利好以美元计价的贵金属。</div></div>
+        <div class="a-block"><div class="a-label" data-en="Recent Alert">近期异动</div><div class="a-text" data-en="Overall weak trend but limited decline, no clear downtrend yet. Break below 98 could accelerate precious metals rally.">整体趋势偏弱但降幅有限，尚未形成明确的趋势性下跌。若跌破98关口可能加速贵金属上行。</div></div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="footer">
-  Demo数据基于联网搜索近似值 · 实际产品应接入 Bloomberg Terminal / CME DataMine / LBMA API / Silver Institute<br>
-  更新频率: 价格(日) · Lease Rate(日) · 库存(日/月) · 供需(年) · FedWatch(周) · ETF(周)
+  <span data-en="Demo data based on web search approximations · Production system should connect to Bloomberg Terminal / CME DataMine / LBMA API / Silver Institute">Demo数据基于联网搜索近似值 · 实际产品应接入 Bloomberg Terminal / CME DataMine / LBMA API / Silver Institute</span><br>
+  <span data-en="Update frequency: Price (daily) · Lease Rate (daily) · Inventory (daily/monthly) · S/D (annual) · FedWatch (weekly) · ETF (weekly)">更新频率: 价格(日) · Lease Rate(日) · 库存(日/月) · 供需(年) · FedWatch(周) · ETF(周)</span>
 </div>
 
 <script>
@@ -314,5 +315,8 @@ mk('cDXY',['2026.1','2','3','4','5'],
   [100.3,101.3,100.0,99.8,99.0],
   'oklch(48% 0.08 250)','');
 </script>
+
+<script src="/investment/docs/lang.js"></script>
+<script>initLang();</script>
 </body>
 </html>

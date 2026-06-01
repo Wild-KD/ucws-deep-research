@@ -29,11 +29,12 @@ h1 em{font-style:normal;color:var(--accent);font-weight:300}
 .section-label span{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3)}
 .section-desc{font-size:12px;color:var(--t4);margin-bottom:14px}
 
-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;table-layout:fixed}
 thead th{text-align:left;font-weight:600;color:var(--t3);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;padding:10px 10px;border-bottom:2px solid rgba(212,167,106,0.25);background:rgba(212,167,106,0.04);white-space:nowrap}
-tbody td{padding:9px 10px;border-bottom:1px solid var(--card-border);color:var(--t2);vertical-align:top;line-height:1.5}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--card-border);color:var(--t2);vertical-align:top;line-height:1.5;word-break:break-word}
 tbody tr:hover td{background:rgba(255,255,255,0.015)}
-td:first-child{color:var(--fg);font-weight:500;white-space:nowrap}
+td:first-child{color:var(--fg);font-weight:500}
+col.c-source{width:180px}col.c-type{width:60px}col.c-data{width:auto}col.c-freq{width:70px}col.c-access{width:70px}col.c-cited{width:110px}
 a.src-link{color:var(--accent);text-decoration:none;font-size:11px}
 a.src-link:hover{text-decoration:underline}
 .tag{display:inline-block;padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;letter-spacing:0.02em}
@@ -72,7 +73,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>供需基本面数据</span></div>
 <div class="section-desc">白银供给、需求、库存、缺口的核心数据源</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr>
     <td>Silver Institute<br><a class="src-link" href="https://www.silverinstitute.org" target="_blank">silverinstitute.org</a></td>
@@ -129,7 +130,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>交易所与库存数据</span></div>
 <div class="section-desc">全球白银交易所的库存、持仓、价格数据</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr>
     <td>CME Group / COMEX<br><a class="src-link" href="https://www.cmegroup.com" target="_blank">cmegroup.com</a></td>
@@ -178,7 +179,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>ETF 持仓数据</span></div>
 <div class="section-desc">全球主要白银ETF的持仓量与资金流动</div>
 <table>
-<thead><tr><th>Source</th><th>产品</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>产品</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr><td>iShares (贝莱德)<br><a class="src-link" href="https://www.ishares.com" target="_blank">ishares.com</a></td><td>SLV</td><td class="data-list">持仓量 (Moz) / 总价值 / 资金流入流出</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.31<br>方正 p.15,18</td></tr>
   <tr><td>Sprott<br><a class="src-link" href="https://www.sprott.com" target="_blank">sprott.com</a></td><td>PSLV</td><td class="data-list">持仓量 / 总价值</td><td><span class="freq">日度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.18</td></tr>
@@ -191,7 +192,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>金融终端 / 综合数据源</span></div>
 <div class="section-desc">三篇研报的底层数据供应商</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr>
     <td>Wind 万得<br><a class="src-link" href="https://www.wind.com.cn" target="_blank">wind.com.cn</a></td>
@@ -224,7 +225,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>宏观经济数据</span></div>
 <div class="section-desc">央行政策、通胀、就业、财政等宏观数据源</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr><td>美联储 Federal Reserve<br><a class="src-link" href="https://www.federalreserve.gov" target="_blank">federalreserve.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 联邦基金利率 / FOMC 决议<br>· SRF 常备回购 / ON RRP<br>· 扩表/缩表政策<br>· 准备金管理购买 (RMP)</td><td><span class="freq">实时</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">三篇均引用</td></tr>
   <tr><td>BLS 美国劳工统计局<br><a class="src-link" href="https://www.bls.gov" target="_blank">bls.gov</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· CPI/核心CPI (同比/环比)<br>· PPI<br>· 初请/持续失业金<br>· 非农时薪</td><td><span class="freq">月度/周度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.7,13<br>银河 p.7,8</td></tr>
@@ -237,7 +238,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>光伏 / 工业需求数据</span></div>
 <div class="section-desc">光伏装机是白银工业需求的核心增量</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr><td>BNEF 彭博新能源财经<br><a class="src-link" href="https://about.bnef.com" target="_blank">about.bnef.com</a></td><td><span class="tag tag-rel">可靠</span></td><td class="data-list">· 全球光伏新增装机数据及预测</td><td><span class="freq">年度</span></td><td><span class="tag tag-paid">付费</span></td><td class="cited">国泰 p.38</td></tr>
   <tr><td>SolarPower Europe<br><a class="src-link" href="https://www.solarpowereurope.org" target="_blank">solarpowereurope.org</a></td><td><span class="tag tag-rel">可靠</span></td><td class="data-list">· 欧洲光伏装机数据</td><td><span class="freq">年度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">国泰 p.38</td></tr>
@@ -250,7 +251,7 @@ a.src-link:hover{text-decoration:underline}
 <div class="section-label"><span>政策与监管数据</span></div>
 <div class="section-desc">影响白银进出口和战略定位的政策信息</div>
 <table>
-<thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
+<colgroup><col class="c-source"><col class="c-type"><col class="c-data"><col class="c-freq"><col class="c-access"><col class="c-cited"></colgroup><thead><tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>访问</th><th>引用报告</th></tr></thead>
 <tbody>
   <tr><td>中国海关总署<br><a class="src-link" href="http://www.customs.gov.cn" target="_blank">customs.gov.cn</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银进出口量/金额</td><td><span class="freq">月度</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.19-20</td></tr>
   <tr><td>中国商务部<br><a class="src-link" href="https://www.mofcom.gov.cn" target="_blank">mofcom.gov.cn</a></td><td><span class="tag tag-auth">权威</span></td><td class="data-list">· 白银出口配额管理<br>· 2026年出口审批制度</td><td><span class="freq">不定期</span></td><td><span class="tag tag-free">免费</span></td><td class="cited">方正 p.19-20</td></tr>

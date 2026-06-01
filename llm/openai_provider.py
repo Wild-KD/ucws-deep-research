@@ -12,6 +12,7 @@ from config import LLMConfig
 
 class OpenAIProvider(LLMProvider):
     """Covers OpenAI GPT + any OpenAI-compatible API (MiroMind, etc.)."""
+    message_format = "openai"
 
     def __init__(self, config: LLMConfig):
         self.config = config

@@ -7,6 +7,7 @@ from config import LLMConfig
 
 
 class AnthropicProvider(LLMProvider):
+    message_format = "anthropic"
 
     def __init__(self, config: LLMConfig):
         self.config = config

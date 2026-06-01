@@ -13,6 +13,7 @@ import logging
 import sys
 
 from config import Config, LLMConfig
+from core.harness import PipelineHarness
 from core.orchestrator import Orchestrator
 
 
@@ -75,6 +76,24 @@ def serve_demo(args):
         sys.exit(1)
 
 
+def run_harness(args):
+    """Run artifact harness commands."""
+    harness = PipelineHarness(args.run_dir)
+    if args.harness_command == "validate":
+        report = harness.validate()
+        for row in report.steps:
+            status = "OK" if row["ok"] else "FAIL"
+            print(f"{status} {row['step']}")
+            for err in row["errors"]:
+                print(f"  - {err}")
+        print(f"\nHarness report: {harness.write_report()}")
+    elif args.harness_command == "parse-raw":
+        result = harness.parse_raw_step(args.step)
+        print(f"Parsed {result['step']}: valid={result['valid']}")
+        for err in result["errors"]:
+            print(f"  - {err}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Investment Research Logic Engine — Deep Research Agent"
@@ -87,7 +106,7 @@ def main():
     run_parser.add_argument("--reports", nargs="*", help="PDF report file paths")
     run_parser.add_argument(
         "--provider",
-        choices=["anthropic", "openai", "miromind"],
+        choices=["anthropic", "openai", "miromind", "mock"],
         default=None,
         help="LLM provider (default: from env LLM_PROVIDER)",
     )
@@ -98,12 +117,25 @@ def main():
     demo_parser.add_argument("--port", type=int, default=8000)
     demo_parser.add_argument("--demo-dir", default="demo")
 
+    # Harness utilities
+    harness_parser = sub.add_parser("harness", help="Validate and replay saved artifacts")
+    harness_sub = harness_parser.add_subparsers(dest="harness_command", required=True)
+
+    validate_parser = harness_sub.add_parser("validate", help="Validate parsed artifacts in a run directory")
+    validate_parser.add_argument("--run-dir", required=True)
+
+    parse_parser = harness_sub.add_parser("parse-raw", help="Parse a raw artifact into parsed JSON")
+    parse_parser.add_argument("--run-dir", required=True)
+    parse_parser.add_argument("--step", required=True)
+
     args = parser.parse_args()
 
     if args.command == "run":
         asyncio.run(run_pipeline(args))
     elif args.command == "demo":
         serve_demo(args)
+    elif args.command == "harness":
+        run_harness(args)
     else:
         parser.print_help()
 

@@ -90,34 +90,62 @@ class BaseAgent:
                 logger.info("Agent finished (no more tool calls)")
                 return resp.content
 
-            # Build assistant message with tool_use blocks
-            assistant_content = []
-            if resp.content:
-                assistant_content.append({"type": "text", "text": resp.content})
-            for tc in resp.tool_calls:
-                assistant_content.append(
+            if getattr(self.llm, "message_format", "anthropic") == "openai":
+                messages.append(
                     {
-                        "type": "tool_use",
-                        "id": tc.id,
-                        "name": tc.name,
-                        "input": tc.input,
+                        "role": "assistant",
+                        "content": resp.content or None,
+                        "tool_calls": [
+                            {
+                                "id": tc.id,
+                                "type": "function",
+                                "function": {
+                                    "name": tc.name,
+                                    "arguments": json.dumps(tc.input, ensure_ascii=False),
+                                },
+                            }
+                            for tc in resp.tool_calls
+                        ],
                     }
                 )
-            messages.append({"role": "assistant", "content": assistant_content})
+                for tc in resp.tool_calls:
+                    logger.info(f"  Calling tool: {tc.name}")
+                    result = await self._execute_tool(tc.name, tc.input)
+                    messages.append(
+                        {
+                            "role": "tool",
+                            "tool_call_id": tc.id,
+                            "content": result,
+                        }
+                    )
+            else:
+                # Build assistant message with Anthropic tool_use blocks.
+                assistant_content = []
+                if resp.content:
+                    assistant_content.append({"type": "text", "text": resp.content})
+                for tc in resp.tool_calls:
+                    assistant_content.append(
+                        {
+                            "type": "tool_use",
+                            "id": tc.id,
+                            "name": tc.name,
+                            "input": tc.input,
+                        }
+                    )
+                messages.append({"role": "assistant", "content": assistant_content})
 
-            # Execute tools and add results
-            tool_results = []
-            for tc in resp.tool_calls:
-                logger.info(f"  Calling tool: {tc.name}")
-                result = await self._execute_tool(tc.name, tc.input)
-                tool_results.append(
-                    {
-                        "type": "tool_result",
-                        "tool_use_id": tc.id,
-                        "content": result,
-                    }
-                )
-            messages.append({"role": "user", "content": tool_results})
+                tool_results = []
+                for tc in resp.tool_calls:
+                    logger.info(f"  Calling tool: {tc.name}")
+                    result = await self._execute_tool(tc.name, tc.input)
+                    tool_results.append(
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": tc.id,
+                            "content": result,
+                        }
+                    )
+                messages.append({"role": "user", "content": tool_results})
 
         logger.warning("Agent hit max turns limit")
         return resp.content if resp else ""

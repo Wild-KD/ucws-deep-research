@@ -6,7 +6,10 @@ from llm.base import LLMProvider
 
 
 def create_provider(config: LLMConfig) -> LLMProvider:
-    if config.provider == "anthropic":
+    if config.provider == "mock":
+        from llm.mock_provider import MockProvider
+        return MockProvider(config)
+    elif config.provider == "anthropic":
         from llm.anthropic_provider import AnthropicProvider
         return AnthropicProvider(config)
     elif config.provider in ("openai", "miromind"):

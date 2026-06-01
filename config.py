@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class LLMConfig:
-    provider: str = "anthropic"  # "anthropic" | "openai" | "miromind"
+    provider: str = "anthropic"  # "anthropic" | "openai" | "miromind" | "mock"
     model: str = "claude-sonnet-4-6"
     api_key: str = ""
     base_url: str | None = None
@@ -21,7 +21,9 @@ class LLMConfig:
     def from_env(cls, provider: str | None = None) -> "LLMConfig":
         provider = provider or os.getenv("LLM_PROVIDER", "anthropic")
 
-        if provider == "anthropic":
+        if provider == "mock":
+            return cls(provider="mock", model="mock-deterministic", api_key="mock")
+        elif provider == "anthropic":
             return cls(
                 provider="anthropic",
                 model=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),

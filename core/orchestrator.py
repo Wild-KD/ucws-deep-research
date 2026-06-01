@@ -6,13 +6,15 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-import json
 import logging
 import os
 from pathlib import Path
 from datetime import datetime
 
 from core.agent import BaseAgent
+from core.artifacts import ArtifactStore
+from core.json_utils import dumps_pretty, parse_json_output
+from core.schemas import validate_step
 from config import Config
 from llm import create_provider
 from tools import WebSearchTool, WebFetchTool, PDFReaderTool, HTMLWriterTool
@@ -73,6 +75,30 @@ class Orchestrator:
         out_path.write_text(data, encoding="utf-8")
         logger.info(f"Saved {step} output to {out_path}")
 
+    def _parse_record(self, store: ArtifactStore, step: str, raw: str, *, required: bool = True):
+        """Parse, validate, and record one model step output."""
+        try:
+            parsed = parse_json_output(raw).data
+            validation = validate_step(step, parsed)
+            store.record(
+                step,
+                raw=raw,
+                parsed=parsed,
+                status="completed" if validation.ok else "validation_warning",
+                metadata={"validation_errors": validation.errors},
+            )
+            if required and not validation.ok:
+                logger.warning("%s validation warnings: %s", step, validation.errors)
+            self._save_step_output(store.run_dir, step, dumps_pretty(parsed))
+            return parsed
+        except Exception as exc:
+            store.record(step, raw=raw, status="error", error=str(exc))
+            if required:
+                raise
+            logger.warning("Could not parse optional step %s: %s", step, exc)
+            self._save_step_output(store.run_dir, step, raw)
+            return {"raw": raw, "parse_error": str(exc)}
+
     async def run(
         self,
         topic: str,
@@ -90,6 +116,8 @@ class Orchestrator:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         run_dir = self.output_dir / f"{topic}_{timestamp}"
         run_dir.mkdir(parents=True, exist_ok=True)
+        store = ArtifactStore(run_dir)
+        self.html_tool.set_allowed_root(run_dir)
 
         async def progress(step, status, detail=""):
             logger.info(f"[{step}] {status}: {detail}")
@@ -103,28 +131,29 @@ class Orchestrator:
         # ── Step 1: 搜 ──────────────────────────────────────────
         await progress("s1_search", "started")
         if report_paths:
-            reports_data = json.dumps(
-                {
-                    "topic": topic,
-                    "reports": [
-                        {"file_path": p, "id": Path(p).stem} for p in report_paths
-                    ],
-                },
-                ensure_ascii=False,
-            )
+            reports_parsed = {
+                "topic": topic,
+                "reports": [
+                    {"file_path": p, "id": Path(p).stem} for p in report_paths
+                ],
+            }
+            reports_data = dumps_pretty(reports_parsed)
+            store.record("s1_search", raw=reports_data, parsed=reports_parsed, status="skipped")
             await progress("s1_search", "skipped", "Reports provided by user")
         else:
             agent = self._make_agent("search", self.search_tools)
             reports_data = await agent.run(
                 f"Search for at least 3 diverse research reports on: {topic}"
             )
-            self._save_step_output(run_dir, "s1_search", reports_data)
+            reports_parsed = self._parse_record(store, "s1_search", reports_data)
             await progress("s1_search", "completed")
         results["s1"] = reports_data
 
         # ── Step 2: 读 (parallel per report) ─────────────────────
         await progress("s2_decompose", "started")
-        report_list = json.loads(reports_data).get("reports", [])
+        if "reports_parsed" not in locals():
+            reports_parsed = self._parse_record(store, "s1_search", reports_data)
+        report_list = reports_parsed.get("reports", [])
 
         async def decompose_one(report: dict) -> str:
             agent = self._make_agent("decompose", self.read_tools)
@@ -136,17 +165,18 @@ class Orchestrator:
         pyramids = await asyncio.gather(
             *[decompose_one(r) for r in report_list]
         )
+        pyramid_objects = []
         for i, p in enumerate(pyramids):
-            self._save_step_output(run_dir, f"s2_pyramid_{i}", p)
+            pyramid_objects.append(self._parse_record(store, f"s2_pyramid_{i}", p))
         await progress("s2_decompose", "completed", f"{len(pyramids)} reports decomposed")
-        results["s2"] = pyramids
+        results["s2"] = pyramid_objects
 
         # ── Step 3: 审 (node-level fan-out verification) ────────────
         await progress("s3_verify", "started")
 
         async def extract_verify_tasks(pyramid_data: str) -> list[dict]:
             """Extract individual data nodes and causal edges for parallel verification."""
-            pyramid = json.loads(pyramid_data) if isinstance(pyramid_data, str) else pyramid_data
+            pyramid = parse_json_output(pyramid_data).data if isinstance(pyramid_data, str) else pyramid_data
 
             tasks = []
             nodes = pyramid.get("data_points", pyramid.get("reorganized_pyramid", {}).get("trunks", []))
@@ -191,7 +221,7 @@ class Orchestrator:
 
         all_verified = []
         for i, p in enumerate(pyramids):
-            pyramid = json.loads(p) if isinstance(p, str) else p
+            pyramid = pyramid_objects[i]
             meta = pyramid.get("metadata", {})
             verify_tasks = await extract_verify_tasks(p)
             await progress("s3_verify", "started", f"Report {i+1}: {len(verify_tasks)} verification tasks")
@@ -203,52 +233,76 @@ class Orchestrator:
                 "report_id": meta.get("title", f"report_{i}"),
                 "verifications": list(results_per_report),
             }
-            self._save_step_output(run_dir, f"s3_verified_{i}", json.dumps(verified_report, ensure_ascii=False))
-            all_verified.append(json.dumps(verified_report, ensure_ascii=False))
+            verified_json = dumps_pretty(verified_report)
+            parsed_verified = self._parse_record(store, f"s3_verified_{i}", verified_json)
+            all_verified.append(parsed_verified)
 
-        total_tasks = sum(len(await extract_verify_tasks(p)) for p in pyramids)
+        total_tasks = 0
+        for p in pyramids:
+            total_tasks += len(await extract_verify_tasks(p))
         await progress("s3_verify", "completed", f"{len(pyramids)} reports, {total_tasks} sub-agents total")
         results["s3"] = all_verified
         verified = all_verified
 
-        # ── Step 4: 合 ───────────────────────────────────────────
-        await progress("s4_merge", "started")
+        # ── Step 4: 沉 (source registry + exploration) ─────────────
+        await progress("s4_distill", "started")
+        registry_agent = self._make_agent("distill-registry", self.verify_tools)
+        registry_raw = await registry_agent.run(
+            "Distill verified reports into a source registry and core judgments.",
+            context={"verified_trees": verified},
+        )
+        registry = self._parse_record(store, "s4_distill_registry", registry_raw, required=False)
+
+        explore_agent = self._make_agent("distill-explore", self.verify_tools)
+        explore_raw = await explore_agent.run(
+            "Explore the source registry and identify reusable data dimensions.",
+            context={"source_registry": registry},
+        )
+        source_map = self._parse_record(store, "s4_distill_explore", explore_raw, required=False)
+        await progress("s4_distill", "completed")
+        results["s4_distill"] = {"registry": registry, "source_map": source_map}
+
+        # ── Step 5: 合 ───────────────────────────────────────────
+        await progress("s5_merge", "started")
         agent = self._make_agent("merge")
         merged = await agent.run(
             f"Merge these {len(verified)} verified pyramids into a consensus tree.",
-            context={"verified_trees": [json.loads(v) if isinstance(v, str) else v for v in verified]},
+            context={"verified_trees": verified, "source_registry": registry, "source_map": source_map},
         )
-        self._save_step_output(run_dir, "s4_merged", merged)
-        await progress("s4_merge", "completed")
-        results["s4"] = merged
+        merged_obj = self._parse_record(store, "s5_merged", merged, required=False)
+        await progress("s5_merge", "completed")
+        results["s5_merge"] = merged_obj
 
-        # ── Step 5: 图 ───────────────────────────────────────────
-        await progress("s5_visualize", "started")
+        # ── Step 6: 图 ───────────────────────────────────────────
+        await progress("s6_visualize", "started")
         agent = self._make_agent("visualize", self.write_tools)
         viz_result = await agent.run(
             "Generate markmap HTML visualizations for all pyramids and the merged tree.",
             context={
-                "pyramids": [json.loads(p) if isinstance(p, str) else p for p in pyramids],
-                "verified": [json.loads(v) if isinstance(v, str) else v for v in verified],
-                "merged": json.loads(merged) if isinstance(merged, str) else merged,
+                "pyramids": pyramid_objects,
+                "verified": verified,
+                "merged": merged_obj,
                 "output_dir": str(run_dir),
             },
         )
-        await progress("s5_visualize", "completed")
-        results["s5"] = viz_result
+        store.record("s6_visualize", raw=viz_result, status="completed")
+        await progress("s6_visualize", "completed")
+        results["s6_visualize"] = viz_result
 
-        # ── Step 6: 讲 ───────────────────────────────────────────
-        await progress("s6_dashboard", "started")
+        # ── Step 7: 追 ───────────────────────────────────────────
+        await progress("s7_dashboard", "started")
         agent = self._make_agent("dashboard", self.dashboard_tools)
         dashboard = await agent.run(
             f"Generate a forward monitoring dashboard for: {topic}",
             context={
-                "merged": json.loads(merged) if isinstance(merged, str) else merged,
+                "merged": merged_obj,
+                "source_registry": registry,
                 "output_dir": str(run_dir),
             },
         )
-        await progress("s6_dashboard", "completed")
-        results["s6"] = dashboard
+        store.record("s7_dashboard", raw=dashboard, status="completed")
+        await progress("s7_dashboard", "completed")
+        results["s7_dashboard"] = dashboard
 
         await progress("pipeline", "completed", f"All outputs in {run_dir}")
         return {

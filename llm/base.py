@@ -30,6 +30,8 @@ class LLMResponse:
 class LLMProvider(ABC):
     """Unified interface for LLM API calls across providers."""
 
+    message_format: str = "anthropic"
+
     @abstractmethod
     async def chat(
         self,

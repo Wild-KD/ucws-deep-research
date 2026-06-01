@@ -725,7 +725,7 @@ function toggleK() {
   document.getElementById('toggleBtn').classList.toggle('active', showK);
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
-  if(showK) mm1a.fit(); else mm1b.fit();
+  requestAnimationFrame(() => { requestAnimationFrame(() => { if(showK) mm1a.fit(); else mm1b.fit(); }); });
 }
 </script>
 </body>

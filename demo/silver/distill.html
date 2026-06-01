@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沉 · 核心判断与知识资产 — 白银</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141417;--fg:#e8e8ed;--accent:#d4a76a;--t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--card-border:rgba(255,255,255,0.07);--green:#4ade80;--gold:#d4a843;--red:#f87171}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,'PingFang SC',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;padding:0}
+body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
+
+.topbar{padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--card-border)}
+.topbar .brand{font-size:14px;font-weight:600;color:var(--fg)}
+.topbar .brand em{font-style:normal;color:var(--accent)}
+.topbar a{font-size:11px;color:var(--t3);text-decoration:none}
+.topbar a:hover{color:var(--accent)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:40px 32px 60px}
+
+h1{font-size:32px;font-weight:200;letter-spacing:-0.02em;margin-bottom:8px}
+h1 em{font-style:normal;color:var(--accent);font-weight:300}
+.subtitle{font-size:14px;color:var(--t3);margin-bottom:40px;line-height:1.6}
+
+.section-label{display:flex;align-items:center;gap:10px;margin:40px 0 16px}
+.section-label::before{content:'';width:20px;height:1px;background:var(--accent)}
+.section-label span{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3)}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:32px}
+thead th{text-align:left;font-weight:600;color:var(--t3);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;padding:10px 12px;border-bottom:2px solid rgba(212,167,106,0.25);background:rgba(212,167,106,0.04)}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--card-border);color:var(--t2);vertical-align:top;line-height:1.5}
+tbody tr:hover td{background:rgba(255,255,255,0.015)}
+td:first-child{color:var(--fg);font-weight:500}
+.color-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.dot-green{background:var(--green)}
+.dot-gold{background:var(--gold)}
+.dot-red{background:var(--red)}
+a.src-link{color:var(--accent);text-decoration:none;font-size:11px;word-break:break-all}
+a.src-link:hover{text-decoration:underline}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:500}
+.tag-auth{background:rgba(74,222,128,0.1);color:var(--green)}
+.tag-reliable{background:rgba(212,167,106,0.1);color:var(--accent)}
+.tag-ref{background:rgba(255,255,255,0.05);color:var(--t3)}
+.tag-free{background:rgba(74,222,128,0.08);color:var(--green)}
+.tag-paid{background:rgba(248,113,113,0.08);color:var(--red)}
+.freq{font-size:10px;color:var(--t4)}
+
+.note{font-size:11px;color:var(--t4);margin-top:8px;line-height:1.5;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">Research<em>Engine</em></span>
+  <a href="/investment/docs/demo.html">← 返回 Demo Journey</a>
+</div>
+
+<div class="wrap">
+
+<h1>沉 · 核心判断与<em>知识资产</em></h1>
+<p class="subtitle">从三篇研报的验证结果中，沉淀下来的两样东西：对投资主线有决定性影响的核心判断，以及未来持续追踪需要的数据源。</p>
+
+<!-- Core Judgments -->
+<div class="section-label"><span>核心判断</span></div>
+
+<table>
+<thead>
+  <tr><th style="width:30px">#</th><th>判断</th><th style="width:60px">验证</th><th style="width:180px">来源</th></tr>
+</thead>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>白银连续第五年供需缺口，2021-2025 累计消耗库存 <strong>762 Moz</strong></td>
+    <td><span class="color-dot dot-green"></span>绿</td>
+    <td>Silver Institute WSS 2026<br><span class="freq">国泰 p.36 / 方正 p.8</span></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>2025 年缺口 <strong>-40.3 Moz</strong>，2026E 预计扩大至 <strong>-46.3 Moz</strong></td>
+    <td><span class="color-dot dot-green"></span>绿</td>
+    <td>Silver Institute WSS 2026<br><span class="freq">WSS 2026 (2026.4发布)</span></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>光伏用银占工业需求比重持续上升，2024 年达 <strong>193 Moz</strong>，结构性增量不可逆</td>
+    <td><span class="color-dot dot-green"></span>绿</td>
+    <td>Silver Institute / CRU<br><span class="freq">国泰 p.28 / 方正 p.15</span></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>矿产银受伴生矿比例（~70%）制约，即使银价上涨也难大幅增产</td>
+    <td><span class="color-dot dot-green"></span>绿</td>
+    <td>USGS / 国泰 p.33<br><span class="freq">结构性约束，长期有效</span></td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>COMEX 注册库存持续下降，2026 年 5 月约 <strong>340 Moz</strong>，年内降幅约 23%</td>
+    <td><span class="color-dot dot-gold"></span>黄</td>
+    <td>CME Group<br><span class="freq">日度数据，近似值</span></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Lease Rate 1M 在 2026 年 5 月飙升至约 <strong>20%</strong>，远超长期均值（<1%），显示现货极度紧张</td>
+    <td><span class="color-dot dot-gold"></span>黄</td>
+    <td>Bloomberg<br><span class="freq">日度，付费源</span></td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>FedWatch 不降息概率从年初 15% 升至 <strong>70%</strong>，宏观面从利好转向中性偏空</td>
+    <td><span class="color-dot dot-green"></span>绿</td>
+    <td>CME FedWatch<br><span class="freq">周度，免费</span></td>
+  </tr>
+</tbody>
+</table>
+
+<p class="note">筛选标准："如果这个事实不存在，投资主线会改变吗？"会 → 核心判断。不会 → 支撑细节，不列入。<br>例如"某矿企去年产量微增 3%"验证为绿，但对主线无决定性影响，不在此表。</p>
+
+<!-- Source Registry -->
+<div class="section-label"><span>Source 注册表 · 知识资产</span></div>
+
+<table>
+<thead>
+  <tr><th>Source</th><th>类型</th><th>提供的数据</th><th>频率</th><th>可用性</th></tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Silver Institute<br><a class="src-link" href="https://www.silverinstitute.org" target="_blank">silverinstitute.org</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td>· 年度供需平衡表（2015-2026E）<br>· 矿产银/再生银产量<br>· 工业需求分项（含光伏）<br>· 供需缺口</td>
+    <td><span class="freq">年度</span></td>
+    <td><span class="tag tag-free">免费摘要</span></td>
+  </tr>
+  <tr>
+    <td>CME Group<br><a class="src-link" href="https://www.cmegroup.com" target="_blank">cmegroup.com</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td>· COMEX 白银库存（注册+合格）<br>· 期货持仓报告<br>· FedWatch 利率概率</td>
+    <td><span class="freq">日度/周度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+  </tr>
+  <tr>
+    <td>LBMA<br><a class="src-link" href="https://www.lbma.org.uk" target="_blank">lbma.org.uk</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td>· 伦敦金库白银库存<br>· 银价定盘价</td>
+    <td><span class="freq">月度/日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+  </tr>
+  <tr>
+    <td>Bloomberg<br><a class="src-link" href="https://www.bloomberg.com" target="_blank">bloomberg.com</a></td>
+    <td><span class="tag tag-reliable">可靠</span></td>
+    <td>· Lease Rate 1M/3M/6M<br>· 金银比<br>· ETF 持仓（SLV/PSLV）</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-paid">付费</span></td>
+  </tr>
+  <tr>
+    <td>ICE<br><a class="src-link" href="https://www.ice.com" target="_blank">ice.com</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td>· 美元指数 DXY</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+  </tr>
+  <tr>
+    <td>USGS<br><a class="src-link" href="https://www.usgs.gov" target="_blank">usgs.gov</a></td>
+    <td><span class="tag tag-auth">权威</span></td>
+    <td>· 全球银矿分布与储量<br>· 伴生矿比例统计</td>
+    <td><span class="freq">年度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+  </tr>
+  <tr>
+    <td>iShares (SLV)<br><a class="src-link" href="https://www.ishares.com" target="_blank">ishares.com</a></td>
+    <td><span class="tag tag-reliable">可靠</span></td>
+    <td>· SLV 持仓量（Moz）<br>· 资金流入流出</td>
+    <td><span class="freq">日度</span></td>
+    <td><span class="tag tag-free">免费</span></td>
+  </tr>
+</tbody>
+</table>
+
+<p class="note">以上 Source 均在验证步骤中实际使用过，URL 已验证可访问。付费源标记为付费，仅登记不依赖。<br>这张表是"追"步看板的数据基础：每个指标从这里的 Source 拉取最新数据。</p>
+
+</div>
+</body>
+</html>

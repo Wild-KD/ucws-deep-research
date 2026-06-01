@@ -55,13 +55,16 @@ a.src-link:hover{text-decoration:underline}
 
 <div class="topbar">
   <span class="brand">Research<em>Engine</em></span>
-  <a href="/investment/docs/demo.html">← 返回 Demo Journey</a>
+  <span style="display:flex;gap:12px;align-items:center">
+    <button id="langToggle" onclick="toggleLang()" style="border:1px solid var(--card-border);background:transparent;color:var(--t3);font-size:10px;padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit">EN</button>
+    <a href="/investment/docs/demo.html" data-en="← Back to Demo Journey">← 返回 Demo Journey</a>
+  </span>
 </div>
 
 <div class="wrap">
 
-<h1>沉 · <em>Source 注册表</em></h1>
-<p class="subtitle">从三篇研报中提取的所有一手数据来源。每个 Source 登记了它提供什么数据、更新频率、访问方式。这张表是"追"步看板的数据基础。</p>
+<h1 data-en="Distill · <em>Source Registry</em>">沉 · <em>Source 注册表</em></h1>
+<p class="subtitle" data-en="All primary data sources extracted from 3 research reports. Each source is registered with its data, update frequency, and access method. This table is the foundation for the Track dashboard.">从三篇研报中提取的所有一手数据来源。每个 Source 登记了它提供什么数据、更新频率、访问方式。这张表是"追"步看板的数据基础。</p>
 <div class="stats">
   <span><b>3</b> 篇研报</span>
   <span><b>100+</b> 处引用</span>
@@ -266,5 +269,7 @@ a.src-link:hover{text-decoration:underline}
 </p>
 
 </div>
+<script src="/investment/docs/lang.js"></script>
+<script>initLang();</script>
 </body>
 </html>

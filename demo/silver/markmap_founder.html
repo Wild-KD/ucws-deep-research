@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>方正证券 · 白银金字塔对比</title>
+<meta name="title-en" content="Founder Securities · Silver Pyramid Comparison">
 <style>
   body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
   .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -24,28 +25,34 @@
 <body>
 
 <div class="header">
-  <h1>方正证券 · 白银金字塔</h1>
+  <h1 data-en="Founder Securities · Silver Pyramid">方正证券 · 白银金字塔</h1>
   <div class="tabs">
-    <div class="tab on" onclick="swTab(0)">原文结构</div>
-    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+    <div class="tab on" data-en="Original Structure" onclick="swTab(0)">原文结构</div>
+    <div class="tab" data-en="Logic Reorganized" onclick="swTab(1)">逻辑重组</div>
   </div>
-  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <button class="toggle-btn active" id="toggleBtn" data-en-on="Knowledge: Shown" data-en-off="Knowledge: Hidden" data-zh-on="常识: 显示中" data-zh-off="常识: 已隐藏" onclick="toggleK()">常识: 显示中</button>
   <div class="legend">
-    <span><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
-    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
-    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
-    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+    <span data-en="Blue=Reference"><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
+    <span data-en="Green=Assumption"><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span data-en="Black=Calculated"><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span data-en="Gray[]=Knowledge"><span class="ldot" style="background:#999"></span>灰[]=常识</span>
   </div>
 </div>
 
-<div class="map-wrap" id="c0"><svg id="s0"></svg></div>
-<div class="map-wrap" id="c1" style="display:none"><svg id="s1a"></svg><svg id="s1b" class="off"></svg></div>
+<div class="map-wrap" id="w0">
+  <svg id="s0a"></svg><svg id="s0b" class="off"></svg>
+</div>
+<div class="map-wrap" id="w1" style="display:none">
+  <svg id="s1a"></svg><svg id="s1b" class="off"></svg>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
 <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
 <script>
 const BLUE = '#005EB8';
+
+// ===== KNOWLEDGE LINES (Chinese) =====
 const K = {
   k1: `- <span style="color:#999">[常识: 去美元化→各国减持美债→寻找替代储值资产→贵金属受益; 白银因市场容量小(仅黄金44%)弹性更大]</span><br>*(国际金融)*`,
   k2: `- <span style="color:#999">[常识: "双重属性"意味白银同时受金融(利率/美元/避险)和实体经济(工业/光伏)两套逻辑驱动, 波动来源更复杂]</span><br>*(贵金属分析框架)*`,
@@ -59,6 +66,21 @@ const K = {
   k10: `- <span style="color:#999">[常识: 中国白银净进口国, 出口管制→减少对外供给→加剧国际市场紧张]</span><br>*(贸易格局)*`
 };
 
+// ===== KNOWLEDGE LINES (English) =====
+const KEN = {
+  k1: `- <span style="color:#999">[Knowledge: De-dollarization → countries reduce US Treasury holdings → seek alternative stores of value → precious metals benefit; silver is more elastic due to smaller market cap (only 44% of gold)]</span><br>*(International finance)*`,
+  k2: `- <span style="color:#999">[Knowledge: "Dual attributes" means silver is driven by both financial (rates/USD/safe-haven) and real-economy (industrial/PV) logic simultaneously, making volatility sources more complex]</span><br>*(Precious metals analytical framework)*`,
+  k3: `- <span style="color:#999">[Knowledge: 80 Moz ≈ 2,490 tonnes; "excluding investment demand" means industrial + jewelry + silverware consumption alone exceeds total supply; ETF and other financial demand further exacerbates the shortage]</span><br>*(Unit conversion; industry definitions)*`,
+  k4: `- <span style="color:#999">[Knowledge: By-product mining = silver output from mining copper/lead/zinc; silver price rises do not incentivize more production]</span><br>*(Mining fundamentals; WoodMackenzie)*`,
+  k5: `- <span style="color:#999">[Knowledge: Recycled silver comes from industrial scrap/old jewelry/e-waste; growth is fast but total volume is limited, insufficient to offset weak mine output growth]</span><br>*(Industry knowledge)*`,
+  k6: `- <span style="color:#999">[Knowledge: Largest industrial demand segment is electronics, followed by PV silver paste; PV is the fastest-growing segment, driven by global energy transition]</span><br>*(World Silver Survey)*`,
+  k7: `- <span style="color:#999">[Knowledge: ETF accumulation = purchasing physical silver from market and locking it in vaults, directly reducing tradable supply; futures premium indicates the market expects silver to be more expensive or spot to be tight]</span><br>*(ETF mechanism; futures pricing)*`,
+  k8: `- <span style="color:#999">[Knowledge: Gold/silver ratio = gold price ÷ silver price; high ratio means silver is relatively "cheap" vs gold; historically, extreme highs tend to mean-revert, with silver outperforming]</span><br>*(Precious metals ratio analysis)*`,
+  k9: `- <span style="color:#999">[Knowledge: Silver crashed in 2008 because: (1) all assets were sold for cash in the broad liquidity crisis (2) industrial demand collapsed; this shows "safe-haven = silver rises" does not hold in extreme scenarios]</span><br>*(Financial crisis case study)*`,
+  k10: `- <span style="color:#999">[Knowledge: China is a net silver importer; export controls → reduced international supply → tighter global market]</span><br>*(Trade structure)*`
+};
+
+// ===== CHINESE MARKDOWN: Original Structure =====
 const mdOrig = `
 # 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
 
@@ -113,6 +135,62 @@ const mdOrig = `
 - <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
 `;
 
+// ===== ENGLISH MARKDOWN: Original Structure =====
+const mdOrigEn = `
+# Silver pullback risk exceeds gold; long-term bullish, but beware short-term volatility *(方正证券 2026.1.23)*
+
+## Silver has weaker financial attributes but stronger industrial attributes
+
+### Financial: Highly correlated with gold but smaller market cap
+- <span style="color:${BLUE};font-weight:bold">Silver-gold rolling correlation has been stable at ~80% since 2004</span><br>*(World Silver Survey)*
+- <span style="color:${BLUE};font-weight:bold">2023 global silver trading volume $2.6T, only 44% of gold's $5.9T</span><br>*(World Silver Survey)*
+
+### Industrial: Industrial demand exceeds 50% of total
+- <span style="color:${BLUE};font-weight:bold">2023 silver industrial demand share exceeds 50%; gold only 6.7%</span><br>*(World Silver Survey)*
+- <span style="color:${BLUE};font-weight:bold">Silver widely used in electronics, PV, brazing, chemicals, pharmaceuticals, etc.</span><br>*(方正整理)*
+
+## Supply-demand structure: Persistent deficit since 2021
+
+### Supply relatively stable
+
+#### Mine silver output trending down but recovering slightly in 2024
+- <span style="color:${BLUE};font-weight:bold">Global silver annual output stable at ~30,000 tonnes; 2024 mine silver +0.9% YoY to 819.7 Moz</span><br>*(World Silver Survey)*
+
+#### Recycled silver growth becomes second-largest supply source
+- <span style="color:${BLUE};font-weight:bold">2024 silver recycling +6% YoY, highest in nearly 12 years, ~20% of total supply</span><br>*(World Silver Survey)*
+
+### Demand: Industrial demand dominates
+
+#### Industrial demand = 58.5% of total
+- <span style="color:${BLUE};font-weight:bold">2024 industrial silver demand 58.5% of total, jewelry 17.9%, physical investment 16.4%; PV accounts for 17% of total demand</span><br>*(World Silver Survey)*
+
+#### ETF surge drains physical supply
+- <span style="color:${BLUE};font-weight:bold">Silver ETF holdings rose from 600 Moz to over 750 Moz, futures premium ~7%</span><br>*(方正引用SLV/PSLV数据)*
+
+### 2021 was the supply-demand inflection year
+- <span style="color:${BLUE};font-weight:bold">2021 silver demand significantly exceeded supply; excluding investment demand, the deficit reached ~80 Moz/year</span><br>*(World Silver Survey)*
+
+## Historical review: Gold/silver ratio peaked three times, silver rebounded each time
+
+### Post-2003 dot-com bubble: Gold/silver ratio ~82
+- <span style="color:${BLUE};font-weight:bold">Silver climbed steadily from lows to $21 in March 2008</span><br>*(方正历史数据)*
+
+### 2008 subprime crisis: Gold/silver ratio surged to 80+
+- <span style="color:${BLUE};font-weight:bold">Silver first crashed from $21 to $9 (~60% drop), then rebounded</span><br>*(方正历史数据)*
+
+### 2020 COVID pandemic: Gold/silver ratio broke 122
+- <span style="color:${BLUE};font-weight:bold">Silver rebounded strongly, gold/silver ratio fell to ~30</span><br>*(方正历史数据)*
+
+## China silver supply falls short of demand, relies on imports
+- <span style="color:${BLUE};font-weight:bold">2024 China silver output (mine + recycled) totaled 4,659 tonnes; industrial demand alone 8,567 tonnes — severe supply shortage</span><br>*(同花顺/方正整理)*
+- <span style="color:${BLUE};font-weight:bold">Oct 2025 MOFCOM announced export-license requirement for silver effective Jan 1, 2026</span><br>*(商务部)*
+
+## Outlook: Long-term bullish, short-term caution needed
+- <span style="color:#008800;font-weight:bold">Silver pullback risk exceeds gold; short-term volatility requires close attention</span><br>*(方正分析)*
+- <span style="color:#008800;font-weight:bold">Rigid long-term industrial demand growth provides core price support for silver</span><br>*(方正分析)*
+`;
+
+// ===== CHINESE MARKDOWN: Logic Reorganized =====
 function mkReorg(withK) {
 return `
 # 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
@@ -178,30 +256,219 @@ ${withK ? K.k10 : ''}
 `;
 }
 
-const { Transformer, Markmap } = window.markmap;
+// ===== ENGLISH MARKDOWN: Logic Reorganized =====
+function mkReorgEn(withK) {
+return `
+# Silver pullback risk exceeds gold; long-term bullish, but beware short-term volatility *(方正证券 2026.1.23)*
+
+## Under de-dollarization, silver's dual attributes benefit from both financial and industrial demand
+
+### De-dollarization drives precious-metal preference over Treasuries
+- <span style="color:${BLUE};font-weight:bold">Global de-dollarization advances; investors appear to prefer precious metals over US Treasuries</span><br>*(方正引用前期报告)*
+${withK ? KEN.k1 : ''}
+
+### Silver has weaker financial attributes but stronger industrial attributes
+- <span style="color:${BLUE};font-weight:bold">Silver-gold correlation ~80%, but industrial demand share exceeds 50% (gold only 6.7%); market cap only 44% of gold</span><br>*(World Silver Survey)*
+${withK ? KEN.k2 : ''}
+
+## Structural supply-demand deficit since 2021 is the fundamental basis for silver's rise
+
+### Supply-demand inflection: Annual demand exceeds supply since 2021
+- <span style="color:${BLUE};font-weight:bold">2021 silver demand significantly exceeded supply; excluding investment demand, the deficit reached ~80 Moz/year</span><br>*(World Silver Survey)*
+${withK ? KEN.k3 : ''}
+
+#### Supply rigidity: Mine output stable but growth weak
+
+##### Mine silver output constrained
+- <span style="color:${BLUE};font-weight:bold">Global silver annual output stable at ~30,000 tonnes; 2024 mine silver only +0.9% YoY to 819.7 Moz</span><br>*(World Silver Survey)*
+${withK ? KEN.k4 : ''}
+
+##### Recycled silver growing but limited in scale
+- <span style="color:${BLUE};font-weight:bold">2024 silver recycling +6% YoY, highest in nearly 12 years, ~20% of total supply</span><br>*(World Silver Survey)*
+${withK ? KEN.k5 : ''}
+
+#### Demand side: Industrial demand dominates, ETFs intensify tightness
+
+##### Industrial demand = 58.5% of total; PV is the largest incremental driver
+- <span style="color:${BLUE};font-weight:bold">2024 industrial silver demand 58.5% of total, jewelry 17.9%, physical investment 16.4%; PV accounts for 17% of total demand</span><br>*(World Silver Survey)*
+${withK ? KEN.k6 : ''}
+
+##### ETF accumulation drains physical supply, worsening shortage
+- <span style="color:${BLUE};font-weight:bold">Silver ETF holdings rose from 600 Moz to over 750 Moz, futures premium ~7%</span><br>*(方正引用SLV/PSLV数据)*
+${withK ? KEN.k7 : ''}
+
+### Historical validation: Silver outperformed after all three extreme gold/silver ratio peaks
+- <span style="color:${BLUE};font-weight:bold">Since 2000, gold/silver ratio peaked three times (2003: 82, 2008: 80+, 2020: 122); silver rebounded strongly after each peak</span><br>*(方正历史数据)*
+${withK ? KEN.k8 : ''}
+
+#### ⚠ 2008 warning: Silver crashed before rallying in extreme liquidity crisis
+- <span style="color:${BLUE};font-weight:bold">During 2008 subprime crisis, gold/silver ratio surged to 80+, but silver first crashed from $21 to $9 (~60% drop) before rebounding</span><br>*(方正历史数据)*
+${withK ? KEN.k9 : ''}
+
+### China supply severely insufficient; export controls tighten international market
+- <span style="color:${BLUE};font-weight:bold">2024 China silver output (mine + recycled) totaled 4,659 tonnes; industrial demand alone 8,567 tonnes — severe shortage; export-license requirement effective Jan 1, 2026</span><br>*(同花顺/方正; 商务部)*
+${withK ? KEN.k10 : ''}
+
+## Forward look: Long-term bullish but beware deep short-term pullbacks
+
+### Long-term: Rigid industrial demand growth supports silver price
+- <span style="color:#008800;font-weight:bold">Rigid long-term industrial demand growth provides core price support for silver</span><br>*(方正分析)*
+
+### Short-term: Silver pullback risk exceeds gold
+- <span style="color:#008800;font-weight:bold">Silver pullback risk exceeds gold; short-term volatility requires close attention; in 1980, margin requirements were raised to 100% or "liquidation only" orders were imposed</span><br>*(方正分析; historical case)*
+
+### ⚠ Data-scope note
+- <span style="color:#999">[Note: This report states industrial demand share as "50-60%" in the summary but "58.5%" in the body text — the two figures are not fully consistent]</span><br>*(Editor's note)*
+`;
+}
+
+// ===== RENDER =====
+const { Transformer } = window.markmap;
+const { Markmap } = window.markmap;
 const transformer = new Transformer();
 const opts = { color: () => '#999', colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 };
 
-const mm0 = Markmap.create('#s0', opts, transformer.transform(mdOrig).root);
-const mm1a = Markmap.create('#s1a', opts, transformer.transform(mkReorg(true)).root);
-const mm1b = Markmap.create('#s1b', opts, transformer.transform(mkReorg(false)).root);
+function render(svgId, md) {
+  const { root } = transformer.transform(md);
+  return Markmap.create('#'+svgId, opts, root);
+}
 
-let curTab = 0, showK = true;
+function rerender(mmObj, svgId, md) {
+  const { root } = transformer.transform(md);
+  mmObj.setData(root);
+  mmObj.fit();
+}
+
+// ===== STATE =====
+let curTab = 0;
+let showK = true;
+let curLang = 'zh';  // 'zh' or 'en'
+
+// Lazy render: only create markmap when its SVG is first visible
+const mm0a = render('s0a', mdOrig);
+let mm1a = null;  // 逻辑重组+常识
+let mm1b = null;  // 逻辑重组-常识
+
+// Store Chinese text for legend spans (to restore when switching back)
+const legendZh = {};
+document.querySelectorAll('.legend > span[data-en]').forEach(function(el) {
+  legendZh[el.getAttribute('data-en')] = el.innerHTML;
+});
+
+function getOriginalMd() { return curLang === 'en' ? mdOrigEn : mdOrig; }
+function getReorgMd(wk) { return curLang === 'en' ? mkReorgEn(wk) : mkReorg(wk); }
+
+function ensureCurrentRendered() {
+  if (curTab === 1 && showK && !mm1a) {
+    document.getElementById('s1a').classList.remove('off');
+    document.getElementById('s1b').classList.add('off');
+    mm1a = render('s1a', getReorgMd(true));
+  }
+  if (curTab === 1 && !showK && !mm1b) {
+    document.getElementById('s1b').classList.remove('off');
+    document.getElementById('s1a').classList.add('off');
+    mm1b = render('s1b', getReorgMd(false));
+  }
+}
+
 function swTab(n) {
   curTab = n;
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
-  document.getElementById('c0').style.display = n===0 ? '' : 'none';
-  document.getElementById('c1').style.display = n===1 ? '' : 'none';
-  if(n===0) mm0.fit(); else if(showK) mm1a.fit(); else mm1b.fit();
+  document.getElementById('w0').style.display = n===0 ? '' : 'none';
+  document.getElementById('w1').style.display = n===1 ? '' : 'none';
+  if (n===1) {
+    document.getElementById('s1a').classList.toggle('off', !showK);
+    document.getElementById('s1b').classList.toggle('off', showK);
+    ensureCurrentRendered();
+  }
+  setTimeout(function() { fitCurrent(); }, 100);
+  setTimeout(function() { fitCurrent(); }, 300);
+  setTimeout(function() { fitCurrent(); }, 600);
 }
+
 function toggleK() {
   showK = !showK;
-  document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
-  document.getElementById('toggleBtn').classList.toggle('active', showK);
+  var btn = document.getElementById('toggleBtn');
+  if (curLang === 'en') {
+    btn.textContent = showK ? btn.getAttribute('data-en-on') : btn.getAttribute('data-en-off');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-on') : btn.getAttribute('data-zh-off');
+  }
+  btn.classList.toggle('active', showK);
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
-  if(curTab===1) { if(showK) mm1a.fit(); else mm1b.fit(); }
+  ensureCurrentRendered();
+  setTimeout(function() { fitCurrent(); }, 100);
+  setTimeout(function() { fitCurrent(); }, 300);
 }
+
+function fitCurrent() {
+  if (curTab===0) mm0a.fit();
+  else if (showK && mm1a) mm1a.fit();
+  else if (!showK && mm1b) mm1b.fit();
+}
+
+// ===== LANGUAGE SWITCHING =====
+function applyLang(lang) {
+  curLang = lang;
+  var isEn = (lang === 'en');
+  document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+
+  // Update h1
+  var h1 = document.querySelector('.header h1');
+  if (isEn) {
+    if (!h1.getAttribute('data-zh')) h1.setAttribute('data-zh', h1.textContent);
+    h1.textContent = h1.getAttribute('data-en');
+  } else {
+    h1.textContent = h1.getAttribute('data-zh') || h1.textContent;
+  }
+
+  // Update tabs
+  document.querySelectorAll('.tab[data-en]').forEach(function(el) {
+    if (isEn) {
+      if (!el.getAttribute('data-zh')) el.setAttribute('data-zh', el.textContent);
+      el.textContent = el.getAttribute('data-en');
+    } else {
+      el.textContent = el.getAttribute('data-zh') || el.textContent;
+    }
+  });
+
+  // Update toggle button
+  var btn = document.getElementById('toggleBtn');
+  if (isEn) {
+    btn.textContent = showK ? btn.getAttribute('data-en-on') : btn.getAttribute('data-en-off');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-on') : btn.getAttribute('data-zh-off');
+  }
+
+  // Update legend items
+  document.querySelectorAll('.legend > span[data-en]').forEach(function(el) {
+    var enKey = el.getAttribute('data-en');
+    if (isEn) {
+      // Keep the ldot span, replace text
+      var dot = el.querySelector('.ldot');
+      el.textContent = '';
+      if (dot) el.appendChild(dot);
+      el.appendChild(document.createTextNode(enKey));
+    } else {
+      // Restore full Chinese innerHTML (includes ldot)
+      if (legendZh[enKey]) el.innerHTML = legendZh[enKey];
+    }
+  });
+
+  // Re-render all existing markmaps with new language content
+  rerender(mm0a, 's0a', getOriginalMd());
+  if (mm1a) rerender(mm1a, 's1a', getReorgMd(true));
+  if (mm1b) rerender(mm1b, 's1b', getReorgMd(false));
+  setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
+}
+
+// ===== LANG.JS INTEGRATION =====
+window.onResearchLangChange = function(lang) {
+  applyLang(lang);
+};
 </script>
+<script src="/investment/docs/lang.js"></script>
+<script>initLang();</script>
 </body>
 </html>

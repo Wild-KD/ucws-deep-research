@@ -22,17 +22,17 @@
   .wp-verdict { font-weight:600; margin-top:4px; }
 </style>
 </head>
-<body>
+<body data-title-en="Founder &middot; Silver Verification Map">
 <div class="header">
-  <h1>方正证券 · 白银验证地图</h1>
+  <h1 data-en="Founder &middot; Silver Verification Map">方正证券 · 白银验证地图</h1>
   <div class="legend">
-    <span><span class="ldot" style="border-color:#009A44"></span>验证通过</span>
-    <span><span class="ldot" style="border-color:#D4A843"></span>有source未验证</span>
-    <span><span class="ldot" style="border-color:#CC0000"></span>有冲突</span>
-    <span><span class="ldot" style="border-color:#333"></span>结构/常识</span>
+    <span><span class="ldot" style="border-color:#009A44"></span><span data-en="Verified">验证通过</span></span>
+    <span><span class="ldot" style="border-color:#D4A843"></span><span data-en="Has source, unverified">有source未验证</span></span>
+    <span><span class="ldot" style="border-color:#CC0000"></span><span data-en="Conflict">有冲突</span></span>
+    <span><span class="ldot" style="border-color:#333"></span><span data-en="MECE Structure">结构/常识</span></span>
   </div>
 </div>
-<div class="stats">数据节点: <b style="color:#009A44">2🟢</b> · <b style="color:#D4A843">6🟡</b> · <b style="color:#CC0000">2🔴</b></div>
+<div class="stats" data-en='Data nodes: <b style="color:#009A44">2&#x1F7E2;</b> &middot; <b style="color:#D4A843">6&#x1F7E1;</b> &middot; <b style="color:#CC0000">2&#x1F534;</b>'>数据节点: <b style="color:#009A44">2🟢</b> · <b style="color:#D4A843">6🟡</b> · <b style="color:#CC0000">2🔴</b></div>
 <div class="map-wrap"><svg id="mm"></svg></div>
 <div id="wpanel"></div>
 
@@ -44,25 +44,169 @@ const BLUE = '#005EB8';
 const G = '#009A44', Y = '#D4A843', R = '#CC0000', B = '#333';
 
 const verifyColors = [
-  ['去美元化', Y],
-  ['80%', Y], ['相关系数', Y],
-  ['2.6万亿', R], ['5.9万亿', R], ['44%', R],
+  ['de-dollarization', Y], ['去美元化', Y],
+  ['80%', Y], ['correlation', Y], ['相关系数', Y],
+  ['2.6万亿', R], ['2.6 trillion', R], ['5.9万亿', R], ['5.9 trillion', R], ['44%', R],
   ['58.5%', Y], ['17%', Y],
-  ['8千万盎司', Y],
-  ['3万吨', Y], ['819.7', Y],
-  ['增长6%', G], ['12年最高', G], ['20%', G],
-  ['6亿盎司', Y], ['7.5亿', Y], ['7%', Y],
-  ['21美元', Y], ['9美元', Y], ['60%', Y],
-  ['4659吨', G], ['8567吨', G],
-  ['出口许可证', Y], ['许可证审批', Y],
+  ['8千万盎司', Y], ['80 million oz', Y],
+  ['3万吨', Y], ['30,000 tonnes', Y], ['819.7', Y],
+  ['增长6%', G], ['grew 6%', G], ['12年最高', G], ['12-year high', G], ['20%', G],
+  ['6亿盎司', Y], ['600 million oz', Y], ['7.5亿', Y], ['750 million', Y], ['7%', Y],
+  ['21美元', Y], ['$21', Y], ['9美元', Y], ['$9', Y], ['60%', Y],
+  ['4659吨', G], ['4,659 tonnes', G], ['8567吨', G], ['8,567 tonnes', G],
+  ['出口许可证', Y], ['export license', Y], ['许可证审批', Y], ['license review', Y],
   ['50-60%', Y],
-  ['供需结构性缺口', Y],
-  ['供给刚性', Y],
-  ['2008年警示', Y],
-  ['中国供给严重不足', G],
+  ['供需结构性缺口', Y], ['structural supply-demand deficit', Y],
+  ['供给刚性', Y], ['supply rigidity', Y],
+  ['2008年警示', Y], ['2008 warning', Y],
+  ['中国供给严重不足', G], ['China severe supply shortage', G],
 ];
 
-const workpapers = {
+// ===== BILINGUAL: Markmap markdown =====
+function mkMd_zh() {
+return `
+# 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
+
+## 去美元化趋势下白银双重属性使其同时受益于金融和工业需求
+
+### 去美元化推动贵金属偏好超过美债
+- <span style="color:${BLUE};font-weight:bold">全球"去美元化"推进, 投资者对贵金属偏好似乎超过了美债</span><br>*(方正引用前期报告)*
+
+### 白银金融属性偏弱但工业属性更强
+- <span style="color:${BLUE};font-weight:bold">白银与黄金相关系数~80%, 工业需求占比超50%; 市场容量2.6万亿美元仅为黄金5.9万亿的44%</span><br>*(世界白银协会)*
+
+## 2021年起供需结构性缺口是白银上涨的基本面根基
+
+### 供需转折: 2021年起每年需求超过供给
+- <span style="color:${BLUE};font-weight:bold">2021年白银需求显著超过供应, 不考虑投资需求的供需缺口已近8千万盎司/年</span><br>*(世界白银协会)*
+
+#### 供给刚性: 矿产稳定但增长乏力
+
+##### 矿产银产量受限
+- <span style="color:${BLUE};font-weight:bold">全球白银总年产量稳定在3万吨左右; 2024年矿产银产量同比+0.9%至819.7百万盎司</span><br>*(世界白银协会)*
+
+##### 再生银增长但总量有限
+- <span style="color:${BLUE};font-weight:bold">2024年白银回收量同比增长6%, 达近12年最高值, 占总供应约20%</span><br>*(世界白银协会)*
+
+#### 需求端: 工业需求主导, ETF加剧紧张
+
+##### 工业需求占总需求58.5%, 光伏是最大增量
+- <span style="color:${BLUE};font-weight:bold">2024年工业白银需求占总需求58.5%, 珠宝17.9%, 实物投资16.4%; 光伏占需求总量17%</span><br>*(世界白银协会)*
+
+##### ETF增仓抽离实物加剧短缺
+- <span style="color:${BLUE};font-weight:bold">白银ETF持仓从6亿盎司攀升至7.5亿盎司以上, 期货溢价约7%</span><br>*(方正引用SLV/PSLV数据)*
+
+### 历史验证: 金银比三次极端高位后白银均跑赢
+- <span style="color:${BLUE};font-weight:bold">2000年以来金银比三次达到峰值(2003年82, 2008年80+, 2020年122), 每次后白银均强劲反弹</span><br>*(方正历史数据)*
+
+#### ⚠ 2008年警示: 极端流动性危机下白银先崩再涨
+- <span style="color:${BLUE};font-weight:bold">2008年次贷危机中金银比冲至80+, 但白银先从21美元暴跌至9美元(跌幅近60%), 之后才反弹</span><br>*(方正历史数据)*
+
+### 中国供给严重不足且出口管制加剧国际紧张
+- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量(矿产+再生)共4659吨, 工业需求单项8567吨; 2026.1.1起实施出口许可证</span><br>*(同花顺/方正; 商务部)*
+
+## 前瞻: 长期看多但短期需警惕深度回调
+
+### 长期: 工业需求刚性增长支撑银价
+- <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
+
+### 短期: 白银回调风险大于黄金
+- <span style="color:#008800;font-weight:bold">白银回调风险大于黄金, 短期波动需警惕; 1980年曾出现保证金提至100%或强制仅限平仓</span><br>*(方正分析; 历史案例)*
+
+### ⚠ 数据口径注意
+- <span style="color:#999">[注: 本报告工业需求占比在核心结论写"50-60%", 正文写"58.5%", 口径不完全一致]</span><br>*(编者注)*
+`;
+}
+
+function mkMd_en() {
+return `
+# Silver pullback risk exceeds gold; long-term bullish, short-term volatility warrants caution *(Founder Securities 2026.1.23)*
+
+## Under de-dollarization, silver's dual attributes benefit from both financial and industrial demand
+
+### De-dollarization drives precious metals preference over US Treasuries
+- <span style="color:${BLUE};font-weight:bold">Global "de-dollarization" advances; investor preference for precious metals appears to exceed US Treasuries</span><br>*(Founder citing prior report)*
+
+### Silver's financial attribute is weaker but industrial attribute is stronger
+- <span style="color:${BLUE};font-weight:bold">Silver-gold correlation ~80%; industrial demand >50% of total; market cap $2.6 trillion is only 44% of gold's $5.9 trillion</span><br>*(World Silver Association)*
+
+## Structural supply-demand deficit since 2021 is the fundamental basis for silver's rise
+
+### Supply-demand inflection: demand exceeds supply annually since 2021
+- <span style="color:${BLUE};font-weight:bold">Silver demand significantly exceeded supply in 2021; excluding investment demand, the deficit is ~80 million oz/year</span><br>*(World Silver Association)*
+
+#### Supply rigidity: mine output stable but growth stagnant
+
+##### Mine silver output constrained
+- <span style="color:${BLUE};font-weight:bold">Global annual silver output stable at ~30,000 tonnes; 2024 mine silver output +0.9% YoY to 819.7 million oz</span><br>*(World Silver Association)*
+
+##### Recycled silver growing but limited in total
+- <span style="color:${BLUE};font-weight:bold">2024 silver recycling grew 6% YoY, reaching a 12-year high, ~20% of total supply</span><br>*(World Silver Association)*
+
+#### Demand side: industrial demand dominates, ETFs intensify tightness
+
+##### Industrial demand 58.5% of total; solar PV is largest growth driver
+- <span style="color:${BLUE};font-weight:bold">2024 industrial silver demand 58.5% of total, jewelry 17.9%, physical investment 16.4%; solar PV 17% of total demand</span><br>*(World Silver Association)*
+
+##### ETF accumulation drains physical supply, worsening shortage
+- <span style="color:${BLUE};font-weight:bold">Silver ETF holdings rose from 600 million oz to over 750 million oz; futures premium ~7%</span><br>*(Founder citing SLV/PSLV data)*
+
+### Historical validation: silver outperformed after each of three extreme gold-silver ratio peaks
+- <span style="color:${BLUE};font-weight:bold">Since 2000, gold-silver ratio peaked three times (2003: 82, 2008: 80+, 2020: 122); silver rebounded strongly each time</span><br>*(Founder historical data)*
+
+#### ⚠ 2008 warning: silver crashed before surging in extreme liquidity crisis
+- <span style="color:${BLUE};font-weight:bold">During the 2008 subprime crisis, gold-silver ratio hit 80+, but silver first plunged from $21 to $9 (~60% drop) before rebounding</span><br>*(Founder historical data)*
+
+### China severe supply shortage plus export controls intensify global tightness
+- <span style="color:${BLUE};font-weight:bold">2024 China silver output (mine+recycled) totaled 4,659 tonnes; industrial demand alone 8,567 tonnes; export license effective Jan 1, 2026</span><br>*(Tonghuashun/Founder; MOFCOM)*
+
+## Outlook: long-term bullish but beware of deep short-term pullback
+
+### Long-term: rigid industrial demand growth supports silver price
+- <span style="color:#008800;font-weight:bold">Long-term rigid growth in industrial demand provides core support for silver prices</span><br>*(Founder analysis)*
+
+### Short-term: silver pullback risk exceeds gold
+- <span style="color:#008800;font-weight:bold">Silver pullback risk exceeds gold; short-term volatility warrants caution; in 1980, margin was raised to 100% or forced liquidation-only</span><br>*(Founder analysis; historical case)*
+
+### ⚠ Data calibration note
+- <span style="color:#999">[Note: This report states industrial demand share as "50-60%" in the summary but "58.5%" in the body; calibration inconsistency]</span><br>*(Editor's note)*
+`;
+}
+
+// Current language helper
+function curLang() { return localStorage.getItem('research-engine-lang') || 'en'; }
+function mkMd() { return curLang() === 'en' ? mkMd_en() : mkMd_zh(); }
+
+function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
+function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
+function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
+function getNodeColor(node) {
+  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
+  if (text.includes('常识') || text.includes('Knowledge')) return B;
+  if (text.includes('注:') || text.includes('Note:')) return B;
+  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
+  if (hasKids(node)) return B;
+  return Y;
+}
+
+const { Transformer, Markmap } = window.markmap;
+const transformer = new Transformer();
+
+function buildMarkmap(svgId, md) {
+  const { root } = transformer.transform(md);
+  return Markmap.create('#' + svgId, {
+    color: getNodeColor,
+    colorFreezeLevel: 0,
+    initialExpandLevel: -1,
+    maxWidth: 420,
+    paddingX: 14
+  }, root);
+}
+
+const mm = buildMarkmap('mm', mkMd());
+
+// ===== BILINGUAL WORKPAPERS =====
+const workpapers_zh = {
   '2.6万亿': {color:'🔴',claim:'白银交易量2.6万亿vs黄金5.9万亿(44%)',structured:true,
     conclusion:'🔴 两个数字均无法从任何权威source验证',
     subclaims:[{text:'事实: 交易量数据能否核实?',status:'🔴',
@@ -134,82 +278,89 @@ const workpapers = {
       sources:[{title:'商务部公告2025年第69号',author:'商务部, 2025.10.29',url:'https://www.mofcom.gov.cn/zcfb/dwmygl/art/2025/art_d939f5e193604b1aaf76aacc441a16f4.html'}]}]},
 };
 
-function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
-function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
-function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
-function getNodeColor(node) {
-  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
-  if (text.includes('常识')) return B;
-  if (text.includes('注:')) return B;
-  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
-  if (hasKids(node)) return B;
-  return Y;
-}
+const workpapers_en = {
+  '2.6 trillion': {color:'🔴',claim:'Silver trading volume $2.6T vs gold $5.9T (44%)',structured:true,
+    conclusion:'🔴 Neither figure can be verified from any authoritative source',
+    subclaims:[{text:'Fact: Can trading volume data be verified?',status:'🔴',
+      finding:'Gold actual daily trading volume ~$163B, annualized ~$41T, far exceeding $5.9T. Silver $2.6T has no public source confirmation either. Silver Institute does not publish such trading volume data.',
+      quote:'',
+      sources:[]}]},
 
-const md = `
-# 白银回调风险大于黄金, 长期看好, 短期波动需警惕 *(方正证券 2026.1.23)*
+  '80%': {color:'🟡',claim:'Gold-silver rolling correlation stable at ~80%',structured:true,
+    conclusion:'🟡 Value basically correct (CME confirms ~0.8), but source misattributed and "stable" is overstated',
+    subclaims:[{text:'Fact: Is correlation ~80%?',status:'🟡',
+      finding:'CME Group research confirms 1-year rolling correlation ~0.68-0.95 since 2004, mean ~0.8. But the report attributes this to "World Silver Association" when it actually comes from CME Group. Also, 2025 correlation dropped to 20-year low.',
+      quote:'',
+      sources:[{title:'Four Factors Driving Gold Prices Relative to Silver',author:'CME Group, Erik Norland, 2024',url:'https://www.cmegroup.com/insights/economic-research/2024/four-factors-driving-gold-prices-relative-to-silver.html'}]}]},
 
-## 去美元化趋势下白银双重属性使其同时受益于金融和工业需求
+  '58.5': {color:'🟡',claim:'Industrial demand 58.5% of total; solar PV 17%',structured:true,
+    conclusion:'🟡 Silver Institute data yields 58.7%, close; PV 17% matches; but report elsewhere says 50-60%, inconsistent',
+    subclaims:[{text:'Fact: Are 58.5% and 17% accurate?',status:'🟡',
+      finding:'Silver Institute WSS 2025: industrial demand 680.5Moz / total demand 1160Moz = 58.7%, close to 58.5%. PV demand 197.6Moz = 17.0%, matches.',
+      quote:'',
+      sources:[{title:'Silver Industrial Demand Reached a Record 680.5 Moz in 2024',author:'Silver Institute',url:'https://silverinstitute.org/silver-industrial-demand-reached-a-record-680-5-moz-in-2024/'}]}]},
 
-### 去美元化推动贵金属偏好超过美债
-- <span style="color:${BLUE};font-weight:bold">全球"去美元化"推进, 投资者对贵金属偏好似乎超过了美债</span><br>*(方正引用前期报告)*
+  '80 million oz': {color:'🟡',claim:'Supply-demand deficit ~80 million oz/year',structured:true,
+    conclusion:'🟡 Only matches 2021 smallest deficit; 2022-2024 deficits far exceed 80 million',
+    subclaims:[{text:'Fact: Is the deficit 80 million oz?',status:'🟡',
+      finding:'Silver Institute: 2021 deficit ~89Moz, 2022 ~272Moz, 2023 ~210Moz, 2024 ~151Moz. "~80 million" only roughly matches 2021; subsequent years far exceed this.',
+      quote:'',
+      sources:[{title:'Silver Supply and Demand',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}]},
 
-### 白银金融属性偏弱但工业属性更强
-- <span style="color:${BLUE};font-weight:bold">白银与黄金相关系数~80%, 工业需求占比超50%; 市场容量2.6万亿美元仅为黄金5.9万亿的44%</span><br>*(世界白银协会)*
+  '819.7': {color:'🟡',claim:'Mine silver output +0.9% to 819.7 million oz; total output ~30,000 tonnes',structured:true,
+    conclusion:'🟡 819.7Moz exact match; "30,000 tonnes" is total supply not mine output (mine ~25,500t)',
+    subclaims:[{text:'Fact: Is 819.7Moz accurate?',status:'🟢',
+      finding:'Silver Institute WSS 2025 original: "Global silver mine production rose by 0.9 percent to 819.7 Moz." Exact match.',
+      quote:'',
+      sources:[{title:'Silver Industrial Demand Record 2024',author:'Silver Institute / GlobeNewsWire, 2025.4.16',url:'https://silverinstitute.org/silver-industrial-demand-reached-a-record-680-5-moz-in-2024/'}]}]},
 
-## 2021年起供需结构性缺口是白银上涨的基本面根基
+  'grew 6%': {color:'🟢',claim:'Recycling grew 6% YoY, reaching 12-year high, ~20% of total supply',structured:true,
+    conclusion:'🟢 All three sub-claims precisely match Silver Institute',
+    subclaims:[{text:'Fact: Recycling data',status:'🟢',
+      finding:'Silver Institute WSS 2025: recycling grew 6% to 193.9Moz, a 12-year high, ~19% of total supply (report says "~20%", reasonable rounding).',
+      quote:'',
+      sources:[{title:'Silver Supply and Demand',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}]},
 
-### 供需转折: 2021年起每年需求超过供给
-- <span style="color:${BLUE};font-weight:bold">2021年白银需求显著超过供应, 不考虑投资需求的供需缺口已近8千万盎司/年</span><br>*(世界白银协会)*
+  '600 million oz': {color:'🟡',claim:'ETF holdings rose from 600 million oz to over 750 million oz; futures premium ~7%',structured:true,
+    conclusion:'🟡 SLV+PSLV total ~710Moz, did not reach 750M; 7% premium unconfirmed',
+    subclaims:[{text:'Fact: Did ETF holdings reach 750 million oz?',status:'🟡',
+      finding:'SEC filings: SLV ~492Moz + PSLV ~217Moz = ~709Moz, below 750Moz. The "from 600M" starting point (SLV+PSLV end-2023 ~608Moz) is roughly correct.',
+      quote:'',
+      sources:[{title:'Global Silver ETP Holdings Chart',author:'MiningVisuals',url:'https://www.miningvisuals.com/post/charted-the-growth-of-global-silver-etp-holdings-2016-2026'}]}]},
 
-#### 供给刚性: 矿产稳定但增长乏力
+  '$21': {color:'🟡',claim:'In 2008, silver crashed from $21 to $9, ~60% decline',structured:true,
+    conclusion:'🟡 Actual peak ~$20.7, actual decline ~57%; report rounded up',
+    subclaims:[{text:'Fact: Price and decline magnitude',status:'🟡',
+      finding:'Actual March 2008 peak ~$20.67-20.78, late October low ~$9.05. Actual decline 56-57%; report says "~60%" as rounding.',
+      quote:'',
+      sources:[{title:'Silver Price History March 2008',author:'Bullion-Rates.com',url:'https://www.bullion-rates.com/silver/USD/2008-3-history.htm'}]}]},
 
-##### 矿产银产量受限
-- <span style="color:${BLUE};font-weight:bold">全球白银总年产量稳定在3万吨左右; 2024年矿产银产量同比+0.9%至819.7百万盎司</span><br>*(世界白银协会)*
+  '4,659 tonnes': {color:'🟢',claim:'China silver output 4,659 tonnes, industrial demand 8,567 tonnes',structured:true,
+    conclusion:'🟢 CCTV and multiple sources exact match',
+    subclaims:[{text:'Fact: China output and demand',status:'🟢',
+      finding:'CCTV Economic Channel, China News Service and multiple authoritative media report consistently: mine silver 3,426t + recycled 1,233t = 4,659t; industrial demand 8,567t.',
+      quote:'',
+      sources:[{title:'2024 Silver Supply-Demand Data Report',author:'CCTV Economic Channel, 2025.10.20',url:'https://jingji.cctv.com/2025/10/20/ARTIN81qvFG5TZHB2OzBxocG251019.shtml'}]}]},
 
-##### 再生银增长但总量有限
-- <span style="color:${BLUE};font-weight:bold">2024年白银回收量同比增长6%, 达近12年最高值, 占总供应约20%</span><br>*(世界白银协会)*
+  'export license': {color:'🟡',claim:'China imposes export license system effective Jan 1, 2026',structured:true,
+    conclusion:'🟡 Fact correct, but it is "continued" not new policy (in place since 2019)',
+    subclaims:[{text:'Fact: Does the policy exist?',status:'🟢',
+      finding:'MOFCOM Announcement No. 69 of 2025 confirms. But original text uses "continue" -- in place since 2019, renewed annually.',
+      quote:'',
+      sources:[{title:'MOFCOM Announcement No. 69 of 2025',author:'MOFCOM, 2025.10.29',url:'https://www.mofcom.gov.cn/zcfb/dwmygl/art/2025/art_d939f5e193604b1aaf76aacc441a16f4.html'}]}]},
+};
 
-#### 需求端: 工业需求主导, ETF加剧紧张
-
-##### 工业需求占总需求58.5%, 光伏是最大增量
-- <span style="color:${BLUE};font-weight:bold">2024年工业白银需求占总需求58.5%, 珠宝17.9%, 实物投资16.4%; 光伏占需求总量17%</span><br>*(世界白银协会)*
-
-##### ETF增仓抽离实物加剧短缺
-- <span style="color:${BLUE};font-weight:bold">白银ETF持仓从6亿盎司攀升至7.5亿盎司以上, 期货溢价约7%</span><br>*(方正引用SLV/PSLV数据)*
-
-### 历史验证: 金银比三次极端高位后白银均跑赢
-- <span style="color:${BLUE};font-weight:bold">2000年以来金银比三次达到峰值(2003年82, 2008年80+, 2020年122), 每次后白银均强劲反弹</span><br>*(方正历史数据)*
-
-#### ⚠ 2008年警示: 极端流动性危机下白银先崩再涨
-- <span style="color:${BLUE};font-weight:bold">2008年次贷危机中金银比冲至80+, 但白银先从21美元暴跌至9美元(跌幅近60%), 之后才反弹</span><br>*(方正历史数据)*
-
-### 中国供给严重不足且出口管制加剧国际紧张
-- <span style="color:${BLUE};font-weight:bold">2024年中国白银产量(矿产+再生)共4659吨, 工业需求单项8567吨; 2026.1.1起实施出口许可证</span><br>*(同花顺/方正; 商务部)*
-
-## 前瞻: 长期看多但短期需警惕深度回调
-
-### 长期: 工业需求刚性增长支撑银价
-- <span style="color:#008800;font-weight:bold">工业需求长期刚性增长为白银价格提供核心支撑</span><br>*(方正分析)*
-
-### 短期: 白银回调风险大于黄金
-- <span style="color:#008800;font-weight:bold">白银回调风险大于黄金, 短期波动需警惕; 1980年曾出现保证金提至100%或强制仅限平仓</span><br>*(方正分析; 历史案例)*
-
-### ⚠ 数据口径注意
-- <span style="color:#999">[注: 本报告工业需求占比在核心结论写"50-60%", 正文写"58.5%", 口径不完全一致]</span><br>*(编者注)*
-`;
-
-const { Transformer, Markmap } = window.markmap;
-const transformer = new Transformer();
-Markmap.create('#mm', { color: getNodeColor, colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 }, transformer.transform(md).root);
+// Active workpapers based on language
+function getWorkpapers() { return curLang() === 'en' ? workpapers_en : workpapers_zh; }
 
 function showWorkpaper(text) {
   var decoded = decodeHtml(text.replace(/<[^>]*>/g,''));
+  var workpapers = getWorkpapers();
   var found = null;
   for (var kw in workpapers) { if (decoded.includes(kw)) { found = workpapers[kw]; break; } }
   var panel = document.getElementById('wpanel');
   if (!found) { panel.style.display='none'; return; }
-  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">✕</span>';
+  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">&#x2715;</span>';
   if (found.structured) {
     h += '<div class="wp-title">'+found.claim+'</div>';
     h += '<div class="wp-verdict" style="padding:6px 8px;background:#f0f8f0;border-radius:4px">'+found.conclusion+'</div>';
@@ -217,15 +368,59 @@ function showWorkpaper(text) {
       var bc = sc.status==='🟢'?G:sc.status==='🟡'?Y:R;
       var did = 'sc'+i;
       h += '<div style="margin-top:8px;border-left:3px solid '+bc+';border-radius:4px">';
-      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' ▼</div>';
+      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' &#x25BC;</div>';
       h += '<div id="'+did+'" style="display:none;padding:6px 8px"><div class="wp-finding">'+sc.finding+'</div>';
-      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">• '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' — <i>'+s.author+'</i></div>'; });
+      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">&bull; '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' &mdash; <i>'+s.author+'</i></div>'; });
       h += '</div></div>';
     });
   }
   panel.innerHTML = h; panel.style.display = 'block';
 }
-setTimeout(function(){ document.querySelectorAll('g.markmap-node').forEach(function(g){ g.style.cursor='pointer'; g.addEventListener('click',function(e){ var fo=g.querySelector('foreignObject'); if(fo)showWorkpaper(fo.innerHTML); e.stopPropagation(); }); }); },1500);
+
+function attachNodeListeners() {
+  document.querySelectorAll('g.markmap-node').forEach(function(g){
+    g.style.cursor='pointer';
+    g.addEventListener('click',function(e){
+      var fo=g.querySelector('foreignObject');
+      if(fo) showWorkpaper(fo.innerHTML);
+      e.stopPropagation();
+    });
+  });
+}
+setTimeout(attachNodeListeners, 1500);
+
+// ===== Language switch: re-render markmap =====
+function reRenderForLang() {
+  var root = transformer.transform(mkMd()).root;
+  mm.setData(root);
+  setTimeout(function() { mm.fit(); }, 100);
+  // Close workpaper panel on lang switch
+  document.getElementById('wpanel').style.display = 'none';
+  // Re-attach click listeners
+  setTimeout(attachNodeListeners, 600);
+}
+
+// Override toggleLang from lang.js to also re-render markmap
+var _origToggleLang = null;
+var _langObserver = setInterval(function() {
+  if (window.toggleLang && !_origToggleLang) {
+    _origToggleLang = window.toggleLang;
+    window.toggleLang = function() {
+      _origToggleLang();
+      reRenderForLang();
+    };
+    clearInterval(_langObserver);
+  }
+}, 100);
+</script>
+<script src="/investment/docs/lang.js"></script>
+<script>
+initLang();
+// After initLang, if saved lang differs from initial, re-render markmap
+(function(){
+  var lang = (localStorage.getItem('research-engine-lang') || 'en');
+  reRenderForLang();
+})();
 </script>
 </body>
 </html>

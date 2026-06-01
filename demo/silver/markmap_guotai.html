@@ -416,7 +416,7 @@ function swTab(n) {
     document.getElementById('s1b').classList.toggle('off', showK);
     ensureCurrentRendered();
   }
-  setTimeout(function() { fitCurrent(); }, 50);
+  setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
 }
 
 function toggleK() {
@@ -431,7 +431,7 @@ function toggleK() {
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
   ensureCurrentRendered();
-  setTimeout(function() { fitCurrent(); }, 50);
+  setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
 }
 
 function fitCurrent() {
@@ -492,7 +492,7 @@ function applyLang(lang) {
   rerender(mm0a, 's0a', getOriginalMd());
   if (mm1a) rerender(mm1a, 's1a', getReorgMd(true));
   if (mm1b) rerender(mm1b, 's1b', getReorgMd(false));
-  setTimeout(function() { fitCurrent(); }, 50);
+  setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
 }
 </script>
 <script src="/investment/docs/lang.js"></script>

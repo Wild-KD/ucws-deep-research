@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-title-en="Galaxy Securities · Silver Pyramid">
 <head>
 <meta charset="UTF-8">
 <title>中国银河 · 白银金字塔对比</title>
@@ -24,17 +24,17 @@
 <body>
 
 <div class="header">
-  <h1>中国银河 · 白银金字塔</h1>
+  <h1 data-en="Galaxy Securities &middot; Silver Pyramid">中国银河 · 白银金字塔</h1>
   <div class="tabs">
-    <div class="tab on" onclick="swTab(0)">原文结构</div>
-    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+    <div class="tab on" onclick="swTab(0)" data-en="Original Structure">原文结构</div>
+    <div class="tab" onclick="swTab(1)" data-en="Logic Reorganized">逻辑重组</div>
   </div>
-  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()" data-en="Knowledge: Shown">常识: 显示中</button>
   <div class="legend">
-    <span><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
-    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
-    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
-    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+    <span data-en="<span class='ldot' style='background:#005EB8'></span>Blue=Reference"><span class="ldot" style="background:#005EB8"></span>蓝=引用</span>
+    <span data-en="<span class='ldot' style='background:#008800'></span>Green=Assumption"><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span data-en="<span class='ldot' style='background:#000'></span>Black=Calculated"><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span data-en="<span class='ldot' style='background:#999'></span>Gray[]=Knowledge"><span class="ldot" style="background:#999"></span>灰[]=常识</span>
   </div>
 </div>
 
@@ -46,6 +46,8 @@
 <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
 <script>
 const BLUE = '#005EB8';
+
+/* ---------- Chinese Knowledge inserts ---------- */
 const K = {
   k1: `- <span style="color:#999">[常识: 央行独立性受质疑→货币政策可能被政治干预→利率路径不可预测→避险资金流向贵金属]</span><br>*(政治经济学)*`,
   k2: `- <span style="color:#999">[常识: CPI低于预期→通胀压力减弱→降息概率上升→实际利率下行预期→持有贵金属机会成本降低]</span><br>*(货币政策传导)*`,
@@ -53,7 +55,16 @@ const K = {
   k4: `- <span style="color:#999">[常识: 白银兼具贵金属和工业金属双重属性; 工业需求占总需求约58%, 光伏是最大单一分项; 供给74%来自伴生矿]</span><br>*(世界白银协会; WoodMackenzie)*`
 };
 
-const mdOrig = `
+/* ---------- English Knowledge inserts ---------- */
+const K_EN = {
+  k1: `- <span style="color:#999">[Knowledge: Central bank independence questioned → monetary policy may face political interference → interest rate path unpredictable → safe-haven funds flow into precious metals]</span><br>*(Political economics)*`,
+  k2: `- <span style="color:#999">[Knowledge: CPI below expectations → inflation pressure eases → rate-cut probability rises → real interest rate expected to decline → lower opportunity cost for holding precious metals]</span><br>*(Monetary policy transmission)*`,
+  k3: `- <span style="color:#999">[Knowledge: Silver market cap only 44% of gold (2.6T vs 5.9T); equal capital inflows cause larger silver price swings]</span><br>*(方正证券报告p4)*`,
+  k4: `- <span style="color:#999">[Knowledge: Silver has dual precious-metal and industrial-metal properties; industrial demand ~58% of total, solar PV the largest single segment; 74% of supply from by-product mining]</span><br>*(世界白银协会; WoodMackenzie)*`
+};
+
+/* ========== Chinese Markmap content ========== */
+const mdOrig_zh = `
 # 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16 周报)*
 
 ## 金融属性驱动白银跟随黄金上涨
@@ -81,7 +92,37 @@ const mdOrig = `
 - <span style="color:#008800;font-weight:bold">但不排除进一步上行至100美元/盎司</span><br>*(银河分析, 无模型支撑)*
 `;
 
-function mkReorg(withK) {
+/* ========== English Markmap content ========== */
+const mdOrig_en = `
+# Silver may pull back short-term but bullish logic remains solid *(Galaxy Securities 2026.1.16 Weekly)*
+
+## Financial attributes drive silver to follow gold higher
+
+### Fed independence questioned, triggering safe-haven demand
+- <span style="color:${BLUE};font-weight:bold">Investigation of Fed Chair Powell raises concerns over central bank independence</span><br>*(US DOJ public information)*
+- <span style="color:${BLUE};font-weight:bold">Vice-chair candidate Kevin Warsh quickly emerged as frontrunner for next chair</span><br>*(Public reports)*
+
+### Below-expectation CPI boosts rate-cut expectations
+- <span style="color:${BLUE};font-weight:bold">Fed held rates steady; Dec 2025 US CPI came in below expectations; market bets on Mar 2025 rate cut intensified</span><br>*(Fed meeting statement; US Bureau of Labor Statistics)*
+
+### Capital inflows into precious metals push gold & silver prices higher
+- <span style="color:${BLUE};font-weight:bold">International silver price broke above $80/oz for the first time on the 12th; gold exceeded $4,600/oz</span><br>*(Exchange data)*
+- <span style="color:${BLUE};font-weight:bold">COMEX silver rose 13.37% this week; gold rose 2.23%</span><br>*(COMEX)*
+
+### Silver and gold prices are highly correlated
+- <span style="color:#008800;font-weight:bold">Gold and silver prices have shown high long-term correlation</span><br>*(Galaxy analysis, no correlation coefficient given)*
+
+## Industrial attributes provide medium-to-long-term support for silver
+- <span style="color:#008800;font-weight:bold">From an industrial perspective, demand from solar PV, new energy, etc. provides solid medium-to-long-term support</span><br>*(Galaxy analysis)*
+- <span style="color:#008800;font-weight:bold">Tight supply conditions in the silver market will not change long-term</span><br>*(Galaxy analysis)*
+
+## Short-term profit-taking pullback risk exists
+- <span style="color:#008800;font-weight:bold">Silver may face profit-taking pullback pressure next week</span><br>*(Galaxy analysis)*
+- <span style="color:#008800;font-weight:bold">However, further upside to $100/oz cannot be ruled out</span><br>*(Galaxy analysis, no model support)*
+`;
+
+/* ========== Chinese Reorganized content ========== */
+function mkReorg_zh(withK) {
 return `
 # 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16 周报)*
 
@@ -117,13 +158,72 @@ ${withK ? K.k4 : ''}
 `;
 }
 
+/* ========== English Reorganized content ========== */
+function mkReorg_en(withK) {
+return `
+# Silver may pull back short-term but bullish logic remains solid *(Galaxy Securities 2026.1.16 Weekly)*
+
+## Fed policy uncertainty + below-expectation CPI favor precious metals
+
+### Central bank independence concerns trigger safe-haven sentiment
+- <span style="color:${BLUE};font-weight:bold">Fed Chair Powell under investigation; vice-chair candidate Warsh became frontrunner for next chair</span><br>*(US DOJ; Public reports)*
+${withK ? K_EN.k1 : ''}
+
+### Below-expectation CPI boosts rate-cut expectations
+- <span style="color:${BLUE};font-weight:bold">Fed held rates steady; Dec 2025 CPI below expectations; market bets on Mar 2025 rate cut intensified</span><br>*(Fed statement; US Bureau of Labor Statistics)*
+${withK ? K_EN.k2 : ''}
+
+## Financial attributes drive silver to follow gold higher
+
+### Silver follows gold with greater volatility
+- <span style="color:${BLUE};font-weight:bold">COMEX silver rose 13.37% this week, gold rose 2.23%; silver broke above $80/oz for the first time, gold exceeded $4,600/oz</span><br>*(COMEX; Exchange data)*
+- <span style="color:#008800;font-weight:bold">Silver follows gold higher; long-term gold-silver price trends are highly correlated</span><br>*(Galaxy analysis, no correlation coefficient given)*
+${withK ? K_EN.k3 : ''}
+
+### Industrial attributes provide medium-to-long-term floor support
+- <span style="color:#008800;font-weight:bold">Solar PV, new energy, etc. provide solid medium-to-long-term demand support for silver</span><br>*(Galaxy analysis)*
+- <span style="color:#008800;font-weight:bold">Tight supply conditions in the silver market will not change long-term</span><br>*(Galaxy analysis)*
+${withK ? K_EN.k4 : ''}
+
+## Outlook: Short-term pullback risk but medium-to-long-term bullish
+
+### Short-term profit-taking pressure exists
+- <span style="color:#008800;font-weight:bold">Silver may face profit-taking pullback pressure next week</span><br>*(Galaxy analysis)*
+
+### Medium-to-long-term bullish logic remains solid
+- <span style="color:#008800;font-weight:bold">Silver's bullish logic remains solid; further upside to $100/oz cannot be ruled out</span><br>*(Galaxy analysis, no model support)*
+`;
+}
+
+/* ========== Markmap rendering ========== */
 const { Transformer, Markmap } = window.markmap;
 const transformer = new Transformer();
 const opts = { color: () => '#999', colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 };
 
-const mm0 = Markmap.create('#s0', opts, transformer.transform(mdOrig).root);
-const mm1a = Markmap.create('#s1a', opts, transformer.transform(mkReorg(true)).root);
-const mm1b = Markmap.create('#s1b', opts, transformer.transform(mkReorg(false)).root);
+let curLang = 'zh';
+let mm0, mm1a, mm1b;
+
+function getOrigMd(lang) { return lang === 'en' ? mdOrig_en : mdOrig_zh; }
+function getReorgMd(lang, withK) { return lang === 'en' ? mkReorg_en(withK) : mkReorg_zh(withK); }
+
+function renderAll() {
+  /* Clear existing SVG children before re-rendering */
+  document.getElementById('s0').innerHTML = '';
+  document.getElementById('s1a').innerHTML = '';
+  document.getElementById('s1b').innerHTML = '';
+  mm0 = Markmap.create('#s0', opts, transformer.transform(getOrigMd(curLang)).root);
+  mm1a = Markmap.create('#s1a', opts, transformer.transform(getReorgMd(curLang, true)).root);
+  mm1b = Markmap.create('#s1b', opts, transformer.transform(getReorgMd(curLang, false)).root);
+  /* Fit the currently visible map */
+  requestAnimationFrame(function() {
+    if (curTab === 0) mm0.fit();
+    else if (showK) mm1a.fit();
+    else mm1b.fit();
+  });
+}
+
+/* Initial render */
+renderAll();
 
 let curTab = 0, showK = true;
 function swTab(n) {
@@ -133,14 +233,42 @@ function swTab(n) {
   document.getElementById('c1').style.display = n===1 ? '' : 'none';
   if(n===0) mm0.fit(); else if(showK) mm1a.fit(); else mm1b.fit();
 }
+
+function updateToggleBtnText() {
+  var btn = document.getElementById('toggleBtn');
+  if (curLang === 'en') {
+    btn.textContent = showK ? 'Knowledge: Shown' : 'Knowledge: Hidden';
+  } else {
+    btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  }
+}
+
 function toggleK() {
   showK = !showK;
-  document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  updateToggleBtnText();
   document.getElementById('toggleBtn').classList.toggle('active', showK);
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
   if(curTab===1) { if(showK) mm1a.fit(); else mm1b.fit(); }
 }
+
+/* ---------- Language change callback ---------- */
+window.onResearchLangChange = function(lang) {
+  curLang = (lang === 'en') ? 'en' : 'zh';
+  renderAll();
+  updateToggleBtnText();
+  /* The toggle button also has data-en, but since we manage its text
+     dynamically based on showK state, we override after lang.js applies: */
+  var btn = document.getElementById('toggleBtn');
+  if (curLang === 'en') {
+    btn.textContent = showK ? 'Knowledge: Shown' : 'Knowledge: Hidden';
+  } else {
+    btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  }
+};
 </script>
+
+<script src="/investment/docs/lang.js"></script>
+<script>initLang();</script>
 </body>
 </html>

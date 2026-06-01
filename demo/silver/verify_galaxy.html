@@ -24,15 +24,15 @@
 </head>
 <body>
 <div class="header">
-  <h1>中国银河 · 白银验证地图</h1>
+  <h1 data-en="Galaxy &middot; Silver Verification Map">中国银河 · 白银验证地图</h1>
   <div class="legend">
-    <span><span class="ldot" style="border-color:#009A44"></span>验证通过</span>
-    <span><span class="ldot" style="border-color:#D4A843"></span>有source未验证</span>
-    <span><span class="ldot" style="border-color:#CC0000"></span>有冲突</span>
-    <span><span class="ldot" style="border-color:#333"></span>结构/常识</span>
+    <span><span class="ldot" style="border-color:#009A44"></span><span data-en="Verified">验证通过</span></span>
+    <span><span class="ldot" style="border-color:#D4A843"></span><span data-en="Has source, unverified">有source未验证</span></span>
+    <span><span class="ldot" style="border-color:#CC0000"></span><span data-en="Conflict">有冲突</span></span>
+    <span><span class="ldot" style="border-color:#333"></span><span data-en="MECE Structure">结构/常识</span></span>
   </div>
 </div>
-<div class="stats">数据节点: <b style="color:#009A44">1🟢</b> · <b style="color:#D4A843">3🟡</b> · <b style="color:#CC0000">1🔴</b></div>
+<div class="stats" data-en='Data nodes: <b style="color:#009A44">1&#x1F7E2;</b> &middot; <b style="color:#D4A843">3&#x1F7E1;</b> &middot; <b style="color:#CC0000">1&#x1F534;</b>'>数据节点: <b style="color:#009A44">1🟢</b> · <b style="color:#D4A843">3🟡</b> · <b style="color:#CC0000">1🔴</b></div>
 <div class="map-wrap"><svg id="mm"></svg></div>
 <div id="wpanel"></div>
 
@@ -44,20 +44,21 @@ const BLUE = '#005EB8';
 const G = '#009A44', Y = '#D4A843', R = '#CC0000', B = '#333';
 
 const verifyColors = [
-  ['鲍威尔', Y], ['央行独立性', Y],
-  ['CPI', Y], ['降息升温', Y],
+  ['鲍威尔', Y], ['Powell', Y], ['央行独立性', Y], ['central bank independence', Y],
+  ['CPI', Y], ['降息升温', Y], ['rate cut expectations', Y],
   ['13.37%', R], ['2.23%', R],
-  ['80美元', G], ['4600', G],
-  ['高度相关', Y],
-  ['光伏', Y], ['新能源', Y], ['供应端紧张', Y],
-  ['获利了结', Y], ['回调', Y],
-  ['100美元', Y],
-  ['降低贵金属持有成本', Y],
-  ['波动更大', Y],
-  ['中长期底部支撑', Y],
+  ['80美元', G], ['$80', G], ['4600', G],
+  ['高度相关', Y], ['highly correlated', Y],
+  ['光伏', Y], ['solar', Y], ['新能源', Y], ['new energy', Y], ['供应端紧张', Y], ['supply tightness', Y],
+  ['获利了结', Y], ['profit-taking', Y], ['回调', Y], ['pullback', Y],
+  ['100美元', Y], ['$100', Y],
+  ['降低贵金属持有成本', Y], ['reduces holding cost', Y],
+  ['波动更大', Y], ['more volatile', Y],
+  ['中长期底部支撑', Y], ['medium-long term floor', Y],
 ];
 
-const workpapers = {
+// ===== BILINGUAL: Workpaper data =====
+const workpapers_zh = {
   '鲍威尔': {color:'🟡',claim:'美联储主席鲍威尔被调查引发央行独立性担忧',structured:true,
     conclusion:'🟡 事实正确, 但source归因不精确',
     subclaims:[{text:'事实: 鲍威尔是否被调查?',status:'🟢',
@@ -103,18 +104,55 @@ const workpapers = {
       sources:[{title:'Four Factors Driving Gold Prices Relative to Silver',author:'CME Group, 2024',url:'https://www.cmegroup.com/insights/economic-research/2024/four-factors-driving-gold-prices-relative-to-silver.html'}]}]},
 };
 
-function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
-function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
-function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
-function getNodeColor(node) {
-  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
-  if (text.includes('常识')) return B;
-  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
-  if (hasKids(node)) return B;
-  return Y;
-}
+const workpapers_en = {
+  'Powell': {color:'🟡',claim:'Fed Chair Powell investigated, raising central bank independence concerns',structured:true,
+    conclusion:'🟡 Facts correct, but source attribution imprecise',
+    subclaims:[{text:'Fact: Was Powell investigated?',status:'🟢',
+      finding:'In Jan 2026 DOJ issued a grand jury subpoena to the Fed. Powell confirmed via official Fed statement on 2026.1.11, calling it retaliation for not setting rates per presidential preference. The investigation was dismissed by a judge in March 2026; DOJ dropped the case in April.',
+      quote:'',
+      sources:[{title:'Powell Statement on DOJ Investigation',author:'Federal Reserve, 2026.1.11',url:'https://www.federalreserve.gov/newsevents/speech/powell20260111a.htm'},
+        {title:'DOJ Launches Criminal Investigation into Fed Chair Powell',author:'ABC News',url:'https://abcnews.com/Politics/doj-launches-criminal-investigation-fed-chair-jerome-powell/story?id=129114228'}]}]},
 
-const md = `
+  '13.37': {color:'🔴',claim:'COMEX silver up 13.37% this week, gold up 2.23%',structured:true,
+    conclusion:'🔴 Specific percentages do not match third-party data',
+    subclaims:[{text:'Fact: Were weekly gains 13.37%/2.23%?',status:'🔴',
+      finding:'Minmetals Futures weekly report (2025.12.13) shows COMEX silver up 11.20% (not 13.37%), gold up 1.68% (not 2.23%). Direction correct but ~2pp deviation. Possibly due to different contracts/cutoff dates.',
+      quote:'',
+      sources:[{title:'Minmetals Futures Precious Metals Weekly 2025.12.13',author:'Minmetals Futures',url:'https://www.wkjyqh.com/ueditor/jsp/upload/file/20251213/1765622953626000446.pdf'}]}]},
+
+  '$80': {color:'🟢',claim:'Silver breaks $80/oz for first time, gold exceeds $4,600/oz',structured:true,
+    conclusion:'🟢 Both price milestones confirmed by multiple sources',
+    subclaims:[{text:'Fact: Did silver first break $80?',status:'🟢',
+      finding:'COMEX silver first broke $80/oz on 2025.12.28, touching $83 intraday.',
+      quote:'',
+      sources:[{title:'Silver Price Breaks $80 Report',author:'Xinhua, 2025.12.29',url:'http://www.news.cn/fortune/20251229/9421370d20da423d98020d635b5f106d/c.html'}]},
+    {text:'Fact: Did gold break $4,600?',status:'🟢',
+      finding:'London gold spot first broke $4,600/oz on 2026.1.12, reaching $4,601.38.',
+      quote:'',
+      sources:[{title:'Gold Price Breaks $4,600 Report',author:'21st Century Business Herald, 2026.1.12',url:'https://www.21jingji.com/article/20260112/herald/cba91a0b8e3384c972fdf210eeebbad1.html'}]}]},
+
+  'CPI': {color:'🟡',claim:'Dec 2025 CPI below expectations, market bets on March rate cut heating up',structured:true,
+    conclusion:'🟡 CPI below expectations is correct, but "March rate cut heating up" is overstated',
+    subclaims:[{text:'Fact: Was CPI below expectations?',status:'🟢',
+      finding:'Dec 2024 CPI (released 2025.1.15): Core CPI YoY 3.2% (est. 3.3%), MoM 0.2% (est. 0.3%), indeed below expectations.',
+      quote:'',
+      sources:[{title:'Consumer Price Index December 2024',author:'BLS, 2025.1.15',url:'https://www.bls.gov/news.release/archives/cpi_01152025.htm'}]},
+    {text:'Logic: Did it boost March rate cut expectations?',status:'🟡',
+      finding:'FedWatch showed market expected first cut in May-June, not March. "March rate cut heating up" is overstated.',
+      quote:'',
+      sources:[{title:'CPI Report December 2024 Analysis',author:'CNBC, 2025.1.15',url:'https://www.cnbc.com/2025/01/15/cpi-inflation-december-2024-.html'}]}]},
+
+  'highly correlated': {color:'🟡',claim:'Gold and silver prices have been highly correlated over time',structured:true,
+    conclusion:'🟡 Qualitatively correct (correlation ~0.8-0.92), but recent correlation at 20-year low',
+    subclaims:[{text:'Fact: Are gold and silver highly correlated?',status:'🟡',
+      finding:'CME Group data: 1-year rolling correlation ~0.68-0.95 since 2004, mean ~0.8. However, 2025 CME report notes correlation dropped to 20-year low. Report did not provide exact coefficient.',
+      quote:'',
+      sources:[{title:'Four Factors Driving Gold Prices Relative to Silver',author:'CME Group, 2024',url:'https://www.cmegroup.com/insights/economic-research/2024/four-factors-driving-gold-prices-relative-to-silver.html'}]}]},
+};
+
+// ===== BILINGUAL: Markmap markdown =====
+function md_zh() {
+return `
 # 白银短期或回调但上涨逻辑稳固 *(中国银河 2026.1.16)*
 
 ## 美联储政策不确定性+CPI低于预期利好贵金属
@@ -142,28 +180,90 @@ const md = `
 ### 中长期上涨逻辑稳固
 - <span style="color:#008800;font-weight:bold">白银价格上涨逻辑依然稳固, 不排除进一步上行至100美元/盎司</span><br>*(银河分析, 无模型支撑)*
 `;
+}
+
+function md_en() {
+return `
+# Silver may pull back short-term but bullish logic remains solid *(Galaxy Securities 2026.1.16)*
+
+## Fed policy uncertainty + CPI below expectations favor precious metals
+
+### Central bank independence concerns trigger risk-off sentiment
+- <span style="color:${BLUE};font-weight:bold">Fed Chair Powell investigated; Vice Chair candidate Warsh becomes frontrunner for next chair</span><br>*(US DOJ; public reports)*
+
+### CPI below expectations boosts rate cut expectations
+- <span style="color:${BLUE};font-weight:bold">Fed holds rates steady; Dec 2025 CPI below expectations; market bets on March 2025 rate cut heating up</span><br>*(Fed statement; US BLS)*
+
+## Financial attributes drive silver to follow gold higher
+
+### Silver follows gold with more volatile moves
+- <span style="color:${BLUE};font-weight:bold">COMEX silver up 13.37% this week, gold up 2.23%; silver breaks $80/oz for first time, gold exceeds $4,600/oz</span><br>*(COMEX; exchange data)*
+- <span style="color:#008800;font-weight:bold">Silver follows gold; gold-silver prices are highly correlated over the long term</span><br>*(Galaxy analysis)*
+
+### Industrial attributes provide medium-long term floor support for silver
+- <span style="color:#008800;font-weight:bold">Solar, new energy and other sectors provide solid medium-long term demand support; supply tightness unlikely to ease permanently</span><br>*(Galaxy analysis)*
+
+## Outlook: Short-term pullback risk but medium-long term bullish
+
+### Short-term profit-taking pressure exists
+- <span style="color:#008800;font-weight:bold">Silver may face profit-taking pullback next week</span><br>*(Galaxy analysis)*
+
+### Medium-long term bullish logic remains solid
+- <span style="color:#008800;font-weight:bold">Silver bullish logic remains intact; cannot rule out further upside to $100/oz</span><br>*(Galaxy analysis, no model support)*
+`;
+}
+
+// Current language helper
+function curLang() { return localStorage.getItem('research-engine-lang') || 'en'; }
+function getMd() { return curLang() === 'en' ? md_en() : md_zh(); }
+
+function decodeHtml(html) { var el = document.createElement('div'); el.innerHTML = html; return el.textContent || ''; }
+function findContent(obj, d) { if (!obj||d>5) return ''; if (obj.content) return obj.content; if (obj.v) return obj.v; if (obj.data) return findContent(obj.data,d+1); return ''; }
+function hasKids(obj) { return (obj.children&&obj.children.length>0)||(obj.data&&obj.data.children&&obj.data.children.length>0); }
+function getNodeColor(node) {
+  var raw = findContent(node,0), text = decodeHtml(raw.replace(/<[^>]*>/g,''));
+  if (text.includes('常识') || text.includes('Knowledge')) return B;
+  for (var i=0;i<verifyColors.length;i++) { if (text.includes(verifyColors[i][0])) return verifyColors[i][1]; }
+  if (hasKids(node)) return B;
+  return Y;
+}
 
 const { Transformer, Markmap } = window.markmap;
 const transformer = new Transformer();
-Markmap.create('#mm', { color: getNodeColor, colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 }, transformer.transform(md).root);
+const mm = Markmap.create('#mm', { color: getNodeColor, colorFreezeLevel: 0, initialExpandLevel: -1, maxWidth: 420, paddingX: 14 }, transformer.transform(getMd()).root);
+
+// Active workpapers based on language
+function getWorkpapers() { return curLang() === 'en' ? workpapers_en : workpapers_zh; }
+
+// Workpaper panel labels (bilingual)
+const wpLabels = {
+  zh: { sourcesLabel: 'Sources:' },
+  en: { sourcesLabel: 'Sources:' }
+};
 
 function showWorkpaper(text) {
   var decoded = decodeHtml(text.replace(/<[^>]*>/g,''));
+  var workpapers = getWorkpapers();
+  var labels = curLang() === 'en' ? wpLabels.en : wpLabels.zh;
   var found = null;
   for (var kw in workpapers) { if (decoded.includes(kw)) { found = workpapers[kw]; break; } }
   var panel = document.getElementById('wpanel');
   if (!found) { panel.style.display='none'; return; }
-  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">✕</span>';
+  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">&#x2715;</span>';
   if (found.structured) {
     h += '<div class="wp-title">'+found.claim+'</div>';
     h += '<div class="wp-verdict" style="padding:6px 8px;background:#f0f8f0;border-radius:4px">'+found.conclusion+'</div>';
     found.subclaims.forEach(function(sc,i){
-      var bc = sc.status==='🟢'?'#009A44':sc.status==='🟡'?'#D4A843':'#CC0000';
+      var bc = sc.status==='\u{1F7E2}'?'#009A44':sc.status==='\u{1F7E1}'?'#D4A843':'#CC0000';
       var did = 'sc'+i;
       h += '<div style="margin-top:8px;border-left:3px solid '+bc+';border-radius:4px">';
-      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' ▼</div>';
+      h += '<div onclick="var e=document.getElementById(\''+did+'\');e.style.display=e.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px">'+sc.status+' '+sc.text+' &#x25BC;</div>';
       h += '<div id="'+did+'" style="display:none;padding:6px 8px"><div class="wp-finding">'+sc.finding+'</div>';
-      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">• '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' — <i>'+s.author+'</i></div>'; });
+      if(sc.quote) {
+        h += '<div style="margin:6px 0;padding:6px 8px;background:#f5f5f0;border-left:2px solid #ccc;font-style:italic;font-size:10px;color:#555">'+sc.quote+'</div>';
+      }
+      h += '<div class="wp-label">'+labels.sourcesLabel+'</div>';
+      if(sc.sources) sc.sources.forEach(function(s){ h += '<div class="wp-src">&bull; '+(s.url?'<a href="'+s.url+'" target="_blank">'+s.title+'</a>':s.title)+' &mdash; <i>'+s.author+'</i></div>'; });
       h += '</div></div>';
     });
   } else {
@@ -173,7 +273,51 @@ function showWorkpaper(text) {
   }
   panel.innerHTML = h; panel.style.display = 'block';
 }
+
+// Attach click listeners after render
 setTimeout(function(){ document.querySelectorAll('g.markmap-node').forEach(function(g){ g.style.cursor='pointer'; g.addEventListener('click',function(e){ var fo=g.querySelector('foreignObject'); if(fo)showWorkpaper(fo.innerHTML); e.stopPropagation(); }); }); },1500);
+
+// ===== Language switch: re-render markmap =====
+function reRenderForLang() {
+  var newRoot = transformer.transform(getMd()).root;
+  mm.setData(newRoot);
+  setTimeout(function() { mm.fit(); }, 100);
+  // Close workpaper panel on lang switch
+  document.getElementById('wpanel').style.display = 'none';
+  // Re-attach click listeners
+  setTimeout(function(){
+    document.querySelectorAll('g.markmap-node').forEach(function(g){
+      g.style.cursor = 'pointer';
+      g.addEventListener('click', function(e){
+        var fo = g.querySelector('foreignObject');
+        if(fo) showWorkpaper(fo.innerHTML);
+        e.stopPropagation();
+      });
+    });
+  }, 600);
+}
+
+// Override toggleLang from lang.js to also re-render markmap
+var _origToggleLang = null;
+var _langObserver = setInterval(function() {
+  if (window.toggleLang && !_origToggleLang) {
+    _origToggleLang = window.toggleLang;
+    window.toggleLang = function() {
+      _origToggleLang();
+      reRenderForLang();
+    };
+    clearInterval(_langObserver);
+  }
+}, 100);
+</script>
+<script src="/investment/docs/lang.js"></script>
+<script>
+initLang();
+// After initLang, if saved lang differs from initial build, re-render markmap
+(function(){
+  var lang = (localStorage.getItem('research-engine-lang') || 'en');
+  reRenderForLang();
+})();
 </script>
 </body>
 </html>

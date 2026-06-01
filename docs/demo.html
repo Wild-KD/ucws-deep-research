@@ -594,7 +594,9 @@ body {
   <a class="back" href="/investment/" data-en="← Back to home, start your research">← 返回首页，开始你的研究</a>
 </section>
 
+<script src="/investment/docs/lang.js"></script>
 <script>
+initLang();
 var observer = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
     if (e.isIntersecting) e.target.classList.add('visible');

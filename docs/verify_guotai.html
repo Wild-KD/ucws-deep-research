@@ -726,10 +726,7 @@ function toggleK() {
   document.getElementById('toggleBtn').classList.toggle('active', showK);
   // 同一个SVG，换数据重新渲染
   mm.setData(showK ? rootWithK : rootNoK);
-  setTimeout(function() {
-    addBorders('s1a');
-    mm.fit();
-  }, 100);
+  setTimeout(function() { mm.fit(); }, 100);
 }
 </script>
 </body>

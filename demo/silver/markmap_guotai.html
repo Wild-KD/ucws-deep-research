@@ -241,9 +241,20 @@ function toggleK() {
 }
 
 function fitCurrent() {
-  if (curTab===0) mm0a.fit();
-  else if (showK) mm1a.fit();
-  else mm1b.fit();
+  var mm;
+  if (curTab===0) mm = mm0a;
+  else if (showK) mm = mm1a;
+  else mm = mm1b;
+  // Force re-render then fit with slight zoom-out so it's not edge-to-edge
+  mm.fit();
+  setTimeout(function() {
+    mm.fit();
+    try {
+      var svg = mm.svg.node();
+      var t = d3.zoomTransform(svg);
+      mm.svg.call(mm.zoom.transform, t.scale(0.9).translate(0, 0));
+    } catch(e) {}
+  }, 100);
 }
 </script>
 </body>

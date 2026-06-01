@@ -114,14 +114,14 @@ Topic + Reports
 
 | Skill | File | Purpose |
 |-------|------|---------|
-| Search | `skills/search/SKILL.md` | Identify sources, collect multi-paradigm reports |
-| Decompose | `skills/decompose/SKILL.md` | Pyramid decomposition + anti-hallucination |
-| Verify | `skills/verify/SKILL.md` | Multi-agent verification + 3-color coding |
-| Distill Registry | `skills/distill-registry/SKILL.md` | Extract sources, build registry |
-| Distill Explore | `skills/distill-explore/SKILL.md` | Deep-dive source data landscape |
-| Merge | `skills/merge/SKILL.md` | Storyteller merge + MECE rebuild |
-| Visualize | `skills/visualize/SKILL.md` | markmap HTML rendering |
-| Dashboard | `skills/dashboard/SKILL.md` | Forward monitoring dashboard |
+| Search | `skills/search/SKILL.{zh,en}.md` | Identify sources, collect multi-paradigm reports |
+| Decompose | `skills/decompose/SKILL.{zh,en}.md` | Pyramid decomposition + anti-hallucination |
+| Verify | `skills/verify/SKILL.{zh,en}.md` | Multi-agent verification + 3-color coding |
+| Distill Registry | `skills/distill-registry/SKILL.{zh,en}.md` | Extract sources, build registry |
+| Distill Explore | `skills/distill-explore/SKILL.{zh,en}.md` | Deep-dive source data landscape |
+| Merge | `skills/merge/SKILL.{zh,en}.md` | Storyteller merge + MECE rebuild |
+| Visualize | `skills/visualize/SKILL.{zh,en}.md` | markmap HTML rendering |
+| Dashboard | `skills/dashboard/SKILL.{zh,en}.md` | Forward monitoring dashboard |
 
 ---
 

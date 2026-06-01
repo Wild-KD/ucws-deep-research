@@ -141,23 +141,75 @@ class Orchestrator:
         await progress("s2_decompose", "completed", f"{len(pyramids)} reports decomposed")
         results["s2"] = pyramids
 
-        # ── Step 3: 审 (fan-out verification) ─────────────────────
+        # ── Step 3: 审 (node-level fan-out verification) ────────────
         await progress("s3_verify", "started")
 
-        async def verify_one(pyramid_data: str) -> str:
-            agent = self._make_agent("verify", self.verify_tools)
-            return await agent.run(
-                "Verify all data nodes and causal edges in this pyramid.",
-                context=json.loads(pyramid_data) if isinstance(pyramid_data, str) else pyramid_data,
-            )
+        async def extract_verify_tasks(pyramid_data: str) -> list[dict]:
+            """Extract individual data nodes and causal edges for parallel verification."""
+            pyramid = json.loads(pyramid_data) if isinstance(pyramid_data, str) else pyramid_data
 
-        verified = await asyncio.gather(
-            *[verify_one(p) for p in pyramids]
-        )
-        for i, v in enumerate(verified):
-            self._save_step_output(run_dir, f"s3_verified_{i}", v)
-        await progress("s3_verify", "completed", f"{len(verified)} reports verified")
-        results["s3"] = verified
+            tasks = []
+            nodes = pyramid.get("data_points", pyramid.get("reorganized_pyramid", {}).get("trunks", []))
+
+            def walk(node, parent_heading=""):
+                if isinstance(node, dict):
+                    children = node.get("children", [])
+                    heading = node.get("heading", node.get("content", ""))
+                    if not children and heading:
+                        tasks.append({
+                            "type": "data_node",
+                            "claim": heading,
+                            "id": node.get("id", ""),
+                            "source_ref": node.get("source_ref", {}),
+                            "original_text": node.get("original_text", ""),
+                        })
+                    if children and parent_heading and heading:
+                        tasks.append({
+                            "type": "causal_edge",
+                            "claim": f"{parent_heading} → {heading}",
+                            "parent": parent_heading,
+                            "child": heading,
+                        })
+                    for c in children:
+                        walk(c, heading)
+                elif isinstance(node, list):
+                    for item in node:
+                        walk(item, parent_heading)
+
+            walk(nodes)
+            return tasks if tasks else [{"type": "full_pyramid", "claim": "Verify all nodes", "data": pyramid}]
+
+        async def verify_single_item(item: dict, report_meta: dict) -> str:
+            """One sub-agent verifies one data node or causal edge."""
+            agent = self._make_agent("verify", self.verify_tools)
+            task_desc = (
+                f"Verify this {item['type']}:\n"
+                f"Claim: {item['claim']}\n"
+                f"Report publish date: {report_meta.get('publish_date', 'unknown')}"
+            )
+            return await agent.run(task_desc, context=item)
+
+        all_verified = []
+        for i, p in enumerate(pyramids):
+            pyramid = json.loads(p) if isinstance(p, str) else p
+            meta = pyramid.get("metadata", {})
+            verify_tasks = await extract_verify_tasks(p)
+            await progress("s3_verify", "started", f"Report {i+1}: {len(verify_tasks)} verification tasks")
+
+            results_per_report = await asyncio.gather(
+                *[verify_single_item(t, meta) for t in verify_tasks]
+            )
+            verified_report = {
+                "report_id": meta.get("title", f"report_{i}"),
+                "verifications": list(results_per_report),
+            }
+            self._save_step_output(run_dir, f"s3_verified_{i}", json.dumps(verified_report, ensure_ascii=False))
+            all_verified.append(json.dumps(verified_report, ensure_ascii=False))
+
+        total_tasks = sum(len(await extract_verify_tasks(p)) for p in pyramids)
+        await progress("s3_verify", "completed", f"{len(pyramids)} reports, {total_tasks} sub-agents total")
+        results["s3"] = all_verified
+        verified = all_verified
 
         # ── Step 4: 合 ───────────────────────────────────────────
         await progress("s4_merge", "started")

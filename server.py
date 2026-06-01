@@ -49,6 +49,18 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # ── Health check ──
+    @app.get("/healthz")
+    async def healthz():
+        return {
+            "status": "ok",
+            "version": "0.1.0",
+            "demo": Path("demo").exists(),
+            "docs": Path("docs").exists(),
+            "skills": len(list(Path("skills").iterdir())) if Path("skills").exists() else 0,
+            "active_runs": len([r for r in runs.values() if r.get("status") == "running"]),
+        }
+
     # ── Rate limiting (in-memory, per IP) ──
     request_counts: dict[str, list[float]] = {}
     MAX_REQUESTS_PER_HOUR = 10

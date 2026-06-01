@@ -496,6 +496,17 @@ function applyLang(lang) {
 }
 </script>
 <script src="/investment/docs/lang.js"></script>
-<script>initLang();</script>
+<script>
+// Override toggleLang to also re-render markmap
+var _origToggle = window.toggleLang;
+window.toggleLang = function() {
+  _origToggle();
+  var lang = localStorage.getItem('research-engine-lang') || 'en';
+  applyLang(lang);
+};
+// Initial render in correct language
+var initLangVal = localStorage.getItem('research-engine-lang') || 'en';
+applyLang(initLangVal);
+</script>
 </body>
 </html>

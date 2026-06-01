@@ -394,15 +394,8 @@ function getOriginalMd() { return curLang === 'en' ? mkOriginalEn(false) : mkOri
 function getReorgMd(wk) { return curLang === 'en' ? mkReorgEn(wk) : mkReorg(wk); }
 
 function ensureCurrentRendered() {
-  if (curTab === 1 && showK && !mm1a) {
-    document.getElementById('s1a').classList.remove('off');
-    document.getElementById('s1b').classList.add('off');
-    mm1a = render('s1a', getReorgMd(true));
-  }
-  if (curTab === 1 && !showK && !mm1b) {
-    document.getElementById('s1b').classList.remove('off');
-    document.getElementById('s1a').classList.add('off');
-    mm1b = render('s1b', getReorgMd(false));
+  if (curTab === 1 && !mm1a) {
+    mm1a = render('s1a', getReorgMd(showK));
   }
 }
 
@@ -428,16 +421,17 @@ function toggleK() {
     btn.textContent = showK ? btn.getAttribute('data-zh-on') : btn.getAttribute('data-zh-off');
   }
   btn.classList.toggle('active', showK);
-  document.getElementById('s1a').classList.toggle('off', !showK);
-  document.getElementById('s1b').classList.toggle('off', showK);
-  ensureCurrentRendered();
+  // Re-render current reorg markmap with/without knowledge using setData
+  if (mm1a) {
+    var { root } = transformer.transform(getReorgMd(showK));
+    mm1a.setData(root);
+  }
   setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
 }
 
 function fitCurrent() {
   if (curTab===0) mm0a.fit();
-  else if (showK && mm1a) mm1a.fit();
-  else if (!showK && mm1b) mm1b.fit();
+  else if (mm1a) mm1a.fit();
 }
 
 // ===== LANGUAGE SWITCHING =====
@@ -490,8 +484,7 @@ function applyLang(lang) {
 
   // Re-render all existing markmaps with new language content
   rerender(mm0a, 's0a', getOriginalMd());
-  if (mm1a) rerender(mm1a, 's1a', getReorgMd(true));
-  if (mm1b) rerender(mm1b, 's1b', getReorgMd(false));
+  if (mm1a) rerender(mm1a, 's1a', getReorgMd(showK));
   setTimeout(function() { fitCurrent(); }, 100); setTimeout(function() { fitCurrent(); }, 300); setTimeout(function() { fitCurrent(); }, 600);
 }
 </script>

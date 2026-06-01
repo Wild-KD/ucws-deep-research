@@ -103,6 +103,8 @@ class Orchestrator:
         self,
         topic: str,
         report_paths: list[str] | None = None,
+        source_urls: list[str] | None = None,
+        run_config: dict | None = None,
         on_progress: callable = None,
     ) -> dict:
         """
@@ -110,9 +112,12 @@ class Orchestrator:
 
         Args:
             topic: Investment topic (e.g., "白银")
-            report_paths: Optional list of PDF file paths. If empty, Step 1 searches.
+            report_paths: Optional list of PDF file paths.
+            source_urls: Optional list of report/article URLs.
+            run_config: Optional depth/language/verification settings.
             on_progress: Optional callback(step_name, status, detail) for progress updates.
         """
+        run_config = run_config or {}
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         run_dir = self.output_dir / f"{topic}_{timestamp}"
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -130,20 +135,26 @@ class Orchestrator:
 
         # ── Step 1: 搜 ──────────────────────────────────────────
         await progress("s1_search", "started")
-        if report_paths:
+        if report_paths or source_urls:
+            reports = []
+            for p in report_paths or []:
+                reports.append({"file_path": p, "id": Path(p).stem, "source_type": "upload"})
+            for i, url in enumerate(source_urls or []):
+                reports.append({"url": url, "id": f"url_{i+1}", "source_type": "url"})
             reports_parsed = {
                 "topic": topic,
-                "reports": [
-                    {"file_path": p, "id": Path(p).stem} for p in report_paths
-                ],
+                "run_config": run_config,
+                "reports": reports,
             }
             reports_data = dumps_pretty(reports_parsed)
             store.record("s1_search", raw=reports_data, parsed=reports_parsed, status="skipped")
-            await progress("s1_search", "skipped", "Reports provided by user")
+            await progress("s1_search", "skipped", f"User provided {len(reports)} sources")
         else:
             agent = self._make_agent("search", self.search_tools)
             reports_data = await agent.run(
-                f"Search for at least 3 diverse research reports on: {topic}"
+                "Search for diverse research reports and articles.\n"
+                f"Topic: {topic}\n"
+                f"Run config: {dumps_pretty(run_config)}"
             )
             reports_parsed = self._parse_record(store, "s1_search", reports_data)
             await progress("s1_search", "completed")
@@ -158,7 +169,8 @@ class Orchestrator:
         async def decompose_one(report: dict) -> str:
             agent = self._make_agent("decompose", self.read_tools)
             return await agent.run(
-                f"Decompose this report into pyramid structure.",
+                "Read this source and decompose it into pyramid structure. "
+                "If the input is a URL, extract the available article/report logic from context and available tools.",
                 context=report,
             )
 
@@ -215,7 +227,8 @@ class Orchestrator:
             task_desc = (
                 f"Verify this {item['type']}:\n"
                 f"Claim: {item['claim']}\n"
-                f"Report publish date: {report_meta.get('publish_date', 'unknown')}"
+                f"Report publish date: {report_meta.get('publish_date', 'unknown')}\n"
+                f"Verification scope: {run_config.get('verification_scope', 'key_claims')}"
             )
             return await agent.run(task_desc, context=item)
 

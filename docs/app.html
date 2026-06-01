@@ -1,79 +1,186 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Investment Detective · Start Research</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Investment Detective · Research Workspace</title>
 <style>
 :root{
-  --bg:#141417;--fg:#e8e8ed;
-  --card-bg:rgba(255,255,255,0.025);--card-border:rgba(255,255,255,0.07);
-  --accent:#d4a76a;--accent-dim:rgba(212,167,106,0.15);
-  --t2:#a1a1aa;--t3:#71717a;--t4:#52525b;--t5:#3f3f46;
+  --bg:#111114;--panel:#17171b;--panel2:#1d1d22;--line:#2a2a31;
+  --fg:#eeeef2;--muted:#a1a1aa;--dim:#71717a;--accent:#d4a76a;
+  --green:#3fbf74;--gold:#d4a843;--red:#e25b5b;--blue:#6aa9ff;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',system-ui,-apple-system,'PingFang SC',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
-body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:80vw;height:50vh;background:radial-gradient(ellipse at center,rgba(212,167,106,0.03) 0%,transparent 70%);pointer-events:none;z-index:-1}
-
-nav{padding:20px 24px;display:flex;align-items:center;gap:10px}
-.brand-bar{width:2px;height:24px;background:linear-gradient(to bottom,#d4a76a,#b8894f);border-radius:1px}
-nav span.bn{font-size:14px;font-weight:600}
-nav em{font-style:normal;color:var(--accent)}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
-.nav-right a{font-size:11px;color:var(--t3);text-decoration:none}
-.nav-right a:hover{color:var(--accent)}
-
-.main{flex:1;display:flex;align-items:center;justify-content:center;padding:0 24px}
-.center-card{max-width:520px;width:100%;text-align:center}
-.badge{display:inline-block;padding:4px 14px;border:1px solid rgba(212,167,106,0.25);border-radius:20px;font-size:11px;font-weight:500;color:var(--accent);margin-bottom:20px}
-.center-card h1{font-size:32px;font-weight:200;letter-spacing:-0.02em;margin-bottom:12px}
-.center-card h1 strong{font-weight:300;color:var(--accent)}
-.center-card .desc{font-size:14px;color:var(--t3);line-height:1.7;margin-bottom:32px}
-.center-card .desc b{color:var(--t2);font-weight:500}
-
-.demo-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--accent);color:#000;font-size:14px;font-weight:500;border:none;border-radius:6px;text-decoration:none;transition:background 0.15s;cursor:pointer;font-family:inherit}
-.demo-cta:hover{background:#dfb97e}
-.or{font-size:12px;color:var(--t4);margin:16px 0}
-.back-link{font-size:12px;color:var(--t3);text-decoration:none}
-.back-link:hover{color:var(--accent)}
-
-footer{padding:24px;text-align:center}
-footer p{font-size:10px;color:var(--t4)}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:13px}
+button,input,textarea,select{font:inherit} button{cursor:pointer}
+.shell{display:grid;grid-template-columns:240px minmax(560px,1fr) 360px;min-height:100vh}
+.side{border-right:1px solid var(--line);background:#131316;padding:18px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:20px}.bar{width:3px;height:28px;background:var(--accent);border-radius:2px}.brand b{font-size:15px}.brand em{color:var(--accent);font-style:normal}
+.nav a{display:block;color:var(--muted);text-decoration:none;padding:9px 10px;border-radius:6px;margin-bottom:3px}.nav a:hover,.nav a.active{background:var(--panel2);color:var(--fg)}
+.runs{margin-top:24px}.runs h3,.panel h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:600;margin:0 0 10px}
+.run-item{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:10px;margin-bottom:8px}
+.run-item b{display:block;font-size:12px;margin-bottom:4px}.status{font-size:11px;color:var(--dim)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dim);margin-right:6px}.running{background:var(--blue)}.completed{background:var(--green)}.error{background:var(--red)}.canceled{background:var(--gold)}
+.main{padding:18px 20px 32px;overflow:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.top h1{font-size:20px;margin:0;font-weight:600}.health{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
+.full{grid-column:1/-1} label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}
+input,textarea,select{width:100%;background:#101013;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:9px 10px;outline:none}
+textarea{min-height:82px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:9px;align-items:center;margin-top:14px}
+.primary{background:var(--accent);border:1px solid var(--accent);color:#111;padding:10px 14px;border-radius:6px;font-weight:600}.ghost{background:transparent;border:1px solid var(--line);color:var(--fg);padding:9px 12px;border-radius:6px}
+.hint{font-size:11px;color:var(--dim);line-height:1.5}.timeline{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.step{border:1px solid var(--line);border-radius:7px;padding:10px 8px;min-height:78px;background:#141418}.step b{display:block;font-size:12px;margin-bottom:5px}.step span{font-size:11px;color:var(--dim)}
+.step.active{border-color:var(--blue)}.step.done{border-color:rgba(63,191,116,.7)}.step.fail{border-color:rgba(226,91,91,.7)}
+.log{height:210px;overflow:auto;background:#0d0d10;border:1px solid var(--line);border-radius:7px;padding:10px;font-family:"Cascadia Code",monospace;font-size:12px;color:#c8c8d0;white-space:pre-wrap}
+.right{border-left:1px solid var(--line);background:#131316;padding:18px;overflow:auto}.tabs{display:flex;gap:6px;margin-bottom:12px}.tab{padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted)}.tab.active{color:var(--fg);border-color:var(--accent)}
+.list{display:flex;flex-direction:column;gap:8px}.file{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:10px}.file a{color:var(--accent);text-decoration:none}.file small{display:block;color:var(--dim);margin-top:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#0d0d10;border:1px solid var(--line);border-radius:7px;padding:10px;max-height:360px;overflow:auto;color:#d6d6dc}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{border:1px solid var(--line);background:#141418;border-radius:7px;padding:12px}.metric b{font-size:18px}.metric span{display:block;color:var(--dim);font-size:11px;margin-top:4px}
+@media(max-width:1100px){.shell{grid-template-columns:1fr}.side,.right{border:0}.grid,.row{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="brand-bar"></div>
-  <span class="bn">Research<em>Engine</em></span>
-  <div class="nav-right">
-    <button id="langToggle" onclick="toggleLang()" style="border:1px solid var(--card-border);background:transparent;color:var(--t3);font-size:10px;padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit">EN</button>
-    <a href="/investment/" data-en="← Home">← 首页</a>
-  </div>
-</nav>
-
-<div class="main">
-  <div class="center-card">
-    <div class="badge" data-en="Coming Soon">即将上线</div>
-    <h1 data-en="Full Pipeline <strong>Coming Soon</strong>">完整管线<strong>即将上线</strong></h1>
-    <div class="desc" data-en="The end-to-end investigation pipeline (upload reports → AI decomposes → verifies → merges → dashboard) is under development.<br><br>In the meantime, check out the <b>Silver Investment Case Demo</b> to see the full detective workflow in action.">
-      端到端的侦探调查管线（上传研报 → AI 拆解 → 验证 → 合并 → 看板）正在开发中。<br><br>现在可以先查看<b>白银投资 Case Demo</b>，体验完整的六步侦探工作流。
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><div class="bar"></div><b>Investment<em>Detective</em></b></div>
+    <nav class="nav">
+      <a class="active" href="/docs/app.html">Research Workspace</a>
+      <a href="/docs/demo.html">Silver Demo Journey</a>
+      <a href="/demo/silver/dashboard.html">Precomputed Dashboard</a>
+      <a href="/docs/index.html">Landing</a>
+    </nav>
+    <div class="runs">
+      <h3>Runs</h3>
+      <div id="runList" class="list"></div>
     </div>
-    <a class="demo-cta" href="/investment/docs/demo.html" data-en="View Silver Demo →">查看白银 Demo →</a>
-    <div class="or" data-en="or">或</div>
-    <a class="back-link" href="/investment/" data-en="← Back to homepage">← 返回首页</a>
-  </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <h1>Research Audit Workspace</h1>
+      <div class="health" id="health">checking service...</div>
+    </div>
+
+    <section class="grid">
+      <div class="panel">
+        <h3>1. Research Question</h3>
+        <label>Topic / question</label>
+        <textarea id="topic">Why is silver surging: macro financial attributes, industrial supply-demand tightness, or trading structure amplification?</textarea>
+        <div class="row">
+          <div><label>Provider</label><select id="provider"><option value="mock">mock - offline demo</option><option value="miromind">miromind</option><option value="anthropic">anthropic</option><option value="openai">openai</option></select></div>
+          <div><label>Language</label><select id="language"><option>bilingual</option><option>zh</option><option>en</option></select></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>2. Sources</h3>
+        <label>Upload reports (PDF)</label>
+        <input id="files" type="file" multiple accept=".pdf">
+        <label>Report / article URLs</label>
+        <textarea id="urls" placeholder="https://example.com/report.pdf&#10;https://example.com/article"></textarea>
+        <p class="hint">Leave files and URLs empty to let Search skill find sources from the topic. Use mock provider for a full offline product walkthrough.</p>
+      </div>
+
+      <div class="panel full">
+        <h3>3. Run Configuration</h3>
+        <div class="row">
+          <div><label>Search mode</label><select id="searchMode"><option value="auto">auto search if no sources</option><option value="provided_only">provided sources only</option><option value="augment">augment provided sources</option></select></div>
+          <div><label>Research depth</label><select id="depth"><option>standard</option><option>quick</option><option>deep</option><option>exhaustive</option></select></div>
+        </div>
+        <div class="row">
+          <div><label>Verification scope</label><select id="verificationScope"><option value="key_claims">key claims</option><option value="all_data_nodes">all data nodes</option><option value="all_nodes_and_edges">all nodes and causal edges</option></select></div>
+          <div><label>Output package</label><select><option>mind maps + workpapers + registry + dashboard</option></select></div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="startRun()">Start Investigation</button>
+          <button class="ghost" onclick="refreshRuns()">Refresh Runs</button>
+          <button class="ghost" onclick="cancelActive()">Cancel Active</button>
+          <span class="hint" id="startHint">Mock runs are deterministic and do not call APIs.</span>
+        </div>
+      </div>
+
+      <div class="panel full">
+        <h3>4. Pipeline</h3>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div class="panel full">
+        <h3>Live Progress</h3>
+        <div id="log" class="log">No run selected.</div>
+      </div>
+
+      <div class="cards full">
+        <div class="metric"><b id="mRuns">0</b><span>Total runs</span></div>
+        <div class="metric"><b id="mArtifacts">0</b><span>Artifacts in active run</span></div>
+        <div class="metric"><b id="mOutputs">0</b><span>Output files</span></div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="right">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('outputs',this)">Outputs</button>
+      <button class="tab" onclick="showTab('artifacts',this)">Artifacts</button>
+      <button class="tab" onclick="showTab('registry',this)">Registry</button>
+      <button class="tab" onclick="showTab('dashboard',this)">Dashboard</button>
+    </div>
+    <div id="rightPane"></div>
+  </aside>
 </div>
 
-<footer>
-  <p>Team KDLD · UCWS Singapore 2026 · MiroMind Deep Research</p>
-</footer>
-
-<script src="/investment/docs/lang.js"></script>
 <script>
-window.RESEARCH_TITLE_EN = 'Investment Detective · Start Research';
-initLang();
+const steps=[
+  ['s1_search','搜 Search','Find reports/articles'],
+  ['s2_decompose','读 Read','Build claim trees'],
+  ['s3_verify','审 Verify','Check claims and edges'],
+  ['s4_distill','沉 Distill','Source registry'],
+  ['s5_merge','合 Merge','Unified thesis'],
+  ['s6_visualize','图 Visualize','Interactive maps'],
+  ['s7_dashboard','追 Track','Dashboard']
+];
+let activeRun=null, socket=null, activeTab='outputs';
+
+function initTimeline(){document.getElementById('timeline').innerHTML=steps.map(s=>`<div id="step-${s[0]}" class="step"><b>${s[1]}</b><span>${s[2]}</span></div>`).join('')}
+function markStep(step,status){const el=document.getElementById('step-'+step); if(!el)return; el.classList.remove('active','done','fail'); if(status==='started'||status==='running')el.classList.add('active'); if(status==='completed'||status==='skipped')el.classList.add('done'); if(status==='error')el.classList.add('fail')}
+function log(msg){const l=document.getElementById('log'); if(l.textContent==='No run selected.')l.textContent=''; l.textContent+=msg+'\n'; l.scrollTop=l.scrollHeight}
+
+async function health(){try{const r=await fetch('/healthz');const j=await r.json();document.getElementById('health').textContent=`service ok · ${j.skills} skills · ${j.active_runs} active`}catch(e){document.getElementById('health').textContent='service unavailable'}}
+
+async function startRun(){
+  const fd=new FormData();
+  fd.append('topic',document.getElementById('topic').value);
+  fd.append('provider',document.getElementById('provider').value);
+  fd.append('source_urls',document.getElementById('urls').value);
+  fd.append('search_mode',document.getElementById('searchMode').value);
+  fd.append('depth',document.getElementById('depth').value);
+  fd.append('language',document.getElementById('language').value);
+  fd.append('verification_scope',document.getElementById('verificationScope').value);
+  for(const f of document.getElementById('files').files) fd.append('files',f);
+  document.getElementById('log').textContent='';
+  steps.forEach(s=>{const el=document.getElementById('step-'+s[0]); el.classList.remove('active','done','fail')});
+  const r=await fetch('/api/run',{method:'POST',body:fd}); const j=await r.json();
+  if(!r.ok){log('ERROR '+(j.error||r.statusText)); return}
+  activeRun=j.run_id; log(`Run ${activeRun} started`); connectWS(activeRun); await refreshRuns(); await loadRight();
+}
+
+function connectWS(id){ if(socket) socket.close(); const proto=location.protocol==='https:'?'wss':'ws'; socket=new WebSocket(`${proto}://${location.host}/ws/${id}`); socket.onmessage=e=>{const m=JSON.parse(e.data); log(`[${m.status}] ${m.step} ${m.detail||''}`); markStep(m.step,m.status); if(m.status==='completed'||m.status==='error')loadRight()}; socket.onclose=()=>{}}
+
+async function refreshRuns(){const r=await fetch('/api/runs'); const j=await r.json(); document.getElementById('mRuns').textContent=j.runs.length; document.getElementById('runList').innerHTML=j.runs.map(run=>`<div class="run-item" onclick="selectRun('${run.id}')"><b>${run.topic||run.id}</b><div class="status"><span class="dot ${run.status}"></span>${run.status} · ${run.provider} · ${run.reports||0} files · ${run.urls||0} urls</div></div>`).join('')||'<p class="hint">No runs yet.</p>'}
+async function selectRun(id){activeRun=id; document.getElementById('log').textContent=''; const r=await fetch(`/api/run/${id}`); const run=await r.json(); (run.progress||[]).forEach(m=>{log(`[${m.status}] ${m.step} ${m.detail||''}`); markStep(m.step,m.status)}); connectWS(id); await loadRight()}
+async function cancelActive(){if(!activeRun)return; await fetch(`/api/run/${activeRun}/cancel`,{method:'POST'}); await refreshRuns()}
+
+function showTab(tab,btn){activeTab=tab; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active'); loadRight()}
+async function loadRight(){if(!activeRun){document.getElementById('rightPane').innerHTML='<p class="hint">Select or start a run.</p>';return}
+  if(activeTab==='outputs') return loadOutputs();
+  if(activeTab==='artifacts') return loadArtifacts();
+  if(activeTab==='registry') return loadRegistry();
+  if(activeTab==='dashboard') return loadDashboard();
+}
+async function loadOutputs(){const r=await fetch(`/api/run/${activeRun}/outputs`); const j=await r.json(); const files=j.files||[]; document.getElementById('mOutputs').textContent=files.length; document.getElementById('rightPane').innerHTML=`<div class="list">${files.map(f=>`<div class="file"><a href="${f.url}" target="_blank">${f.name}</a><small>${f.size} bytes</small></div>`).join('')||'<p class="hint">No outputs yet.</p>'}</div>`}
+async function loadArtifacts(){const r=await fetch(`/api/run/${activeRun}/artifacts`); const j=await r.json(); const files=j.artifacts||[]; document.getElementById('mArtifacts').textContent=files.length; document.getElementById('rightPane').innerHTML=`<div class="list">${files.map(f=>`<div class="file"><a href="#" onclick="openArtifact('${f.name}');return false">${f.name}</a><small>${f.size} bytes</small></div>`).join('')||'<p class="hint">No artifacts yet.</p>'}</div>`}
+async function openArtifact(name){const r=await fetch(`/api/run/${activeRun}/artifact/${name}`); const t=await r.text(); try{const j=JSON.parse(t); document.getElementById('rightPane').innerHTML=`<pre>${escapeHtml(JSON.stringify(j,null,2))}</pre>`}catch{document.getElementById('rightPane').innerHTML=t}}
+async function loadRegistry(){const r=await fetch(`/api/run/${activeRun}/source-registry`); const j=await r.json(); document.getElementById('rightPane').innerHTML=`<pre>${escapeHtml(JSON.stringify(j.source_registry||{},null,2))}</pre>`}
+async function loadDashboard(){const r=await fetch(`/api/run/${activeRun}/dashboard`); const j=await r.json(); document.getElementById('rightPane').innerHTML=`<pre>${escapeHtml(JSON.stringify(j,null,2))}</pre>`}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+
+initTimeline(); health(); refreshRuns();
 </script>
 </body>
 </html>

@@ -240,6 +240,23 @@ body {
   height: auto;
 }
 .cover-item:hover img { opacity: 1 }
+.cover-item img { cursor: zoom-in }
+.lightbox {
+  position: fixed; top:0; left:0; right:0; bottom:0;
+  background: rgba(10,10,12,0.92);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.lightbox.show { opacity: 1 }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
 .cover-label {
   padding: 8px 12px;
   font-size: 11px;
@@ -586,6 +603,28 @@ var observer = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.15 });
 document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el) });
+
+// Lightbox for report cover images
+document.querySelectorAll('.cover-item img').forEach(function(img) {
+  img.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var lb = document.createElement('div');
+    lb.className = 'lightbox';
+    var bigImg = document.createElement('img');
+    bigImg.src = this.src;
+    bigImg.alt = this.alt;
+    lb.appendChild(bigImg);
+    document.body.appendChild(lb);
+    requestAnimationFrame(function() { lb.classList.add('show'); });
+    lb.addEventListener('click', function() {
+      lb.classList.remove('show');
+      setTimeout(function() { lb.remove(); }, 200);
+    });
+    document.addEventListener('keydown', function handler(ev) {
+      if (ev.key === 'Escape') { lb.click(); document.removeEventListener('keydown', handler); }
+    });
+  });
+});
 </script>
 </body>
 </html>

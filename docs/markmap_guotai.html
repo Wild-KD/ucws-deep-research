@@ -213,21 +213,29 @@ function render(svgId, md) {
   return Markmap.create('#'+svgId, opts, root);
 }
 
-// Render all 4 versions (original/reorg × with/without knowledge)
+// Only render the visible tab initially; lazy-render others on first switch
 const mm0a = render('s0a', mkOriginal(false));
-const mm0b = render('s0b', mkOriginal(false)); // original has no knowledge either way
-const mm1a = render('s1a', mkReorg(true));
-const mm1b = render('s1b', mkReorg(false));
+let mm1a = null;
+let mm1b = null;
 
 let curTab = 0;
 let showK = true;
+
+function ensureReorgRendered() {
+  if (!mm1a) {
+    mm1a = render('s1a', mkReorg(true));
+    mm1b = render('s1b', mkReorg(false));
+    document.getElementById('s1b').classList.add('off');
+  }
+}
 
 function swTab(n) {
   curTab = n;
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
   document.getElementById('w0').style.display = n===0 ? '' : 'none';
   document.getElementById('w1').style.display = n===1 ? '' : 'none';
-  requestAnimationFrame(() => { requestAnimationFrame(() => { fitCurrent(); }); });
+  if (n===1) ensureReorgRendered();
+  setTimeout(function() { fitCurrent(); }, 50);
 }
 
 function toggleK() {
@@ -235,26 +243,16 @@ function toggleK() {
   const btn = document.getElementById('toggleBtn');
   btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
   btn.classList.toggle('active', showK);
+  if (curTab===1) ensureReorgRendered();
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { fitCurrent(); }); });
+  setTimeout(function() { fitCurrent(); }, 50);
 }
 
 function fitCurrent() {
-  var mm;
-  if (curTab===0) mm = mm0a;
-  else if (showK) mm = mm1a;
-  else mm = mm1b;
-  // Force re-render then fit with slight zoom-out so it's not edge-to-edge
-  mm.fit();
-  setTimeout(function() {
-    mm.fit();
-    try {
-      var svg = mm.svg.node();
-      var t = d3.zoomTransform(svg);
-      mm.svg.call(mm.zoom.transform, t.scale(0.9).translate(0, 0));
-    } catch(e) {}
-  }, 100);
+  if (curTab===0) mm0a.fit();
+  else if (showK && mm1a) mm1a.fit();
+  else if (mm1b) mm1b.fit();
 }
 </script>
 </body>

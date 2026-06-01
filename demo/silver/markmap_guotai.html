@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>国泰期货 · 白银金字塔对比</title>
+<meta name="title-en" content="Guotai Futures · Silver Pyramid Comparison">
 <style>
   body { margin: 0; font-family: 'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; background: #fff; }
   .header { padding: 10px 20px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -24,17 +25,17 @@
 <body>
 
 <div class="header">
-  <h1>国泰期货 · 白银金字塔</h1>
+  <h1 data-en="Guotai Futures · Silver Pyramid">国泰期货 · 白银金字塔</h1>
   <div class="tabs">
-    <div class="tab on" onclick="swTab(0)">原文结构</div>
-    <div class="tab" onclick="swTab(1)">逻辑重组</div>
+    <div class="tab on" data-en="Original Structure" onclick="swTab(0)">原文结构</div>
+    <div class="tab" data-en="Logic Reorganized" onclick="swTab(1)">逻辑重组</div>
   </div>
-  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <button class="toggle-btn active" id="toggleBtn" data-en-on="Knowledge: Shown" data-en-off="Knowledge: Hidden" data-zh-on="常识: 显示中" data-zh-off="常识: 已隐藏" onclick="toggleK()">常识: 显示中</button>
   <div class="legend">
-    <span><span class="ldot" style="background:#0000CC"></span>蓝=引用</span>
-    <span><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
-    <span><span class="ldot" style="background:#000"></span>黑=算的结果</span>
-    <span><span class="ldot" style="background:#999"></span>灰[]=常识</span>
+    <span data-en="Blue=Reference"><span class="ldot" style="background:#0000CC"></span>蓝=引用</span>
+    <span data-en="Green=Assumption"><span class="ldot" style="background:#008800"></span>绿=Assumption</span>
+    <span data-en="Black=Calculated"><span class="ldot" style="background:#000"></span>黑=算的结果</span>
+    <span data-en="Gray[]=Knowledge"><span class="ldot" style="background:#999"></span>灰[]=常识</span>
   </div>
 </div>
 
@@ -49,7 +50,7 @@
 <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
 <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18"></script>
 <script>
-// ===== KNOWLEDGE LINES =====
+// ===== KNOWLEDGE LINES (Chinese) =====
 const K = {
   k1: `- <span style="color:#999">[常识: 利率下行降低持有无收益资产(如白银)的机会成本, 有利于贵金属配置需求]</span><br>*(金融学基础理论)*`,
   k2: `- <span style="color:#999">[常识: 财政赤字扩张→国债供给增加→美元信用稀释预期→利好实物资产/贵金属]</span><br>*(宏观经济学)*`,
@@ -62,6 +63,21 @@ const K = {
   k9: `- <span style="color:#999">[常识: 贸易商预期关税→从伦敦买银运纽约赚价差→伦敦库存被抽走]</span><br>*(贸易套利机制)*`,
   k10: `- <span style="color:#999">[常识: ETF运作=投资者买份额→发行方购实物存金库→实物被锁定; 占比越高自由流通越少]</span><br>*(ETF机制)*`,
   k11: `- <span style="color:#999">[常识: lease rate=借白银利息, 越高=可借实物越稀缺; 库存持仓比=库存÷期货持仓, 越低=实物越不足]</span><br>*(期货市场指标)*`
+};
+
+// ===== KNOWLEDGE LINES (English) =====
+const KEN = {
+  k1: `- <span style="color:#999">[Knowledge: Lower rates reduce the opportunity cost of holding non-yielding assets (e.g. silver), supporting precious-metal allocation]</span><br>*(Finance fundamentals)*`,
+  k2: `- <span style="color:#999">[Knowledge: Fiscal deficit expansion → more Treasury supply → USD credit-dilution expectations → bullish for real assets / precious metals]</span><br>*(Macroeconomics)*`,
+  k3: `- <span style="color:#999">[Knowledge: Ample liquidity drives yield-seeking; silver's small market cap (only 44% of gold) makes it more price-elastic to inflows]</span><br>*(Founder Securities)*`,
+  k4: `- <span style="color:#999">[Knowledge: Visible inventory = exchange + ETF publicly tracked stocks; free-float = visible inventory minus locked portions]</span><br>*(Industry definition)*`,
+  k5: `- <span style="color:#999">[Knowledge: By-product mining = silver output from mining other metals; silver price rises do not incentivize more production — the host-metal price drives mining decisions]</span><br>*(Mining fundamentals)*`,
+  k6: `- <span style="color:#999">[Knowledge: Mining CAPEX takes 1-2 years from investment to capacity release; spending today → output in 2027-2028]</span><br>*(Mining capital cycle)*`,
+  k7: `- <span style="color:#999">[Knowledge: PV silver paste is the largest single industrial demand item (~37%); TOPCon is the next-gen cell technology requiring more paste than PERC]</span><br>*(Silver Institute)*`,
+  k8: `- <span style="color:#999">[Knowledge: Silver is used in server PCB soldering / connectors / heat dissipation — an emerging demand but far smaller than PV]</span><br>*(国泰报告)*`,
+  k9: `- <span style="color:#999">[Knowledge: Traders anticipate tariffs → buy silver in London, ship to New York for arbitrage → London stocks drained]</span><br>*(Trade arbitrage mechanism)*`,
+  k10: `- <span style="color:#999">[Knowledge: ETF mechanics = investors buy shares → issuer purchases physical silver → stored in vaults → locked; higher ETF share = lower free-float]</span><br>*(ETF mechanism)*`,
+  k11: `- <span style="color:#999">[Knowledge: Lease rate = interest on borrowed silver; higher = scarcer lendable physical. Inventory/position ratio = inventory ÷ futures OI; lower = tighter physical]</span><br>*(Futures market indicators)*`
 };
 
 function mkOriginal(withK) {
@@ -202,6 +218,145 @@ ${withK ? K.k11 : ''}
 `;
 }
 
+// ===== ENGLISH MARKDOWN =====
+function mkOriginalEn(withK) {
+return `
+# Silver Super-Rally: Silver to Outperform Gold in 2026, Target 75$/oz *(国泰 2025.12.23)*
+
+## Macro Backdrop
+
+### Rate Cuts Continue
+- <span style="color:#0000CC;font-weight:bold">Fed expected to cut twice in 2026, total 50bp to 3.25%</span><br>*(FedWatch)*
+
+### Fiscal Expansion
+- <span style="color:#0000CC;font-weight:bold">"One Big Beautiful Bill" enacted, adding $3.4T deficit over 10 years</span><br>*(CBO/CRFB)*
+
+### Ample Liquidity
+- <span style="color:#008800;font-weight:bold">Dual fiscal-monetary easing, Fed resumes balance-sheet expansion, bullish for precious metals</span><br>*(Bloomberg+国泰)*
+
+## 4.1 Triple Squeeze
+- <span style="color:#008800;font-weight:bold">Physical silver under triple pressure from inventory drawdown + tariff arbitrage + ETF locking, London free-float extremely scarce</span>
+
+### Inventory Drawdown
+- <span style="color:#0000CC;font-weight:bold">Nov 2025 visible inventory 42,640 tonnes, ~1.2 months of cover</span><br>*(Wind/SMM)*
+
+### Arbitrage Transfer
+- <span style="color:#0000CC;font-weight:bold">Late 2024 silver added to critical minerals list, London→COMEX arbitrage transfer</span><br>*(USGS/CME)*
+
+### ETF Locking
+- <span style="color:#0000CC;font-weight:bold">Dec 2025 London ETF holdings 23,749 tonnes, 87% of LBMA</span><br>*(Bloomberg)*
+
+### Market Confirmation
+- <span style="color:#0000CC;font-weight:bold">Dec 19 2025 lease rate 7.8%; inventory/position ratio 9.8% at historic low</span><br>*(Bloomberg/上金所)*
+
+### ⚠ Signs of Easing
+- <span style="color:#008800;font-weight:bold">TD deferred fee shifted to short-pays-long, 380 tonnes restocked, hidden inventory partially released</span><br>*(上金所/SMM)*
+
+## 4.2 Supply-Demand Imbalance
+- <span style="color:#008800;font-weight:bold">Mine supply constrained by by-product structure, PV/AI sustain demand, structural deficit persists</span>
+
+### Supply Side
+
+#### Structural Constraint
+- <span style="color:#0000CC;font-weight:bold">74% by-product mining in 2024, output depends on copper/zinc not silver prices</span><br>*(WoodMac)*
+
+#### Miner Cutbacks
+- <span style="color:#0000CC;font-weight:bold">10 of 15 miners cut output guidance in 2025</span><br>*(Corporate annual reports)*
+
+#### Output Forecast
+- <span style="color:#000;font-weight:bold">2026 mine silver 27,073 tonnes, +1.67%</span><br>*(WoodMac+国泰)*
+
+#### CAPEX
+- <span style="color:#008800;font-weight:bold">2025 CAPEX recovers to $29.2B, 1-2 year lag to output</span><br>*(Corporate annual reports)*
+
+### Demand Side
+
+#### PV Silver Consumption
+- <span style="color:#0000CC;font-weight:bold">Installations 493GW (↓13%)</span>, <span style="color:#000;font-weight:bold">silver use only ↓7% to 7,830 tonnes</span><br>*(BNEF+国泰)*
+
+#### AI Silver Consumption
+- <span style="color:#000;font-weight:bold">331 kg per GW, still small scale</span><br>*(国泰测算)*
+
+## 4.3 Deficit Persists
+- <span style="color:#000;font-weight:bold">2026 supply-demand gap persists, narrower than 2025</span>
+
+### Historical Deficit
+- <span style="color:#000;font-weight:bold">2025 deficit ~5,187 tonnes, 2026 ~4,185 tonnes</span><br>*(World Silver Survey+国泰)*
+
+### Free-Float Inventory
+- <span style="color:#000;font-weight:bold">Free-float ~6,600 tonnes</span>; <span style="color:#0000CC;font-weight:bold">Jan 1 2026 China export-license requirement</span><br>*(LBMA/商务部)*
+`;
+}
+
+function mkReorgEn(withK) {
+return `
+# Silver Super-Rally: Silver to Outperform Gold in 2026, Target 75$/oz *(国泰 2025.12.23)*
+
+## Macro Backdrop
+
+### Rate Cuts Continue
+- <span style="color:#0000CC;font-weight:bold">Fed expected to cut twice in 2026, total 50bp to 3.25%</span><br>*(FedWatch)*
+${withK ? KEN.k1 : ''}
+
+### Fiscal Expansion
+- <span style="color:#0000CC;font-weight:bold">"One Big Beautiful Bill" enacted, adding $3.4T deficit over 10 years</span><br>*(CBO/CRFB)*
+${withK ? KEN.k2 : ''}
+
+### Ample Liquidity
+- <span style="color:#008800;font-weight:bold">Dual fiscal-monetary easing, Fed resumes balance-sheet expansion, bullish for precious metals</span><br>*(Bloomberg+国泰)*
+${withK ? KEN.k3 : ''}
+
+## Causal Analysis
+- All three factors combine to make London free-float silver extremely scarce: inventory drawdown is the base, arbitrage transfer is the catalyst, ETF locking is the amplifier
+
+### Inventory Drawdown
+- <span style="color:#0000CC;font-weight:bold">Nov 2025 visible inventory 42,640 tonnes, 1.2 months of cover</span>; <span style="color:#000;font-weight:bold">free-float ~6,600 tonnes</span><br>*(Wind/SMM/LBMA+国泰估算)*
+${withK ? KEN.k4 : ''}
+
+#### Supply Side
+
+##### Near-Term Contraction
+- <span style="color:#0000CC;font-weight:bold">74% of 2024 global silver from by-product mining, output depends on copper/zinc not silver price; consequently, 10 of 15 core miners cut output guidance in 2025</span><br>*(WoodMac; Corporate annual reports)*
+${withK ? KEN.k5 : ''}
+
+##### Longer-Term Outlook
+- <span style="color:#000;font-weight:bold">2026 mine silver forecast 27,073 tonnes (+1.67%); gradual rise to 27,797 tonnes by 2030</span><br>*(WoodMac+国泰推算)*
+- <span style="color:#008800;font-weight:bold">CAPEX recovers to $29.2B, but 1-2 year lag from spending to output limits near-term supply potential</span><br>*(Corporate annual reports+国泰)*
+${withK ? KEN.k6 : ''}
+
+#### Demand Side
+
+##### PV Silver Consumption
+- <span style="color:#0000CC;font-weight:bold">2026 PV installations 493GW (↓13%)</span>, <span style="color:#000;font-weight:bold">TOPCon transition limits silver-use decline to only ↓7% at 7,830 tonnes</span><br>*(BNEF installations; 国泰 model)*
+${withK ? KEN.k7 : ''}
+
+##### AI Silver Consumption
+- <span style="color:#000;font-weight:bold">AI data centers consume ~331 kg silver per GW</span><br>*(国泰测算)*
+${withK ? KEN.k8 : ''}
+
+### Arbitrage Transfer
+- <span style="color:#0000CC;font-weight:bold">Late 2024 silver added to critical minerals list, London silver shipped to COMEX, London stocks siphoned</span><br>*(USGS/CME)*
+${withK ? KEN.k9 : ''}
+
+### ETF Locking
+- <span style="color:#0000CC;font-weight:bold">Dec 2025 London ETF holdings 23,749 tonnes = 87% of LBMA</span>; <span style="color:#008800;font-weight:bold">unlikely to decrease during rate-cut cycle</span><br>*(Bloomberg/LBMA)*
+${withK ? KEN.k10 : ''}
+
+### Physical Tightness Confirmed
+- <span style="color:#0000CC;font-weight:bold">Dec 19 2025 lease rate 7.8%, inventory/position ratio 9.8% at historic low</span><br>*(Bloomberg/上金所)*
+${withK ? KEN.k11 : ''}
+- ⚠ <span style="color:#008800;font-weight:bold">TD deferred fee shifted to short-pays-long, 380 tonnes restocked; not without caveats</span><br>*(上金所/SMM)*
+
+## Forward-Looking Judgment
+
+### Deficit Narrows
+- <span style="color:#000;font-weight:bold">2026 deficit expected to narrow to 4,185 tonnes, down from 2025 (5,187 tonnes) but still negative</span><br>*(World Silver Survey+国泰)*
+
+### Export Controls
+- <span style="color:#0000CC;font-weight:bold">From Jan 1 2026 China imposes silver export-license requirement, domestic/international inventory tightness alternates</span><br>*(商务部 2025.10)*
+`;
+}
+
 // ===== RENDER =====
 const { Transformer } = window.markmap;
 const { Markmap } = window.markmap;
@@ -213,26 +368,41 @@ function render(svgId, md) {
   return Markmap.create('#'+svgId, opts, root);
 }
 
+function rerender(mmObj, svgId, md) {
+  const { root } = transformer.transform(md);
+  mmObj.setData(root);
+  mmObj.fit();
+}
+
+// ===== STATE =====
+let curTab = 0;
+let showK = true;
+let curLang = 'zh';  // 'zh' or 'en'
+
 // Lazy render: only create markmap when its SVG is first visible
 const mm0a = render('s0a', mkOriginal(false));
 let mm1a = null;  // 逻辑重组+常识
 let mm1b = null;  // 逻辑重组-常识
 
-let curTab = 0;
-let showK = true;
+// Store Chinese text for legend spans (to restore when switching back)
+const legendZh = {};
+document.querySelectorAll('.legend > span[data-en]').forEach(function(el) {
+  legendZh[el.getAttribute('data-en')] = el.innerHTML;
+});
+
+function getOriginalMd() { return curLang === 'en' ? mkOriginalEn(false) : mkOriginal(false); }
+function getReorgMd(wk) { return curLang === 'en' ? mkReorgEn(wk) : mkReorg(wk); }
 
 function ensureCurrentRendered() {
   if (curTab === 1 && showK && !mm1a) {
-    // 显示s1a，隐藏s1b，然后渲染mm1a
     document.getElementById('s1a').classList.remove('off');
     document.getElementById('s1b').classList.add('off');
-    mm1a = render('s1a', mkReorg(true));
+    mm1a = render('s1a', getReorgMd(true));
   }
   if (curTab === 1 && !showK && !mm1b) {
-    // 显示s1b，隐藏s1a，然后渲染mm1b
     document.getElementById('s1b').classList.remove('off');
     document.getElementById('s1a').classList.add('off');
-    mm1b = render('s1b', mkReorg(false));
+    mm1b = render('s1b', getReorgMd(false));
   }
 }
 
@@ -242,7 +412,6 @@ function swTab(n) {
   document.getElementById('w0').style.display = n===0 ? '' : 'none';
   document.getElementById('w1').style.display = n===1 ? '' : 'none';
   if (n===1) {
-    // 确保当前可见的SVG状态正确
     document.getElementById('s1a').classList.toggle('off', !showK);
     document.getElementById('s1b').classList.toggle('off', showK);
     ensureCurrentRendered();
@@ -253,9 +422,12 @@ function swTab(n) {
 function toggleK() {
   showK = !showK;
   var btn = document.getElementById('toggleBtn');
-  btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
+  if (curLang === 'en') {
+    btn.textContent = showK ? btn.getAttribute('data-en-on') : btn.getAttribute('data-en-off');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-on') : btn.getAttribute('data-zh-off');
+  }
   btn.classList.toggle('active', showK);
-  // 先切换可见性，再渲染（确保渲染时SVG可见）
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
   ensureCurrentRendered();
@@ -267,6 +439,63 @@ function fitCurrent() {
   else if (showK && mm1a) mm1a.fit();
   else if (!showK && mm1b) mm1b.fit();
 }
+
+// ===== LANGUAGE SWITCHING =====
+function applyLang(lang) {
+  curLang = lang;
+  var isEn = (lang === 'en');
+  document.documentElement.lang = isEn ? 'en' : 'zh-CN';
+
+  // Update h1
+  var h1 = document.querySelector('.header h1');
+  if (isEn) {
+    if (!h1.getAttribute('data-zh')) h1.setAttribute('data-zh', h1.textContent);
+    h1.textContent = h1.getAttribute('data-en');
+  } else {
+    h1.textContent = h1.getAttribute('data-zh') || h1.textContent;
+  }
+
+  // Update tabs
+  document.querySelectorAll('.tab[data-en]').forEach(function(el) {
+    if (isEn) {
+      if (!el.getAttribute('data-zh')) el.setAttribute('data-zh', el.textContent);
+      el.textContent = el.getAttribute('data-en');
+    } else {
+      el.textContent = el.getAttribute('data-zh') || el.textContent;
+    }
+  });
+
+  // Update toggle button
+  var btn = document.getElementById('toggleBtn');
+  if (isEn) {
+    btn.textContent = showK ? btn.getAttribute('data-en-on') : btn.getAttribute('data-en-off');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-on') : btn.getAttribute('data-zh-off');
+  }
+
+  // Update legend items
+  document.querySelectorAll('.legend > span[data-en]').forEach(function(el) {
+    var enKey = el.getAttribute('data-en');
+    if (isEn) {
+      // Keep the ldot span, replace text
+      var dot = el.querySelector('.ldot');
+      el.textContent = '';
+      if (dot) el.appendChild(dot);
+      el.appendChild(document.createTextNode(enKey));
+    } else {
+      // Restore full Chinese innerHTML (includes ldot)
+      if (legendZh[enKey]) el.innerHTML = legendZh[enKey];
+    }
+  });
+
+  // Re-render all existing markmaps with new language content
+  rerender(mm0a, 's0a', getOriginalMd());
+  if (mm1a) rerender(mm1a, 's1a', getReorgMd(true));
+  if (mm1b) rerender(mm1b, 's1b', getReorgMd(false));
+  setTimeout(function() { fitCurrent(); }, 50);
+}
 </script>
+<script src="/investment/docs/lang.js"></script>
+<script>initLang();</script>
 </body>
 </html>

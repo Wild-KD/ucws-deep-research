@@ -32,23 +32,23 @@
 <body>
 
 <div class="header">
-  <h1>国泰期货 · 白银验证地图</h1>
-  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()">常识: 显示中</button>
+  <h1 data-en="Guotai &middot; Silver Verification Map">国泰期货 · 白银验证地图</h1>
+  <button class="toggle-btn active" id="toggleBtn" onclick="toggleK()" data-en-show="Knowledge: Shown" data-en-hide="Knowledge: Hidden" data-zh-show="常识: 显示中" data-zh-hide="常识: 已隐藏">常识: 显示中</button>
   <div class="legend">
     <div class="legend-row">
-      <span><div class="lbox" style="border-color:#009A44"></div>验证通过</span>
-      <span><div class="lbox" style="border-color:#D4A843"></div>有source未验证</span>
-      <span><div class="lbox" style="border-color:#CC0000"></div>有冲突</span>
-      <span><div class="lbox" style="border-color:#333"></div>MECE展开</span>
+      <span><div class="lbox" style="border-color:#009A44"></div><span data-en="Verified">验证通过</span></span>
+      <span><div class="lbox" style="border-color:#D4A843"></div><span data-en="Has source, unverified">有source未验证</span></span>
+      <span><div class="lbox" style="border-color:#CC0000"></div><span data-en="Conflict">有冲突</span></span>
+      <span><div class="lbox" style="border-color:#333"></div><span data-en="MECE Structure">MECE展开</span></span>
     </div>
     <div class="legend-row">
-      <span><div class="ldot" style="background:#005EB8"></div>蓝=引用</span>
-      <span><div class="ldot" style="background:#008800"></div>绿=Assumption</span>
-      <span><div class="ldot" style="background:#000"></div>黑=算的结果</span>
+      <span><div class="ldot" style="background:#005EB8"></div><span data-en="Blue=Reference">蓝=引用</span></span>
+      <span><div class="ldot" style="background:#008800"></div><span data-en="Green=Assumption">绿=Assumption</span></span>
+      <span><div class="ldot" style="background:#000"></div><span data-en="Black=Calculated">黑=算的结果</span></span>
     </div>
   </div>
 </div>
-<div class="stats">数据节点: <b style="color:#009A44">4🟢</b> · <b style="color:#D4A843">5🟡</b> · <b style="color:#CC0000">2🔴</b> · <b style="color:#333">黑=结构</b> | 因果边: <b style="color:#009A44">6🟢</b> · <b style="color:#D4A843">1🟡</b> | 逻辑框架成立, 部分数据有问题</div>
+<div class="stats" data-en='Data nodes: <b style="color:#009A44">4&#x1F7E2;</b> &middot; <b style="color:#D4A843">5&#x1F7E1;</b> &middot; <b style="color:#CC0000">2&#x1F534;</b> &middot; <b style="color:#333">Black=Structure</b> | Causal edges: <b style="color:#009A44">6&#x1F7E2;</b> &middot; <b style="color:#D4A843">1&#x1F7E1;</b> | Logic framework holds, some data issues'>数据节点: <b style="color:#009A44">4🟢</b> · <b style="color:#D4A843">5🟡</b> · <b style="color:#CC0000">2🔴</b> · <b style="color:#333">黑=结构</b> | 因果边: <b style="color:#009A44">6🟢</b> · <b style="color:#D4A843">1🟡</b> | 逻辑框架成立, 部分数据有问题</div>
 
 <div class="map-wrap">
   <svg id="s1a"></svg>
@@ -68,7 +68,8 @@ const B = '#333333'; // Black - pure MECE decomposition, no propagation
 // IB text colors (updated to MBB blue)
 const BLUE = '#005EB8';
 
-const K = {
+// ===== BILINGUAL: Knowledge strings =====
+const K_zh = {
   k1: `- <span style="color:#999">[常识: 利率下行降低持有无收益资产(如白银)的机会成本, 有利于贵金属配置需求]</span><br>*(金融学基础理论)*`,
   k2: `- <span style="color:#999">[常识: 财政赤字扩张→国债供给增加→美元信用稀释预期→利好实物资产/贵金属]</span><br>*(宏观经济学)*`,
   k3: `- <span style="color:#999">[常识: 流动性充裕时资金寻找收益, 白银因市场容量小(仅黄金44%)对资金流入价格弹性更大]</span><br>*(方正证券)*`,
@@ -82,64 +83,76 @@ const K = {
   k11: `- <span style="color:#999">[常识: lease rate=借白银利息, 越高=可借实物越稀缺; 库存持仓比=库存÷期货持仓, 越低=实物越不足]</span><br>*(期货市场指标)*`
 };
 
+const K_en = {
+  k1: `- <span style="color:#999">[Knowledge: Lower rates reduce opportunity cost of holding non-yielding assets (like silver), boosting precious metals demand]</span><br>*(Basic finance theory)*`,
+  k2: `- <span style="color:#999">[Knowledge: Fiscal deficit expansion -> more Treasury supply -> USD credit dilution expectations -> bullish for real assets/precious metals]</span><br>*(Macroeconomics)*`,
+  k3: `- <span style="color:#999">[Knowledge: When liquidity is ample, capital seeks returns; silver's smaller market cap (only 44% of gold) makes it more price-elastic to inflows]</span><br>*(Founder Securities)*`,
+  k4: `- <span style="color:#999">[Knowledge: Visible inventory = exchange + ETF publicly trackable stocks; free float = visible inventory - locked portion]</span><br>*(Industry definition)*`,
+  k5: `- <span style="color:#999">[Knowledge: By-product mining = silver produced alongside other metals; silver price rises don't incentivize more mining; output depends on primary metal prices]</span><br>*(Mining basics)*`,
+  k6: `- <span style="color:#999">[Knowledge: Mining CAPEX typically takes 1-2 years from investment to capacity release; investing now -> visible only in 2027-2028]</span><br>*(Mining capital cycle)*`,
+  k7: `- <span style="color:#999">[Knowledge: Solar silver paste is the largest single industrial silver demand (~37%); TOPCon is next-gen cell tech requiring more paste than PERC]</span><br>*(Silver Institute)*`,
+  k8: `- <span style="color:#999">[Knowledge: Silver used in server PCB soldering/connectors/heat dissipation; emerging demand but far smaller than solar]</span><br>*(Guotai report)*`,
+  k9: `- <span style="color:#999">[Knowledge: Traders anticipate tariffs -> buy silver in London, ship to New York for arbitrage -> London inventory drained]</span><br>*(Trade arbitrage mechanism)*`,
+  k10: `- <span style="color:#999">[Knowledge: ETF mechanism = investors buy shares -> issuer buys physical silver for vaults -> physical locked; higher ETF share = less free float]</span><br>*(ETF mechanism)*`,
+  k11: `- <span style="color:#999">[Knowledge: Lease rate = interest to borrow silver, higher = scarcer physical supply; inventory/position ratio = inventory / futures OI, lower = more physical shortage]</span><br>*(Futures market indicators)*`
+};
+
 // Verification colors per node (by depth-first index in tree)
-// Order must match the markdown heading order exactly
-// Verification colors: matched by content keywords
-// Applies to BOTH leaf nodes (data) AND heading nodes (logic statements)
 const verifyColors = [
-  // Data nodes (leaves)
   ['FedWatch', R],
   ['3.25%', R],
-  ['3.4万亿', G],
+  ['3.4万亿', G], ['3.4 trillion', G],
   ['CBO', G],
-  ['双宽松', Y],
-  ['贵金属利多', Y],
+  ['双宽松', Y], ['Dual easing', Y],
+  ['贵金属利多', Y], ['bullish precious metals', Y],
   ['42640', Y],
   ['27187', Y],
   ['74%', R],
-  ['15家', R],
-  ['10家', R],
+  ['15家', R], ['15 major', R],
+  ['10家', R], ['10 cut', R],
   ['27073', Y],
   ['CAPEX', Y],
-  ['292亿', Y],
+  ['292亿', Y], ['29.2B', Y],
   ['493GW', R],
   ['7830', R],
   ['331kg', Y],
   ['331', Y],
-  ['关键矿产清单', G],
+  ['关键矿产清单', G], ['critical minerals list', G],
   ['COMEX', G],
   ['23749', G],
   ['87%', G],
-  ['ETF持仓', G],
+  ['ETF持仓', G], ['ETF holdings', G],
   ['lease rate', G],
   ['7.8%', G],
   ['9.8%', G],
-  ['TD递延', G],
-  ['累库380', G],
+  ['TD递延', G], ['TD deferred', G],
+  ['累库380', G], ['accumulated 380', G],
   ['4185', R],
-  ['缺口预计', R],
-  ['出口许可证', Y],
-  ['商务部', Y],
-  // Heading logic statements — colored based on logic/data verification
-  ['降息延续降低', G],             // E1 verified ✓
-  ['财政扩张侵蚀', G],            // N2 data green ✓
-  ['流动性充裕放大', Y],           // 综合推理, 有source未验证
-  ['三重共振导致', G],             // E7 verified ✓
-  ['连续四年供需缺口导致', G],      // E2 verified ✓
-  ['供给短期收缩', G],            // E3 verified ✓
-  ['伴生矿结构.*矿企减产', R],     // N5 data red
-  ['CAPEX回升但', Y],             // N6 yellow
-  ['需求不会断崖', R],            // N7 data red
-  ['装机降但', R],                // N7 data red
-  ['新兴需求来源但', Y],           // method undisclosed
-  ['关税预期触发', G],             // E4 verified ✓
-  ['ETF锁住', G],                // E6 verified ✓
-  ['多项市场指标确认', G],         // E7 verified ✓
-  ['缺口持续但收敛', R],          // N12 red
-  ['中国管制加剧', Y],            // N11 yellow
+  ['缺口预计', R], ['gap expected', R],
+  ['出口许可证', Y], ['export license', Y],
+  ['商务部', Y], ['MOFCOM', Y],
+  // Heading logic statements
+  ['降息延续降低', G], ['Rate cuts continue to reduce', G],
+  ['财政扩张侵蚀', G], ['Fiscal expansion erodes', G],
+  ['流动性充裕放大', Y], ['Ample liquidity amplifies', Y],
+  ['三重共振导致', G], ['Triple resonance causes', G],
+  ['连续四年供需缺口导致', G], ['Four consecutive years of deficit', G],
+  ['供给短期收缩', G], ['Short-term supply contraction', G],
+  ['伴生矿结构.*矿企减产', R], ['By-product structure.*miners cut output', R],
+  ['CAPEX回升但', Y], ['CAPEX recovers but', Y],
+  ['需求不会断崖', R], ['Demand won\'t cliff', R],
+  ['装机降但', R], ['Installations down but', R],
+  ['新兴需求来源但', Y], ['Emerging demand source but', Y],
+  ['关税预期触发', G], ['Tariff expectations trigger', G],
+  ['ETF锁住', G], ['ETFs lock up', G],
+  ['多项市场指标确认', G], ['Multiple market indicators confirm', G],
+  ['缺口持续但收敛', R], ['Deficit persists but narrows', R],
+  ['中国管制加剧', Y], ['China export controls tighten', Y],
 ];
 
-function mkReorg(withK) {
+// ===== BILINGUAL: Markmap markdown generator =====
+function mkReorg_zh(withK) {
+  var K = K_zh;
 return `
 # 白银主升浪: 2026年白银将继续强于黄金, 目标75$/oz *(国泰 2025.12.23)*
 
@@ -207,6 +220,79 @@ ${withK ? K.k11 : ''}
 `;
 }
 
+function mkReorg_en(withK) {
+  var K = K_en;
+return `
+# Silver Bull Run: Silver to outperform gold in 2026, target 75$/oz *(Guotai 2025.12.23)*
+
+## Triple macro factors bullish precious metals
+
+### Rate cuts continue to reduce precious metals holding cost
+- <span style="color:${BLUE};font-weight:bold">Fed expected to cut rates twice in 2026, total 50bp to 3.25%</span><br>*(FedWatch)*
+${withK ? K.k1 : ''}
+
+### Fiscal expansion erodes USD credibility
+- <span style="color:${BLUE};font-weight:bold">"One Big Beautiful Bill" enacted, adding $3.4 trillion deficit over 10 years</span><br>*(CBO/CRFB)*
+${withK ? K.k2 : ''}
+
+### Ample liquidity amplifies silver elasticity
+- <span style="color:#008800;font-weight:bold">Dual easing (fiscal + monetary), Fed restarts balance sheet expansion, bullish precious metals</span><br>*(Bloomberg+Guotai)*
+${withK ? K.k3 : ''}
+
+## Supply-demand imbalance + arbitrage + ETF triple resonance causes extreme London silver scarcity
+
+### Four consecutive years of deficit reduced visible inventory to 42,640 tonnes
+- <span style="color:${BLUE};font-weight:bold">As of Nov 2025, global visible silver inventory 42,640 tonnes</span>; <span style="color:#000;font-weight:bold">LBMA 27,187t, ETF holdings 23,749t</span><br>*(Wind/SMM/LBMA+Guotai est.)*
+${withK ? K.k4 : ''}
+
+#### Short-term supply contraction, by-product structure constrains output
+
+##### Near-term: By-product structure + miners cutting output shrinks supply
+- <span style="color:${BLUE};font-weight:bold">In 2024, 74% of global silver came from by-product mining; output depends on Cu/Zn prices not silver; 10 of 15 major miners cut 2025 output guidance</span><br>*(WoodMac; company annual reports)*
+${withK ? K.k5 : ''}
+
+##### Longer-term: CAPEX recovers but capacity release takes 1-2 years
+- <span style="color:#000;font-weight:bold">2026 mine silver est. 27,073t (+1.67%); gradual rise to 27,797t by 2030</span><br>*(WoodMac+Guotai est.)*
+- <span style="color:#008800;font-weight:bold">CAPEX up to $29.2B, but 1-2 year lag between capex and output limits near-term supply</span><br>*(Company reports+Guotai)*
+${withK ? K.k6 : ''}
+
+#### Demand won't cliff-drop; solar tech transition offsets installation decline
+
+##### Solar: Installations down but tech upgrade limits silver consumption decline
+- <span style="color:${BLUE};font-weight:bold">2026 solar installations 493GW (down 13%)</span>, <span style="color:#000;font-weight:bold">TOPCon transition limits silver decline to just 7% at 7,830t</span><br>*(BNEF installations; Guotai model)*
+${withK ? K.k7 : ''}
+
+##### AI: Emerging demand source but still small scale
+- <span style="color:#000;font-weight:bold">AI data centers consume ~331kg silver per GW</span><br>*(Guotai estimate)*
+${withK ? K.k8 : ''}
+
+### Tariff expectations trigger massive London-to-New York silver arbitrage
+- <span style="color:${BLUE};font-weight:bold">Late 2024 silver added to critical minerals list; London silver shipped to COMEX, London inventory siphoned</span><br>*(USGS/CME)*
+${withK ? K.k9 : ''}
+
+### ETFs lock up most LBMA inventory, extremely low free float
+- <span style="color:${BLUE};font-weight:bold">Dec 2025 London ETF holdings 23,749t = ~87% of LBMA (23,749/27,187)</span>; <span style="color:#008800;font-weight:bold">unlikely to decline during rate cut cycle</span><br>*(Bloomberg/LBMA)*
+${withK ? K.k10 : ''}
+
+### Multiple market indicators confirm extreme physical tightness
+- <span style="color:${BLUE};font-weight:bold">Dec 19, 2025 lease rate 7.8%, inventory/position ratio 9.8% at historical low</span><br>*(Bloomberg/SGE)*
+${withK ? K.k11 : ''}
+- ⚠ <span style="color:#008800;font-weight:bold">TD deferred fee flipped to shorts paying longs; accumulated 380t; not without caveats</span><br>*(SGE/SMM)*
+
+## Outlook: Deficit persists but narrows, China export controls tighten supply
+
+### 2026 deficit narrows but remains negative
+- <span style="color:#000;font-weight:bold">2026 gap expected to narrow to 4,185t vs 5,187t in 2025, still negative</span><br>*(World Silver Association+Guotai)*
+
+### China export controls further restrict circulation
+- <span style="color:${BLUE};font-weight:bold">From Jan 1 2026, China imposes export license on silver, alternating domestic/international inventory tightness continues</span><br>*(MOFCOM 2025.10)*
+`;
+}
+
+// Current language helper
+function curLang() { return localStorage.getItem('research-engine-lang') || 'en'; }
+function mkReorg(withK) { return curLang() === 'en' ? mkReorg_en(withK) : mkReorg_zh(withK); }
+
 // Render with per-node color function
 const { Transformer, Markmap } = window.markmap;
 const transformer = new Transformer();
@@ -238,18 +324,17 @@ function getNodeColor(node) {
   var rawContent = findContent(node, 0);
   var text = decodeHtml(rawContent.replace(/<[^>]*>/g, ''));
 
-  // 常识 → always black
-  if (text.includes('常识')) return B;
+  if (text.includes('常识') || text.includes('Knowledge')) return B;
 
-  // Check if this text matches any verified keyword (works for BOTH headings and leaves)
   for (const [kw, color] of verifyColors) {
-    if (text.includes(kw)) return color;
+    try {
+      if (kw.includes('.*') ? new RegExp(kw).test(text) : text.includes(kw)) return color;
+    } catch(e) {
+      if (text.includes(kw)) return color;
+    }
   }
 
-  // Fallback: has children but no keyword match → pure structural label → black
   if (hasKids(node)) return B;
-
-  // Leaf with no match
   return Y;
 }
 
@@ -264,121 +349,81 @@ function buildMarkmap(svgId, md) {
   }, root);
 }
 
-// 单SVG渲染，切换常识时重新setData
 const mm = buildMarkmap('s1a', mkReorg(true));
-const rootWithK = transformer.transform(mkReorg(true)).root;
-const rootNoK = transformer.transform(mkReorg(false)).root;
 
-// Post-render: add borders matching line colors
-function addBorders(svgId) {
-  const svg = document.getElementById(svgId);
-  if (!svg) return;
-  svg.querySelectorAll('g.markmap-node').forEach(function(g) {
-    const fo = g.querySelector('foreignObject');
-    if (!fo) return;
-    // Get the color from the circle (markmap renders a small circle per node)
-    const circle = g.querySelector('circle');
-    const color = circle ? circle.getAttribute('fill') : B;
-
-    const w = parseFloat(fo.getAttribute('width')) || 150;
-    const h = parseFloat(fo.getAttribute('height')) || 30;
-    const x = parseFloat(fo.getAttribute('x')) || 0;
-    const y = parseFloat(fo.getAttribute('y')) || 0;
-
-    g.querySelectorAll('.v-border').forEach(e => e.remove());
-    const border = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    border.setAttribute('class', 'v-border');
-    border.setAttribute('x', x - 5);
-    border.setAttribute('y', y - 5);
-    border.setAttribute('width', w + 10);
-    border.setAttribute('height', h + 10);
-    border.setAttribute('rx', 6);
-    border.setAttribute('ry', 6);
-    border.setAttribute('fill', 'none');
-    border.setAttribute('stroke', color);
-    border.setAttribute('stroke-width', '2.5');
-    g.insertBefore(border, g.firstChild);
-  });
+function getMarkmapRoots() {
+  return {
+    rootWithK: transformer.transform(mkReorg(true)).root,
+    rootNoK: transformer.transform(mkReorg(false)).root
+  };
 }
+var roots = getMarkmapRoots();
 
-// borders disabled — markmap's native circle+line color already reflects verification status
-// setTimeout(function(){ addBorders('s1a'); addBorders('s1b'); }, 1200);
-
-// ===== VERIFICATION WORKPAPER DATA =====
-const workpapers = {
-
-  // ===== N1: 降息预期 =====
-  'FedWatch': {color:'🔴',claim:'2026年美联储预计降息两次共50bp至3.25%',structured:true,
-    conclusion:'🔴 数据验证不通过: 数据过时且source误归',
+// ===== VERIFICATION WORKPAPER DATA (bilingual) =====
+const workpapers_zh = {
+  'FedWatch': {color:'\u{1F534}',claim:'2026年美联储预计降息两次共50bp至3.25%',structured:true,
+    conclusion:'\u{1F534} 数据验证不通过: 数据过时且source误归',
     subclaims:[
-      {text:'事实①: FedWatch是否显示"两次降息50bp"为共识?',status:'🔴',
+      {text:'事实①: FedWatch是否显示"两次降息50bp"为共识?',status:'\u{1F534}',
        finding:'不是。FedWatch显示的是概率分布, 不是单一预测。截至2026年2月, 累计降息50bp的概率仅32.5%, 并非共识。',
        quote:'"CME FedWatch Tool tracks the probabilities of changes to the Fed rate, as implied by 30-Day Fed Funds futures prices." — CME Group',
        sources:[{title:'CME FedWatch Tool',author:'CME Group',url:'https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html'}]},
-      {text:'事实②: 截至2026年5月, 市场预期是否仍为降息?',status:'🔴',
+      {text:'事实②: 截至2026年5月, 市场预期是否仍为降息?',status:'\u{1F534}',
        finding:'否。截至2026年5月末, FedWatch显示67.3%概率零次降息, 仅8%概率降息两次。市场预期已大幅转向。',
        quote:'"Fed funds futures currently price in a 67.3% probability of no rate changes in 2026." — MacroMicro/FedWatch data',
        sources:[{title:'US FedWatch Rate Forecast 2026',author:'MacroMicro',url:'https://en.macromicro.me/charts/144242/us-number-yearend-rate-2026'}]}
     ]},
-  '3.25': {color:'🔴',claim:'同"FedWatch"',sources:['见FedWatch'],finding:'同上',verdict:'红'},
-
-  // ===== N2: 财政扩张 =====
-  '3.4万亿': {color:'🟢',claim:'《大美丽法案》落地, 10年增赤字3.4万亿美元',structured:true,
-    conclusion:'🟢 精确匹配CBO官方数据',
+  '3.25': {color:'\u{1F534}',claim:'同"FedWatch"',sources:['见FedWatch'],finding:'同上',verdict:'红'},
+  '3.4万亿': {color:'\u{1F7E2}',claim:'《大美丽法案》落地, 10年增赤字3.4万亿美元',structured:true,
+    conclusion:'\u{1F7E2} 精确匹配CBO官方数据',
     subclaims:[
-      {text:'事实①: CBO是否确认3.4万亿?',status:'🟢',
+      {text:'事实①: CBO是否确认3.4万亿?',status:'\u{1F7E2}',
        finding:'是。CBO final score(Publication 61570)估算该法案将在FY2025-2034增加primary deficit 3.4万亿美元。',
        quote:'"CBO estimates the law will increase primary budget deficits by $3.4 trillion over FY 2025-2034." — CBO Publication 61570',
        sources:[{title:'Estimated Budgetary Effects of the One Big Beautiful Bill Act',author:'Congressional Budget Office, July 2025',url:'https://www.cbo.gov/publication/61570'}]},
-      {text:'事实②: 是否有独立来源交叉验证?',status:'🟢',
+      {text:'事实②: 是否有独立来源交叉验证?',status:'\u{1F7E2}',
        finding:'CRFB独立确认3.4万亿(primary), 并指出含利息为4.1万亿。',
        quote:'"Including interest costs, the total rises to $4.1 trillion." — CRFB',
        sources:[{title:'CRFB Analysis of One Big Beautiful Bill Act',author:'Committee for a Responsible Federal Budget',url:'https://www.crfb.org/'}]}
     ]},
-  'CBO': {color:'🟢',claim:'同上',sources:['见3.4万亿'],finding:'同上',verdict:'绿'},
-
-  // ===== 流动性充裕 =====
-  '双宽松': {color:'🟡',claim:'财政货币双宽松, 美联储重启扩表, 贵金属利多',structured:true,
-    conclusion:'🟡 综合推理, 非单一可验证数据点',
+  'CBO': {color:'\u{1F7E2}',claim:'同上',sources:['见3.4万亿'],finding:'同上',verdict:'绿'},
+  '双宽松': {color:'\u{1F7E1}',claim:'财政货币双宽松, 美联储重启扩表, 贵金属利多',structured:true,
+    conclusion:'\u{1F7E1} 综合推理, 非单一可验证数据点',
     subclaims:[
-      {text:'事实①: 美联储是否重启扩表?',status:'🟡',
+      {text:'事实①: 美联储是否重启扩表?',status:'\u{1F7E1}',
        finding:'2025年12月FOMC会议上美联储宣布重启资产负债表扩张。但"重启扩表"更多是准备金管理操作, 对宏观流动性的实际影响有争议。',
        quote:'"The Fed will begin purchasing short-term Treasuries to maintain adequate reserve levels." — FOMC Statement, Dec 2025',
        sources:[{title:'FOMC Statement December 2025',author:'Federal Reserve',url:'https://www.federalreserve.gov/'}]},
-      {text:'逻辑①: 双宽松是否一定利好贵金属?',status:'🟡',
+      {text:'逻辑①: 双宽松是否一定利好贵金属?',status:'\u{1F7E1}',
        finding:'历史上大部分情况成立(2008-2015, 2020), 但并非绝对。且降息前提(N1)已标红, 削弱了"双宽松"的完整性。',
        quote:'',
        sources:[{title:'Gold and Real Yields historical analysis',author:'In Gold We Trust Report',url:'https://ingoldwetrust.report/'}]}
     ]},
-  '贵金属利多': {color:'🟡',claim:'同上',sources:['见双宽松'],finding:'同上',verdict:'黄'},
-
-  // ===== N3: 显性库存 =====
-  '42640': {color:'🟡',claim:'截至2025年11月全球白银显性库存42640吨',structured:true,
-    conclusion:'🟡 数字范围合理, 但原始source为付费库无法直接核实',
+  '贵金属利多': {color:'\u{1F7E1}',claim:'同上',sources:['见双宽松'],finding:'同上',verdict:'黄'},
+  '42640': {color:'\u{1F7E1}',claim:'截至2025年11月全球白银显性库存42640吨',structured:true,
+    conclusion:'\u{1F7E1} 数字范围合理, 但原始source为付费库无法直接核实',
     subclaims:[
-      {text:'事实①: LBMA库存',status:'🟢',
+      {text:'事实①: LBMA库存',status:'\u{1F7E2}',
        finding:'LBMA官方数据: 2025年11月末27,187吨。',
        quote:'"Silver held in London vaults totalled 27,187 tonnes at end-November 2025." — LBMA',
        sources:[{title:'London Vault Data',author:'LBMA',url:'https://www.lbma.org.uk/prices-and-data/london-vault-data'}]},
-      {text:'事实②: COMEX+SHFE+SGE库存',status:'🟡',
+      {text:'事实②: COMEX+SHFE+SGE库存',status:'\u{1F7E1}',
        finding:'COMEX约14,300-15,000吨(由10月末15,005吨和1月末12,630吨推算); SHFE约559吨; SGE约716吨。汇总约42,762-43,462吨, 42,640在范围内。',
        quote:'',
        sources:[{title:'COMEX Silver Warehouse Stocks',author:'CME Group',url:'https://www.cmegroup.com/delivery_reports/Silver_stocks.xls'}]},
-      {text:'事实③: Wind/SMM原始数据能否直接核实?',status:'🟡',
+      {text:'事实③: Wind/SMM原始数据能否直接核实?',status:'\u{1F7E1}',
        finding:'Wind和SMM均为付费数据终端, 无法直接访问核实42,640这个精确数字。但公开交易所数据汇总与之吻合。',
        quote:'',
        sources:[]}
     ]},
-
-  // ===== N4+N5: 伴生矿+矿企减产 =====
-  '74%': {color:'🔴',claim:'2024年全球银产74%来自伴生矿; 15家核心矿企中10家下调产量',structured:true,
-    conclusion:'🔴 伴生矿占比接近但略偏高; 矿企减产数据与公开信息矛盾',
+  '74%': {color:'\u{1F534}',claim:'2024年全球银产74%来自伴生矿; 15家核心矿企中10家下调产量',structured:true,
+    conclusion:'\u{1F534} 伴生矿占比接近但略偏高; 矿企减产数据与公开信息矛盾',
     subclaims:[
-      {text:'事实①: 伴生矿占比是否为74%?',status:'🟡',
+      {text:'事实①: 伴生矿占比是否为74%?',status:'\u{1F7E1}',
        finding:'接近但略偏高。World Silver Survey 2025报告primary mines占27.8%, 即伴生矿约72.2%。差2个百分点, 不影响结论方向。',
        quote:'"Primary silver mines accounted for approximately 27.8% of global silver mine production in 2024." — Metals Focus / Silver Institute',
        sources:[{title:'World Silver Survey 2025',author:'Metals Focus / Silver Institute, April 2025',url:'https://silverinstitute.org/wp-content/uploads/2025/04/World_Silver_Survey-2025.pdf'}]},
-      {text:'事实②: 15家矿企中10家是否下调产量指引?',status:'🔴',
+      {text:'事实②: 15家矿企中10家是否下调产量指引?',status:'\u{1F534}',
        finding:'无法验证, 且公开数据显示相反趋势。Pan American Silver超出指引(22.8Moz); Hecla创纪录(17Moz, +5%); First Majestic超出上调后指引(31.1Moz); Silvercorp创纪录(~6.9Moz)。Mining Visuals追踪7家中仅Fresnillo下调(且是对2026年)。',
        quote:'"Pan American Silver exceeded full-year guidance with 22.8 million ounces." — Pan American Silver 2025 Annual Report',
        sources:[
@@ -387,275 +432,546 @@ const workpapers = {
          {title:'First Majestic Reports 2025 Production and 2026 Outlook',author:'First Majestic Silver, 2026.1',url:'https://www.firstmajestic.com/investors/news-releases/first-majestic-reports-2025-production-and-2026-outlook-increases-dividend'}
        ]}
     ]},
-  '15家': {color:'🔴',claim:'同上',sources:['见74%'],finding:'同上',verdict:'红'},
-  '10家': {color:'🔴',claim:'同上',sources:['见74%'],finding:'同上',verdict:'红'},
-
-  // ===== N6: 矿产银预测 =====
-  '27073': {color:'🟡',claim:'2026年全球矿产银预计27073吨(+1.67%)',structured:true,
-    conclusion:'🟡 付费库无法直接核实, 与公开源有偏差',
+  '15家': {color:'\u{1F534}',claim:'同上',sources:['见74%'],finding:'同上',verdict:'红'},
+  '10家': {color:'\u{1F534}',claim:'同上',sources:['见74%'],finding:'同上',verdict:'红'},
+  '27073': {color:'\u{1F7E1}',claim:'2026年全球矿产银预计27073吨(+1.67%)',structured:true,
+    conclusion:'\u{1F7E1} 付费库无法直接核实, 与公开源有偏差',
     subclaims:[
-      {text:'事实①: Silver Institute的预测是否一致?',status:'🟡',
+      {text:'事实①: Silver Institute的预测是否一致?',status:'\u{1F7E1}',
        finding:'不一致。World Silver Survey 2026预测2026年矿产银844.1Moz(约26,255吨, -0.3%), 低于国泰的27,073吨(约870Moz), 差约3%, 方向也相反(+1.67% vs -0.3%)。',
        quote:'"Global silver mine production is forecast at 844.1 million ounces in 2026, a slight decline of 0.3%." — World Silver Survey 2026',
        sources:[{title:'World Silver Survey 2026',author:'Metals Focus / Silver Institute, April 2026',url:'https://silverinstitute.org/silver-supply-demand/'}]},
-      {text:'事实②: WoodMac原始数据能否核实?',status:'🟡',
+      {text:'事实②: WoodMac原始数据能否核实?',status:'\u{1F7E1}',
        finding:'WoodMackenzie是付费数据库, 无法直接访问。国泰基于WoodMac铜锌产量预测+伴生比例推算, 方法论可能与Silver Institute不同。',
        quote:'',sources:[]}
     ]},
-
-  // ===== CAPEX =====
-  'CAPEX': {color:'🟡',claim:'CAPEX回升至292亿, 但产能释放需1-2年',structured:true,
-    conclusion:'🟡 有source(企业年报)但未逐家独立核实',
+  'CAPEX': {color:'\u{1F7E1}',claim:'CAPEX回升至292亿, 但产能释放需1-2年',structured:true,
+    conclusion:'\u{1F7E1} 有source(企业年报)但未逐家独立核实',
     subclaims:[
-      {text:'事实①: CAPEX是否回升?',status:'🟡',
+      {text:'事实①: CAPEX是否回升?',status:'\u{1F7E1}',
        finding:'国泰逐家统计15家矿企年报汇总得292亿美元。未逐家独立核实, 但方向与行业报道一致(多家矿企增加勘探支出)。',
        quote:'',sources:[]},
-      {text:'逻辑①: CAPEX→产能释放是否需1-2年?',status:'🟢',
+      {text:'逻辑①: CAPEX→产能释放是否需1-2年?',status:'\u{1F7E2}',
        finding:'矿业资本周期共识: 从投资到投产通常1-2年(棕地扩建)至10年+(绿地新矿)。',
        quote:'"New silver mine development now takes an average of 10+ years from exploration to production." — Numismatic News',
        sources:[]}
     ]},
-  '292亿': {color:'🟡',claim:'同上',sources:['见CAPEX'],finding:'同上',verdict:'黄'},
-
-  // ===== N7: 光伏装机+耗银 =====
-  '493GW': {color:'🔴',claim:'2026年全球光伏装机预计493GW, 光伏银浆需求7830吨',structured:true,
-    conclusion:'🔴 装机量严重偏低且source误归; 耗银预测基于错误前提',
+  '292亿': {color:'\u{1F7E1}',claim:'同上',sources:['见CAPEX'],finding:'同上',verdict:'黄'},
+  '493GW': {color:'\u{1F534}',claim:'2026年全球光伏装机预计493GW, 光伏银浆需求7830吨',structured:true,
+    conclusion:'\u{1F534} 装机量严重偏低且source误归; 耗银预测基于错误前提',
     subclaims:[
-      {text:'事实①: BNEF 2026年光伏装机预测是否为493GW?',status:'🔴',
+      {text:'事实①: BNEF 2026年光伏装机预测是否为493GW?',status:'\u{1F534}',
        finding:'不是。BNEF最新预测为649GW(DC), 远高于493GW。IEA预测约540GW, CPIA下限约500GW。493GW不匹配任何已知BNEF预测, 更接近国联期货中性情景(~490GW)。',
        quote:'"BNEF forecasts 649GW of new solar installations globally in 2026." — BNEF December 2025 outlook',
-       sources:[
-       ]},
-      {text:'事实②: 7830吨银浆需求能否核实?',status:'🟡',
+       sources:[]},
+      {text:'事实②: 7830吨银浆需求能否核实?',status:'\u{1F7E1}',
        finding:'国泰自建模型输出, 基于TOPCon占76%假设。因装机量基础(493GW)不正确, 耗银预测也需质疑。公开估算范围6028-9236吨, 7830在范围内但基础数据不对。',
        quote:'',sources:[]}
     ]},
-  '7830': {color:'🔴',claim:'同上',sources:['见493GW'],finding:'同上',verdict:'红'},
-
-  // ===== AI耗银 =====
-  '331': {color:'🟡',claim:'AI算力中心每GW耗银约331kg',structured:true,
-    conclusion:'🟡 方法未充分披露, 无法核实',
+  '7830': {color:'\u{1F534}',claim:'同上',sources:['见493GW'],finding:'同上',verdict:'红'},
+  '331': {color:'\u{1F7E1}',claim:'AI算力中心每GW耗银约331kg',structured:true,
+    conclusion:'\u{1F7E1} 方法未充分披露, 无法核实',
     subclaims:[
-      {text:'事实①: 331kg/GW的测算依据?',status:'🟡',
+      {text:'事实①: 331kg/GW的测算依据?',status:'\u{1F7E1}',
        finding:'国泰基于1000台DGXH100服务器(8000块H100 GPU)拆解估算硬件制造环节用银。方法论和假设未在报告中充分披露, 无法独立验证。',
        quote:'',sources:[]},
-      {text:'逻辑①: AI耗银是否是重要需求来源?',status:'🟢',
+      {text:'逻辑①: AI耗银是否是重要需求来源?',status:'\u{1F7E2}',
        finding:'目前规模远小于光伏(光伏耗银约7000-8000吨/年, AI耗银总量可能仅数百吨)。报告自己也标注"供参考"。',
        quote:'',sources:[]}
     ]},
-  '331kg': {color:'🟡',claim:'同上',sources:['见331'],finding:'同上',verdict:'黄'},
-
-  // ===== 标题逻辑验证 =====
-  '财政扩张侵蚀': {color:'🟢',claim:'财政扩张侵蚀美元信用',structured:true,
-    conclusion:'🟢 逻辑验证通过',
+  '331kg': {color:'\u{1F7E1}',claim:'同上',sources:['见331'],finding:'同上',verdict:'黄'},
+  '财政扩张侵蚀': {color:'\u{1F7E2}',claim:'财政扩张侵蚀美元信用',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过',
     subclaims:[
-      {text:'逻辑: 财政赤字扩张是否侵蚀美元信用?',status:'🟢',
+      {text:'逻辑: 财政赤字扩张是否侵蚀美元信用?',status:'\u{1F7E2}',
        finding:'是。赤字扩大→国债供给增加→美元购买力稀释预期→投资者转向实物资产对冲。CBO确认10年增赤字3.4万亿。',
        quote:'"CRFB estimates 2035 debt-to-GDP rising to 122%, revised upward." — CRFB',
        sources:[{title:'CRFB Debt Projections',author:'CRFB',url:'https://www.crfb.org/'}]}
     ]},
-  '流动性充裕放大': {color:'🟡',claim:'流动性充裕放大白银弹性',structured:true,
-    conclusion:'🟡 逻辑合理但依赖降息前提(N1已标红)',
+  '流动性充裕放大': {color:'\u{1F7E1}',claim:'流动性充裕放大白银弹性',structured:true,
+    conclusion:'\u{1F7E1} 逻辑合理但依赖降息前提(N1已标红)',
     subclaims:[
-      {text:'逻辑: 流动性充裕时白银弹性是否更大?',status:'🟡',
+      {text:'逻辑: 流动性充裕时白银弹性是否更大?',status:'\u{1F7E1}',
        finding:'方向成立——白银市场容量仅黄金44%, 同等资金流入时价格弹性更大。但"流动性充裕"的前提依赖降息(N1已标红)和扩表, 完整性被削弱。',
        quote:'"白银市场容量小, 2023年全球白银交易量2.6万亿美元, 仅为黄金5.9万亿美元的44%...同等资金冲击更大" — 方正证券《大类资产新视角(三)》p4',
        sources:[]}
     ]},
-  '三重共振导致': {color:'🟢',claim:'供需失衡+套利+ETF三重共振导致伦敦白银极度稀缺',structured:true,
-    conclusion:'🟢 逻辑验证通过: 2025.10月伦敦市场冻结事件是实证',
+  '三重共振导致': {color:'\u{1F7E2}',claim:'供需失衡+套利+ETF三重共振导致伦敦白银极度稀缺',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 2025.10月伦敦市场冻结事件是实证',
     subclaims:[
-      {text:'逻辑: 三者是否共同导致了极度稀缺?',status:'🟢',
+      {text:'逻辑: 三者是否共同导致了极度稀缺?',status:'\u{1F7E2}',
        finding:'是。2025.10.10伦敦白银市场一度零流动性, lease rate飙至40-100%, free-float仅~155Moz(约6周消费)。三个机制各自独立验证(E2/E4/E6), 且共同效果被市场事件证实(E7)。',
        quote:'"On October 10, 2025, the London silver market experienced a complete freeze with zero liquidity." — TD Securities via Kitco News',
        sources:[{title:'Silver supply warning: LBMA free-float depletion',author:'TD Securities / Kitco News, 2025.9.8',url:'https://www.kitco.com/'}]}
     ]},
-  '连续四年供需缺口导致': {color:'🟢',claim:'连续四年供需缺口导致显性库存降至42640吨',structured:true,
-    conclusion:'🟢 逻辑验证通过: 供需缺口→库存下降的因果机制有数据支持',
+  '连续四年供需缺口导致': {color:'\u{1F7E2}',claim:'连续四年供需缺口导致显性库存降至42640吨',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 供需缺口→库存下降的因果机制有数据支持',
     subclaims:[
-      {text:'逻辑: 供需缺口是否导致了库存下降?',status:'🟢',
+      {text:'逻辑: 供需缺口是否导致了库存下降?',status:'\u{1F7E2}',
        finding:'是。Silver Institute确认2021年以来连续deficit。COMEX库存从2020峰值346Moz降至2023底82Moz(-70%+)。LBMA库存降近40%。报告原文仅称"显性库存42640吨", 未做覆盖月数换算。',
        quote:'',
        sources:[{title:'Silver Supply and Demand Data',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}
     ]},
-  '供给短期收缩': {color:'🟢',claim:'供给短期收缩, 伴生矿结构制约增产',structured:true,
-    conclusion:'🟢 逻辑验证通过: 银价翻倍但产量反降9%',
+  '供给短期收缩': {color:'\u{1F7E2}',claim:'供给短期收缩, 伴生矿结构制约增产',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 银价翻倍但产量反降9%',
     subclaims:[
-      {text:'逻辑: 伴生矿结构是否真的制约增产?',status:'🟢',
+      {text:'逻辑: 伴生矿结构是否真的制约增产?',status:'\u{1F7E2}',
        finding:'是。2016年矿产银峰值900.1Moz→2024年降至819.7Moz, 下降9%, 同期银价翻倍。直接证明供给对银价不敏感。Primary mines仅占28%, 大部分产量由铜锌开采决策决定。',
        quote:'"Higher silver prices alone cannot increase output if base metal prices don\'t justify mining operations." — Crux Investor',
        sources:[]}
     ]},
-  '需求不会断崖': {color:'🔴',claim:'需求不会断崖, 光伏转型对冲装机下滑',structured:true,
-    conclusion:'🔴 逻辑方向合理但关键数据(N7装机量)验证不通过',
+  '需求不会断崖': {color:'\u{1F534}',claim:'需求不会断崖, 光伏转型对冲装机下滑',structured:true,
+    conclusion:'\u{1F534} 逻辑方向合理但关键数据(N7装机量)验证不通过',
     subclaims:[
-      {text:'逻辑: 光伏转型是否对冲装机下滑?',status:'🟡',
+      {text:'逻辑: 光伏转型是否对冲装机下滑?',status:'\u{1F7E1}',
        finding:'方向合理——PERC→TOPCon确实提升单GW耗银量。但报告使用的装机量493GW严重偏低(BNEF实际649GW), 导致整个需求分析的基础数据不可靠。',
        quote:'',sources:[]}
     ]},
-  '缺口持续但收敛': {color:'🔴',claim:'前瞻: 缺口持续但收敛, 中国管制加剧紧张',structured:true,
-    conclusion:'🔴 缺口数据(N12)验证不通过, 方向与Silver Institute相反',
+  '缺口持续但收敛': {color:'\u{1F534}',claim:'前瞻: 缺口持续但收敛, 中国管制加剧紧张',structured:true,
+    conclusion:'\u{1F534} 缺口数据(N12)验证不通过, 方向与Silver Institute相反',
     subclaims:[
-      {text:'逻辑: 缺口是否在收敛?',status:'🔴',
+      {text:'逻辑: 缺口是否在收敛?',status:'\u{1F534}',
        finding:'Silver Institute 2026报告显示缺口从40.3Moz(2025)扩大至46.3Moz(2026), 与报告的"收敛"方向相反。',
        quote:'"A sixth consecutive annual deficit of 46.3 million ounces in 2026." — Silver Institute',
        sources:[]}
     ]},
-
-  // ===== 降息→贵金属(标题逻辑) =====
-  '降息延续降低': {color:'🟢',claim:'降息延续降低贵金属持有成本',structured:true,
-    conclusion:'🟢 逻辑验证通过: 几十年学术研究支持, 但近年关系有所减弱',
+  '降息延续降低': {color:'\u{1F7E2}',claim:'降息延续降低贵金属持有成本',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 几十年学术研究支持, 但近年关系有所减弱',
     subclaims:[
-      {text:'逻辑①: 降息是否降低贵金属持有成本?',status:'🟢',
+      {text:'逻辑①: 降息是否降低贵金属持有成本?',status:'\u{1F7E2}',
        finding:'是。贵金属无票息, 持有的机会成本=无风险利率(国债收益率)。利率下行→机会成本降低→贵金属相对吸引力上升。这是资产定价的基本原理。',
        quote:'"Gold is a long-duration durable asset whose price has a strong inverse relationship with the long-term real interest rate." — Chicago Fed Letter No. 464',
        sources:[{title:'Chicago Fed Letter No. 464',author:'Barsky et al., Federal Reserve Bank of Chicago, Nov 2021',url:'https://www.chicagofed.org/publications/chicago-fed-letter/2021/464'}]},
-      {text:'逻辑②: 历史数据是否支持?',status:'🟢',
+      {text:'逻辑②: 历史数据是否支持?',status:'\u{1F7E2}',
        finding:'Erb & Harvey的NBER研究发现1997-2012年实际利率与实际金价相关系数-0.82。历史降息周期中贵金属表现: 2008-2015年金涨180%银涨220%; 2019-2020年金涨35%银涨45%。',
        quote:'"We find a correlation of -0.82 between real interest rates and real gold prices from 1997-2012." — Erb & Harvey, NBER Working Paper',
        sources:[{title:'The Golden Dilemma',author:'Erb & Harvey, NBER Working Paper No. 18706',url:'https://www.nber.org/system/files/working_papers/w18706/w18706.pdf'},{title:'Monetary policy transmission: Fed rate cut impact on precious metals',author:'Discovery Alert, 2026',url:'https://discoveryalert.com.au/monetary-policy-transmission-2026-fed-rate-cut-impact/'}]},
-      {text:'⚠ 反例: 近年关系减弱',status:'🟡',
+      {text:'⚠ 反例: 近年关系减弱',status:'\u{1F7E1}',
        finding:'2023-2024年高利率环境下金价照涨12%+, 因央行购金(贡献10-15%)和地缘风险(贡献~5%)覆盖了利率拖累。说明降息不是唯一驱动因子。',
        quote:'"The gold-real rate relationship is weaker than in the past, likely due to the increasing relevance of emerging market demand." — Oxford Economics / World Gold Council',
        sources:[{title:'Gold Mid-Year Outlook 2024',author:'World Gold Council',url:'https://www.gold.org/goldhub/research/gold-mid-year-outlook-2024'}]}
     ]},
-
-  // ===== 套利搬运: 事实底稿 =====
-  '关键矿产清单': {color:'🟢',claim:'2024底白银纳入关键矿产清单, 伦敦白银被搬至COMEX, 伦敦库存被虹吸',structured:true,
-    conclusion:'🟢 事实验证通过: 三项子声明均有独立证据',
+  '关键矿产清单': {color:'\u{1F7E2}',claim:'2024底白银纳入关键矿产清单, 伦敦白银被搬至COMEX, 伦敦库存被虹吸',structured:true,
+    conclusion:'\u{1F7E2} 事实验证通过: 三项子声明均有独立证据',
     subclaims:[
-      {text:'事实①: 白银被纳入关键矿产清单',status:'🟢',
+      {text:'事实①: 白银被纳入关键矿产清单',status:'\u{1F7E2}',
        finding:'USGS确实将白银纳入。报告写"2024底"时间有误(实际2025年), 但核心事实成立。',
        quote:'"The U.S. Geological Survey today published a final list of 50 critical minerals... Silver was added to the list for the first time."',
        sources:[{title:'Interior Department Releases Final 2025 List of Critical Minerals',author:'USGS News Release, 2025.11.6',url:'https://www.usgs.gov/news/science-snippet/interior-department-releases-final-2025-list-critical-minerals'}]},
-      {text:'事实②: 大量白银从伦敦被搬运至纽约COMEX',status:'🟢',
+      {text:'事实②: 大量白银从伦敦被搬运至纽约COMEX',status:'\u{1F7E2}',
        finding:'约225百万盎司从伦敦流入COMEX。COMEX库存2025.10.3达峰值532百万盎司。',
        quote:'"As firms anticipated tighter rules, inventories surged as traders rushed material into the U.S. before potential duties." — StoneX',
        sources:[
          {title:'Silver COMEX inventories almost back to pre-tariff levels',author:'StoneX, 2025.11.12',url:'https://www.stonex.com/en/market-intelligence/precious-metals-talking-points-110425-silver-comex-inventories-almost-back-to-pre-tariff-levels/'},
          {title:'COMEX Silver Warehouse Stocks',author:'CME Group',url:'https://www.cmegroup.com/delivery_reports/Silver_stocks.xls'}
        ]},
-      {text:'事实③: 伦敦库存被虹吸至历史低位',status:'🟢',
+      {text:'事实③: 伦敦库存被虹吸至历史低位',status:'\u{1F7E2}',
        finding:'伦敦可用商业库存降至2025.9月末136百万盎司历史低位。',
        quote:'"London faces 150-million-oz silver shortfall amid COMEX drain... a record low of 136 million oz."',
        sources:[{title:'London faces 150-million-oz silver shortfall amid COMEX drain',author:'Kitco News, 2025.10.23',url:'https://www.kitco.com/news/article/2025-10-23/london-faces-150-million-oz-silver-shortfall-amid-comex-drain-insider'}]}
     ]},
-
-  // ===== 套利搬运: 逻辑底稿(挂在标题节点) =====
-  '关税预期触发': {color:'🟢',claim:'关税预期触发伦敦白银向纽约大规模套利搬运',structured:true,
-    conclusion:'🟢 逻辑验证通过: 因果链有三重独立证据',
+  '关税预期触发': {color:'\u{1F7E2}',claim:'关税预期触发伦敦白银向纽约大规模套利搬运',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 因果链有三重独立证据',
     subclaims:[
-      {text:'逻辑①: 是否存在关税预期?',status:'🟢',
+      {text:'逻辑①: 是否存在关税预期?',status:'\u{1F7E2}',
        finding:'存在。2025.4.15行政令启动Section 232调查, 白银可能面临最高50%关税。',
        quote:'"The problem with silver thus far is that there is only one tariff classification." — StoneX',
        sources:[{title:'Precious Metals Talking Points: Silver COMEX inventories',author:'StoneX, 2025.11',url:'https://www.stonex.com/en/market-intelligence/precious-metals-talking-points-110425-silver-comex-inventories-almost-back-to-pre-tariff-levels/'}]},
-      {text:'逻辑②: 套利搬运是否由关税预期驱动?',status:'🟢',
+      {text:'逻辑②: 套利搬运是否由关税预期驱动?',status:'\u{1F7E2}',
        finding:'是。(a)COMEX-London价差飙至$1.05-1.10/oz; (b)搬运时间与关税消息吻合; (c)黄金关税豁免后套利立即停止=自然实验。',
        quote:'"There\'s a genuine shortage of silver in London, but you\'ve got 500 million ounces sitting in COMEX doing nothing." — Macquarie',
        sources:[{title:'Gold and Silver Fall as Trump Tariff EFP Blow-Out Fades',author:'BullionVault, 2024.12.17',url:'https://www.bullionvault.com/gold-news/gold-price-news/gold-silver-trump-tariffs-efp-121720241'},{title:'Gold Demand Trends Q1 2025',author:'World Gold Council',url:'https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q1-2025'}]}
     ]},
-  'COMEX': {color:'🟢',claim:'同"关键矿产清单"节点',sources:['见上'],finding:'见上',verdict:'绿'},
-
-  // ===== ETF锁仓: 事实+逻辑 =====
-  '23749': {color:'🟢',claim:'2025.12伦敦ETF持仓23749吨占LBMA约87%(推算: 23749÷27187)',structured:true,
-    conclusion:'🟢 锁仓事实成立(具体数字有偏差但不影响结论)',
+  'COMEX': {color:'\u{1F7E2}',claim:'同"关键矿产清单"节点',sources:['见上'],finding:'见上',verdict:'绿'},
+  '23749': {color:'\u{1F7E2}',claim:'2025.12伦敦ETF持仓23749吨占LBMA约87%(推算: 23749÷27187)',structured:true,
+    conclusion:'\u{1F7E2} 锁仓事实成立(具体数字有偏差但不影响结论)',
     subclaims:[
-      {text:'事实①: ETF持仓总量',status:'🟡',
+      {text:'事实①: ETF持仓总量',status:'\u{1F7E1}',
        finding:'23,749吨无法从公开ETF数据精确复现。最大单只SLV约16,060-16,600吨。但ETF占LBMA大部分库存是事实。',
        quote:'"Approximately 75% of London silver vault holdings were bars held for ETFs, with the non-ETF float stable at only ~140 million oz." — Jensen David analysis',
        sources:[{title:'How Much Silver Is Really Available as Free Float',author:'Jensen David, Substack, 2025',url:'https://jensendavid.substack.com/'}]},
-      {text:'事实②: 87%占比是否准确?',status:'🔴',
+      {text:'事实②: 87%占比是否准确?',status:'\u{1F534}',
        finding:'87%是2021年2月BullionStar的旧数据。2025年多个分析师估计为66-75%。',
        quote:'"Houston, We Have a Problem – 85% of Silver in London Already Held by ETFs" — BullionStar, Feb 3 2021',
        sources:[{title:'85% of Silver in London Held by ETFs',author:'Ronan Manly, BullionStar, 2021.2.3',url:'https://www.bullionstar.com/blogs/ronan-manly/houston-we-have-a-problem-85-of-silver-in-london-already-held-by-etfs/'}]}
     ]},
-  'ETF持仓': {color:'🟢',claim:'同上',sources:['见23749'],finding:'同上',verdict:'绿'},
-  '87%': {color:'🟢',claim:'同上',sources:['见23749'],finding:'同上',verdict:'绿'},
-  'ETF锁住': {color:'🟢',claim:'ETF锁住LBMA大部分库存, 自由流通量极低',structured:true,
-    conclusion:'🟢 逻辑验证通过: ETF锁仓→实物稀缺的机制有市场事件验证',
+  'ETF持仓': {color:'\u{1F7E2}',claim:'同上',sources:['见23749'],finding:'同上',verdict:'绿'},
+  '87%': {color:'\u{1F7E2}',claim:'同上',sources:['见23749'],finding:'同上',verdict:'绿'},
+  'ETF锁住': {color:'\u{1F7E2}',claim:'ETF锁住LBMA大部分库存, 自由流通量极低',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: ETF锁仓→实物稀缺的机制有市场事件验证',
     subclaims:[
-      {text:'逻辑①: ETF是否真的"锁住"实物?',status:'🟢',
+      {text:'逻辑①: ETF是否真的"锁住"实物?',status:'\u{1F7E2}',
        finding:'是。SLV prospectus明确禁止托管人(JPMorgan)出借或租赁ETF白银。Grantor trust结构下股东保留法律所有权。',
        quote:'"The custodian is not permitted to lend or lease the silver held by the trust." — SLV Prospectus, SEC filing',
        sources:[{title:'iShares Silver Trust 10-Q (FY2025)',author:'BlackRock / SEC',url:'https://www.sec.gov/Archives/edgar/data/0001330568/000143774925033436/slv20250930_10q.htm'}]},
-      {text:'逻辑②: 锁仓是否导致了实物稀缺?',status:'🟢',
+      {text:'逻辑②: 锁仓是否导致了实物稀缺?',status:'\u{1F7E2}',
        finding:'是。2025.10.10伦敦白银市场冻结1.5小时, 零流动性, lease rate飙至40-100%。Free float从2019年850Moz降至~200Moz。',
        quote:'"On October 10, 2025, the London silver market experienced a complete freeze with zero liquidity." — multiple sources',
        sources:[{title:'Silver lease rates plunge as historic squeeze eases',author:'Bloomberg, 2025.10.27',url:'https://www.bloomberg.com/news/articles/2025-10-27/silver-lease-rates-plunge-as-historic-market-squeeze-eases'},{title:'London silver market liquidity event',author:'BullionStar, 2025.10',url:'https://www.bullionstar.com/'}]}
     ]},
-
-  // ===== N10: Lease rate =====
-  'lease rate': {color:'🟢',claim:'2025.12.19伦敦白银lease rate 7.8%',structured:true,
-    conclusion:'🟢 多源交叉验证, 落在确认区间内',
+  'lease rate': {color:'\u{1F7E2}',claim:'2025.12.19伦敦白银lease rate 7.8%',structured:true,
+    conclusion:'\u{1F7E2} 多源交叉验证, 落在确认区间内',
     subclaims:[
-      {text:'事实①: 12月中旬lease rate水平',status:'🟢',
+      {text:'事实①: 12月中旬lease rate水平',status:'\u{1F7E2}',
        finding:'多个独立来源确认12月中旬lease rate在7-8%区间: 12.4 Gottlieb报7.3%, 12.11报7.5-8%, 12.18 Ikemizu报7-8%。7.8%在区间内。',
        quote:'"London silver lease rates generally ranging between 7% and 8%." — Bruce Ikemizu, JBMA, 2025.12.18',
        sources:[
          {title:'Silver Lease Rates Plunge as Historic Market Squeeze Eases',author:'Bloomberg, 2025.10.27',url:'https://www.bloomberg.com/news/articles/2025-10-27/silver-lease-rates-plunge-as-historic-market-squeeze-eases'}
        ]}
     ]},
-  '7.8%': {color:'🟢',claim:'同上',sources:['见lease rate'],finding:'同上',verdict:'绿'},
-  '9.8%': {color:'🟢',claim:'库存持仓比9.8%',sources:['上海黄金交易所公开数据'],finding:'交易所公开数据可查',verdict:'绿'},
-
-  // ===== 现货紧张确认(标题逻辑) =====
-  '多项市场指标确认': {color:'🟢',claim:'多项市场指标确认现货极度紧张',structured:true,
-    conclusion:'🟢 逻辑验证通过: 2025.10月伦敦市场冻结事件是三重共振的实证',
+  '7.8%': {color:'\u{1F7E2}',claim:'同上',sources:['见lease rate'],finding:'同上',verdict:'绿'},
+  '9.8%': {color:'\u{1F7E2}',claim:'库存持仓比9.8%',sources:['上海黄金交易所公开数据'],finding:'交易所公开数据可查',verdict:'绿'},
+  '多项市场指标确认': {color:'\u{1F7E2}',claim:'多项市场指标确认现货极度紧张',structured:true,
+    conclusion:'\u{1F7E2} 逻辑验证通过: 2025.10月伦敦市场冻结事件是三重共振的实证',
     subclaims:[
-      {text:'逻辑①: lease rate + 库存持仓比是否能确认紧张?',status:'🟢',
+      {text:'逻辑①: lease rate + 库存持仓比是否能确认紧张?',status:'\u{1F7E2}',
        finding:'是。lease rate是实物借贷紧张的直接指标; 库存持仓比是库存相对于衍生品头寸的比值, 越低说明实物越不足。两者从不同维度指向同一结论。',
        quote:'"LBMA free-float stockpiles could be depleted within seven months." — Daniel Ghali, TD Securities, via Kitco News, Sept 8 2025',
        sources:[{title:'Silver supply warning: LBMA free-float depletion',author:'TD Securities / Kitco News, 2025.9.8',url:'https://www.kitco.com/'}]}
     ]},
-
-  // ===== TD递延费 =====
-  'TD递延': {color:'🟢',claim:'TD递延费转空付多, 累库380吨',sources:['上海黄金交易所公开数据'],finding:'交易所公开数据可查',verdict:'绿'},
-  '累库380': {color:'🟢',claim:'同上',sources:['同上'],finding:'同上',verdict:'绿'},
-
-  // ===== N12: 缺口预测 =====
-  '4185': {color:'🔴',claim:'2026年缺口预计收敛至4185吨',structured:true,
-    conclusion:'🔴 数字和方向均与Silver Institute不匹配',
+  'TD递延': {color:'\u{1F7E2}',claim:'TD递延费转空付多, 累库380吨',sources:['上海黄金交易所公开数据'],finding:'交易所公开数据可查',verdict:'绿'},
+  '累库380': {color:'\u{1F7E2}',claim:'同上',sources:['同上'],finding:'同上',verdict:'绿'},
+  '4185': {color:'\u{1F534}',claim:'2026年缺口预计收敛至4185吨',structured:true,
+    conclusion:'\u{1F534} 数字和方向均与Silver Institute不匹配',
     subclaims:[
-      {text:'事实①: Silver Institute的2026年缺口预测?',status:'🔴',
+      {text:'事实①: Silver Institute的2026年缺口预测?',status:'\u{1F534}',
        finding:'World Silver Survey 2026报告2026年deficit为46.3Moz(约1,440吨), 较2025年40.3Moz(约1,252吨)扩大而非收敛。国泰的4,185吨(约134.5Moz)与之差近3倍, 方向也相反。',
        quote:'"The global silver market is expected to record a sixth consecutive annual deficit of 46.3 million ounces in 2026." — Silver Institute, April 2026',
        sources:[{title:'Global Silver Investment to Remain Strong in 2026',author:'Silver Institute, April 2026',url:'https://silverinstitute.org/global-silver-investment-to-remain-strong-in-2026-against-the-backdrop-of-a-sixth-consecutive-annual-market-deficit/'}]},
-      {text:'事实②: 国泰调整了什么?',status:'🟡',
+      {text:'事实②: 国泰调整了什么?',status:'\u{1F7E1}',
        finding:'国泰在世界白银协会原表基础上调整了光伏需求分项(自建模型)。但光伏装机假设(493GW)已被验证为偏低(N7红), 可能导致缺口估算偏大。',
        quote:'',sources:[]}
     ]},
-  '缺口预计': {color:'🔴',claim:'同上',sources:['见4185'],finding:'同上',verdict:'红'},
-
-  // ===== N11: 出口管制 =====
-  '出口许可证': {color:'🟡',claim:'2026.1.1起中国对白银实施出口许可证',structured:true,
-    conclusion:'🟡 核心事实正确, 但措辞误导(是"继续"而非新政)',
+  '缺口预计': {color:'\u{1F534}',claim:'同上',sources:['见4185'],finding:'同上',verdict:'红'},
+  '出口许可证': {color:'\u{1F7E1}',claim:'2026.1.1起中国对白银实施出口许可证',structured:true,
+    conclusion:'\u{1F7E1} 核心事实正确, 但措辞误导(是"继续"而非新政)',
     subclaims:[
-      {text:'事实①: 是否2026.1.1起实施出口许可证?',status:'🟢',
+      {text:'事实①: 是否2026.1.1起实施出口许可证?',status:'\u{1F7E2}',
        finding:'是。商务部公告2025年第69号确认。',
        quote:'"自2026年1月1日起, 继续暂停白银出口配额管理, 实行出口许可证管理。" — 商务部公告2025年第69号',
        sources:[{title:'商务部公告2025年第69号',author:'商务部, 2025.10.29',url:'https://www.mofcom.gov.cn/zcfb/dwmygl/art/2025/art_d939f5e193604b1aaf76aacc441a16f4.html'}]},
-      {text:'事实②: 这是新政策吗?',status:'🟡',
+      {text:'事实②: 这是新政策吗?',status:'\u{1F7E1}',
        finding:'不是新政策。商务部原文用"继续"二字, 该制度自2019年起已实施, 每年例行续期。获批企业从42家增至44家。',
        quote:'"继续暂停白银出口配额管理" — 关键词"继续"表明这不是新政策',
        sources:[]}
     ]},
-  '商务部': {color:'🟡',claim:'同上',sources:['见出口许可证'],finding:'同上',verdict:'黄'},
-  '23749': {color:'🟢',claim:'ETF持仓23749吨占LBMA约87%(推算: 23749÷27187)',sources:['BullionStar 2021.2: 85%占比(旧数据)','Jensen David 2025: ~66-75%','SLV Prospectus: 禁止出借ETF白银','2025.10.10伦敦市场冻结1.5小时'],finding:'87%是2021年旧数据(实际~66-75%)。但ETF锁仓事实通过逻辑验证: 市场冻结+SLV禁止出借确认。',verdict:'绿: 逻辑E6验证通过(数据N9有偏差)'},
-  'ETF持仓': {color:'🟢',claim:'同上',sources:['同上'],finding:'同上',verdict:'绿'},
-  'lease rate': {color:'🟢',claim:'lease rate 7.8%',sources:['Bruce Ikemizu (JBMA) 2025.12.18: 7-8%','Robert Gottlieb (ex-JPMorgan) 2025.12.4: 7.3%','Bloomberg 2025.10.27'],finding:'多源交叉验证, 7.8%落在12月中旬确认的7-8%区间内',verdict:'绿: 多源验证'},
-  '7.8%': {color:'🟢',claim:'同上',sources:['同上'],finding:'同上',verdict:'绿'},
-  '9.8%': {color:'🟢',claim:'库存持仓比9.8%',sources:['上海黄金交易所公开数据'],finding:'交易所公开数据可查',verdict:'绿'},
-  'TD递延': {color:'🟢',claim:'TD递延费转空付多, 累库380吨',sources:['上海黄金交易所'],finding:'交易所公开数据',verdict:'绿'},
-  '累库380': {color:'🟢',claim:'同上',sources:['同上'],finding:'同上',verdict:'绿'},
-  '4185': {color:'🔴',claim:'2026年缺口收敛至4185吨',sources:['Silver Institute 2026.4: 46.3Moz(~1440吨), 较2025年40.3Moz扩大'],finding:'报告说缺口"收敛"至4185吨; Silver Institute说缺口扩大至1440吨。数字差近3倍, 方向相反。',verdict:'红: 数字和方向均不匹配'},
-  '缺口预计': {color:'🔴',claim:'同上',sources:['同上'],finding:'同上',verdict:'红'},
-  '出口许可证': {color:'🟡',claim:'2026.1.1中国实施出口许可证',sources:['商务部公告2025年第69号 (mofcom.gov.cn): "继续暂停配额管理, 实行出口许可证管理"'],finding:'事实正确, 但商务部原文用"继续"——该制度自2019年起已实施, 非新政。获批企业从42家增至44家。',verdict:'黄: 事实对但措辞误导'},
-  '商务部': {color:'🟡',claim:'同上',sources:['同上'],finding:'同上',verdict:'黄'}
+  '商务部': {color:'\u{1F7E1}',claim:'同上',sources:['见出口许可证'],finding:'同上',verdict:'黄'},
+  '中国管制加剧': {color:'\u{1F7E1}',claim:'中国管制加剧紧张',sources:['见出口许可证'],finding:'同上',verdict:'黄'}
+};
+
+const workpapers_en = {
+  'FedWatch': {color:'\u{1F534}',claim:'Fed expected to cut rates twice in 2026, total 50bp to 3.25%',structured:true,
+    conclusion:'\u{1F534} Data verification failed: outdated data and misattributed source',
+    subclaims:[
+      {text:'Fact 1: Does FedWatch show "two cuts of 50bp" as consensus?',status:'\u{1F534}',
+       finding:'No. FedWatch shows probability distributions, not a single forecast. As of Feb 2026, probability of cumulative 50bp cut was only 32.5%, far from consensus.',
+       quote:'"CME FedWatch Tool tracks the probabilities of changes to the Fed rate, as implied by 30-Day Fed Funds futures prices." — CME Group',
+       sources:[{title:'CME FedWatch Tool',author:'CME Group',url:'https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html'}]},
+      {text:'Fact 2: As of May 2026, does the market still expect rate cuts?',status:'\u{1F534}',
+       finding:'No. As of late May 2026, FedWatch shows 67.3% probability of zero cuts, only 8% probability of two cuts. Market expectations have shifted dramatically.',
+       quote:'"Fed funds futures currently price in a 67.3% probability of no rate changes in 2026." — MacroMicro/FedWatch data',
+       sources:[{title:'US FedWatch Rate Forecast 2026',author:'MacroMicro',url:'https://en.macromicro.me/charts/144242/us-number-yearend-rate-2026'}]}
+    ]},
+  '3.25': {color:'\u{1F534}',claim:'Same as "FedWatch"',sources:['See FedWatch'],finding:'Same as above',verdict:'Red'},
+  '3.4 trillion': {color:'\u{1F7E2}',claim:'"One Big Beautiful Bill" enacted, adding $3.4 trillion deficit over 10 years',structured:true,
+    conclusion:'\u{1F7E2} Exact match with CBO official data',
+    subclaims:[
+      {text:'Fact 1: Does CBO confirm $3.4 trillion?',status:'\u{1F7E2}',
+       finding:'Yes. CBO final score (Publication 61570) estimates the law increases primary deficit by $3.4 trillion over FY2025-2034.',
+       quote:'"CBO estimates the law will increase primary budget deficits by $3.4 trillion over FY 2025-2034." — CBO Publication 61570',
+       sources:[{title:'Estimated Budgetary Effects of the One Big Beautiful Bill Act',author:'Congressional Budget Office, July 2025',url:'https://www.cbo.gov/publication/61570'}]},
+      {text:'Fact 2: Is there independent cross-verification?',status:'\u{1F7E2}',
+       finding:'CRFB independently confirms $3.4 trillion (primary), noting it rises to $4.1 trillion including interest.',
+       quote:'"Including interest costs, the total rises to $4.1 trillion." — CRFB',
+       sources:[{title:'CRFB Analysis of One Big Beautiful Bill Act',author:'Committee for a Responsible Federal Budget',url:'https://www.crfb.org/'}]}
+    ]},
+  'CBO': {color:'\u{1F7E2}',claim:'Same as above',sources:['See $3.4 trillion'],finding:'Same as above',verdict:'Green'},
+  'Dual easing': {color:'\u{1F7E1}',claim:'Dual fiscal-monetary easing, Fed restarts balance sheet expansion, bullish precious metals',structured:true,
+    conclusion:'\u{1F7E1} Composite reasoning, not a single verifiable data point',
+    subclaims:[
+      {text:'Fact 1: Did the Fed restart balance sheet expansion?',status:'\u{1F7E1}',
+       finding:'The Dec 2025 FOMC announced restart of balance sheet expansion. However, this is more of a reserve management operation; its actual macro liquidity impact is debated.',
+       quote:'"The Fed will begin purchasing short-term Treasuries to maintain adequate reserve levels." — FOMC Statement, Dec 2025',
+       sources:[{title:'FOMC Statement December 2025',author:'Federal Reserve',url:'https://www.federalreserve.gov/'}]},
+      {text:'Logic 1: Does dual easing always benefit precious metals?',status:'\u{1F7E1}',
+       finding:'Historically mostly true (2008-2015, 2020), but not absolute. The rate cut premise (N1) is already flagged red, weakening the "dual easing" thesis.',
+       quote:'',
+       sources:[{title:'Gold and Real Yields historical analysis',author:'In Gold We Trust Report',url:'https://ingoldwetrust.report/'}]}
+    ]},
+  'bullish precious metals': {color:'\u{1F7E1}',claim:'Same as above',sources:['See Dual easing'],finding:'Same as above',verdict:'Yellow'},
+  '42640': {color:'\u{1F7E1}',claim:'As of Nov 2025, global visible silver inventory 42,640 tonnes',structured:true,
+    conclusion:'\u{1F7E1} Number in reasonable range, but original source is paywalled',
+    subclaims:[
+      {text:'Fact 1: LBMA inventory',status:'\u{1F7E2}',
+       finding:'LBMA official: 27,187 tonnes at end-Nov 2025.',
+       quote:'"Silver held in London vaults totalled 27,187 tonnes at end-November 2025." — LBMA',
+       sources:[{title:'London Vault Data',author:'LBMA',url:'https://www.lbma.org.uk/prices-and-data/london-vault-data'}]},
+      {text:'Fact 2: COMEX+SHFE+SGE inventory',status:'\u{1F7E1}',
+       finding:'COMEX ~14,300-15,000t (interpolated from Oct 15,005t and Jan 12,630t); SHFE ~559t; SGE ~716t. Total ~42,762-43,462t; 42,640 is within range.',
+       quote:'',
+       sources:[{title:'COMEX Silver Warehouse Stocks',author:'CME Group',url:'https://www.cmegroup.com/delivery_reports/Silver_stocks.xls'}]},
+      {text:'Fact 3: Can Wind/SMM raw data be directly verified?',status:'\u{1F7E1}',
+       finding:'Wind and SMM are both paywalled terminals. The exact figure 42,640 cannot be directly verified, but public exchange data aggregation is consistent.',
+       quote:'',
+       sources:[]}
+    ]},
+  '74%': {color:'\u{1F534}',claim:'In 2024, 74% of global silver from by-product mining; 10 of 15 major miners cut output',structured:true,
+    conclusion:'\u{1F534} By-product share close but slightly high; miner output cuts contradict public data',
+    subclaims:[
+      {text:'Fact 1: Is by-product share 74%?',status:'\u{1F7E1}',
+       finding:'Close but slightly high. World Silver Survey 2025: primary mines 27.8%, so by-product ~72.2%. 2pp difference, doesn\'t change conclusion direction.',
+       quote:'"Primary silver mines accounted for approximately 27.8% of global silver mine production in 2024." — Metals Focus / Silver Institute',
+       sources:[{title:'World Silver Survey 2025',author:'Metals Focus / Silver Institute, April 2025',url:'https://silverinstitute.org/wp-content/uploads/2025/04/World_Silver_Survey-2025.pdf'}]},
+      {text:'Fact 2: Did 10 of 15 miners cut output guidance?',status:'\u{1F534}',
+       finding:'Cannot verify, and public data shows opposite trend. Pan American exceeded guidance (22.8Moz); Hecla set records (17Moz, +5%); First Majestic exceeded raised guidance (31.1Moz); Silvercorp set records (~6.9Moz). Mining Visuals tracked 7 miners, only Fresnillo cut (for 2026).',
+       quote:'"Pan American Silver exceeded full-year guidance with 22.8 million ounces." — Pan American Silver 2025 Annual Report',
+       sources:[
+         {title:'Pan American Silver Achieves 2025 Production Guidance',author:'Pan American Silver, 2026.1.20',url:'https://panamericansilver.com/news/pan-american-silver-achieves-2025-production-guidance-and-provides-guidance-for-2026/'},
+         {title:'Silver miner Hecla achieves multiple records in 2025',author:'Mining Weekly, 2026.2.18',url:'https://www.miningweekly.com/article/silver-miner-hecla-achieves-multiple-records-in-2025-2026-02-18'},
+         {title:'First Majestic Reports 2025 Production and 2026 Outlook',author:'First Majestic Silver, 2026.1',url:'https://www.firstmajestic.com/investors/news-releases/first-majestic-reports-2025-production-and-2026-outlook-increases-dividend'}
+       ]}
+    ]},
+  '15 major': {color:'\u{1F534}',claim:'Same as above',sources:['See 74%'],finding:'Same as above',verdict:'Red'},
+  '10 cut': {color:'\u{1F534}',claim:'Same as above',sources:['See 74%'],finding:'Same as above',verdict:'Red'},
+  '27073': {color:'\u{1F7E1}',claim:'2026 global mine silver est. 27,073t (+1.67%)',structured:true,
+    conclusion:'\u{1F7E1} Paywalled source, deviates from public sources',
+    subclaims:[
+      {text:'Fact 1: Does Silver Institute forecast match?',status:'\u{1F7E1}',
+       finding:'No. World Silver Survey 2026 forecasts 844.1Moz (~26,255t, -0.3%), below Guotai\'s 27,073t (~870Moz). ~3% gap, opposite direction (+1.67% vs -0.3%).',
+       quote:'"Global silver mine production is forecast at 844.1 million ounces in 2026, a slight decline of 0.3%." — World Silver Survey 2026',
+       sources:[{title:'World Silver Survey 2026',author:'Metals Focus / Silver Institute, April 2026',url:'https://silverinstitute.org/silver-supply-demand/'}]},
+      {text:'Fact 2: Can WoodMac raw data be verified?',status:'\u{1F7E1}',
+       finding:'WoodMackenzie is paywalled. Guotai derived figures from WoodMac Cu/Zn forecasts + by-product ratios; methodology may differ from Silver Institute.',
+       quote:'',sources:[]}
+    ]},
+  'CAPEX': {color:'\u{1F7E1}',claim:'CAPEX up to $29.2B, but capacity release takes 1-2 years',structured:true,
+    conclusion:'\u{1F7E1} Has source (company reports) but not independently verified per company',
+    subclaims:[
+      {text:'Fact 1: Is CAPEX recovering?',status:'\u{1F7E1}',
+       finding:'Guotai aggregated 15 miners\' annual reports totaling $29.2B. Not independently verified per company, but direction aligns with industry reporting.',
+       quote:'',sources:[]},
+      {text:'Logic 1: Does CAPEX->capacity release take 1-2 years?',status:'\u{1F7E2}',
+       finding:'Mining capital cycle consensus: investment to production typically 1-2 years (brownfield) to 10+ years (greenfield).',
+       quote:'"New silver mine development now takes an average of 10+ years from exploration to production." — Numismatic News',
+       sources:[]}
+    ]},
+  '29.2B': {color:'\u{1F7E1}',claim:'Same as above',sources:['See CAPEX'],finding:'Same as above',verdict:'Yellow'},
+  '493GW': {color:'\u{1F534}',claim:'2026 solar installations 493GW; silver paste demand 7,830t',structured:true,
+    conclusion:'\u{1F534} Installation figure significantly too low and misattributed; silver estimate based on wrong premise',
+    subclaims:[
+      {text:'Fact 1: Is BNEF\'s 2026 solar forecast 493GW?',status:'\u{1F534}',
+       finding:'No. BNEF latest forecast is 649GW (DC), far above 493GW. IEA forecasts ~540GW, CPIA floor ~500GW. 493GW matches no known BNEF forecast; closer to Guolian Futures neutral scenario (~490GW).',
+       quote:'"BNEF forecasts 649GW of new solar installations globally in 2026." — BNEF December 2025 outlook',
+       sources:[]},
+      {text:'Fact 2: Can 7,830t silver paste demand be verified?',status:'\u{1F7E1}',
+       finding:'Guotai proprietary model output based on TOPCon 76% share assumption. Since the installation base (493GW) is incorrect, the silver estimate must also be questioned. Public estimates range 6,028-9,236t; 7,830 is in range but built on wrong foundation.',
+       quote:'',sources:[]}
+    ]},
+  '7830': {color:'\u{1F534}',claim:'Same as above',sources:['See 493GW'],finding:'Same as above',verdict:'Red'},
+  '331': {color:'\u{1F7E1}',claim:'AI data centers consume ~331kg silver per GW',structured:true,
+    conclusion:'\u{1F7E1} Methodology not fully disclosed, cannot verify',
+    subclaims:[
+      {text:'Fact 1: Basis for 331kg/GW estimate?',status:'\u{1F7E1}',
+       finding:'Guotai estimated based on teardown of 1,000 DGX H100 servers (8,000 H100 GPUs) for hardware manufacturing silver usage. Methodology and assumptions not fully disclosed in the report.',
+       quote:'',sources:[]},
+      {text:'Logic 1: Is AI silver consumption a significant demand source?',status:'\u{1F7E2}',
+       finding:'Currently far smaller than solar (solar ~7,000-8,000t/yr; AI total likely only hundreds of tonnes). The report itself notes "for reference only".',
+       quote:'',sources:[]}
+    ]},
+  '331kg': {color:'\u{1F7E1}',claim:'Same as above',sources:['See 331'],finding:'Same as above',verdict:'Yellow'},
+  'Fiscal expansion erodes': {color:'\u{1F7E2}',claim:'Fiscal expansion erodes USD credibility',structured:true,
+    conclusion:'\u{1F7E2} Logic verified',
+    subclaims:[
+      {text:'Logic: Does fiscal deficit expansion erode USD credibility?',status:'\u{1F7E2}',
+       finding:'Yes. Larger deficit -> more Treasury supply -> USD purchasing power dilution expectations -> investors shift to real assets. CBO confirms $3.4T added deficit over 10 years.',
+       quote:'"CRFB estimates 2035 debt-to-GDP rising to 122%, revised upward." — CRFB',
+       sources:[{title:'CRFB Debt Projections',author:'CRFB',url:'https://www.crfb.org/'}]}
+    ]},
+  'Ample liquidity amplifies': {color:'\u{1F7E1}',claim:'Ample liquidity amplifies silver elasticity',structured:true,
+    conclusion:'\u{1F7E1} Logic sound but depends on rate cut premise (N1 flagged red)',
+    subclaims:[
+      {text:'Logic: Is silver more elastic when liquidity is ample?',status:'\u{1F7E1}',
+       finding:'Direction holds -- silver market cap is only 44% of gold; same capital inflow causes larger price moves. But "ample liquidity" premise depends on rate cuts (N1 red) and QE; thesis integrity weakened.',
+       quote:'"Silver market cap small: 2023 global silver trading $2.6T, only 44% of gold\'s $5.9T... same capital shock has larger impact" — Founder Securities',
+       sources:[]}
+    ]},
+  'Triple resonance causes': {color:'\u{1F7E2}',claim:'Supply-demand imbalance + arbitrage + ETF triple resonance causes extreme London silver scarcity',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: Oct 2025 London market freeze is empirical evidence',
+    subclaims:[
+      {text:'Logic: Do all three together cause extreme scarcity?',status:'\u{1F7E2}',
+       finding:'Yes. On Oct 10, 2025, London silver market had zero liquidity for 1.5 hours; lease rate spiked to 40-100%; free-float only ~155Moz (~6 weeks consumption). Each mechanism independently verified (E2/E4/E6), combined effect confirmed by market event (E7).',
+       quote:'"On October 10, 2025, the London silver market experienced a complete freeze with zero liquidity." — TD Securities via Kitco News',
+       sources:[{title:'Silver supply warning: LBMA free-float depletion',author:'TD Securities / Kitco News, 2025.9.8',url:'https://www.kitco.com/'}]}
+    ]},
+  'Four consecutive years of deficit': {color:'\u{1F7E2}',claim:'Four consecutive years of supply-demand deficit reduced visible inventory to 42,640t',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: deficit -> inventory decline causation supported by data',
+    subclaims:[
+      {text:'Logic: Did supply-demand deficit cause inventory decline?',status:'\u{1F7E2}',
+       finding:'Yes. Silver Institute confirms continuous deficit since 2021. COMEX inventory fell from 2020 peak 346Moz to 82Moz by end 2023 (-70%+). LBMA inventory down ~40%.',
+       quote:'',
+       sources:[{title:'Silver Supply and Demand Data',author:'Silver Institute',url:'https://silverinstitute.org/silver-supply-demand/'}]}
+    ]},
+  'Short-term supply contraction': {color:'\u{1F7E2}',claim:'Short-term supply contraction, by-product structure constrains output growth',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: silver price doubled but output fell 9%',
+    subclaims:[
+      {text:'Logic: Does by-product structure truly constrain output growth?',status:'\u{1F7E2}',
+       finding:'Yes. Mine silver peaked at 900.1Moz in 2016, fell to 819.7Moz in 2024 (-9%) while silver price doubled. Directly proves supply is inelastic to silver price. Primary mines only 28%; most output driven by Cu/Zn mining decisions.',
+       quote:'"Higher silver prices alone cannot increase output if base metal prices don\'t justify mining operations." — Crux Investor',
+       sources:[]}
+    ]},
+  'Demand won\'t cliff': {color:'\u{1F534}',claim:'Demand won\'t cliff-drop; solar tech transition offsets installation decline',structured:true,
+    conclusion:'\u{1F534} Logic direction sound but key data (N7 installations) fails verification',
+    subclaims:[
+      {text:'Logic: Does solar tech transition offset installation decline?',status:'\u{1F7E1}',
+       finding:'Direction sound -- PERC->TOPCon does increase silver per GW. But the report\'s 493GW installation figure is significantly too low (BNEF actual 649GW), making the entire demand analysis unreliable.',
+       quote:'',sources:[]}
+    ]},
+  'Deficit persists but narrows': {color:'\u{1F534}',claim:'Outlook: Deficit persists but narrows; China export controls tighten supply',structured:true,
+    conclusion:'\u{1F534} Deficit data (N12) fails verification; direction opposite to Silver Institute',
+    subclaims:[
+      {text:'Logic: Is the deficit narrowing?',status:'\u{1F534}',
+       finding:'Silver Institute 2026 report shows deficit widening from 40.3Moz (2025) to 46.3Moz (2026), opposite to the report\'s "narrowing" claim.',
+       quote:'"A sixth consecutive annual deficit of 46.3 million ounces in 2026." — Silver Institute',
+       sources:[]}
+    ]},
+  'Rate cuts continue to reduce': {color:'\u{1F7E2}',claim:'Rate cuts continue to reduce precious metals holding cost',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: decades of academic research support, but relationship weakened recently',
+    subclaims:[
+      {text:'Logic 1: Do rate cuts reduce precious metals holding cost?',status:'\u{1F7E2}',
+       finding:'Yes. Precious metals have no coupon; opportunity cost = risk-free rate (Treasury yields). Lower rates -> lower opportunity cost -> precious metals become relatively more attractive. Basic asset pricing principle.',
+       quote:'"Gold is a long-duration durable asset whose price has a strong inverse relationship with the long-term real interest rate." — Chicago Fed Letter No. 464',
+       sources:[{title:'Chicago Fed Letter No. 464',author:'Barsky et al., Federal Reserve Bank of Chicago, Nov 2021',url:'https://www.chicagofed.org/publications/chicago-fed-letter/2021/464'}]},
+      {text:'Logic 2: Does historical data support this?',status:'\u{1F7E2}',
+       finding:'Erb & Harvey NBER research found -0.82 correlation between real rates and real gold prices (1997-2012). Historical rate cut cycles: 2008-2015 gold +180%, silver +220%; 2019-2020 gold +35%, silver +45%.',
+       quote:'"We find a correlation of -0.82 between real interest rates and real gold prices from 1997-2012." — Erb & Harvey, NBER Working Paper',
+       sources:[{title:'The Golden Dilemma',author:'Erb & Harvey, NBER Working Paper No. 18706',url:'https://www.nber.org/system/files/working_papers/w18706/w18706.pdf'},{title:'Monetary policy transmission: Fed rate cut impact on precious metals',author:'Discovery Alert, 2026',url:'https://discoveryalert.com.au/monetary-policy-transmission-2026-fed-rate-cut-impact/'}]},
+      {text:'Caveat: Relationship weakened in recent years',status:'\u{1F7E1}',
+       finding:'2023-2024 gold rose 12%+ despite high rates, as central bank buying (10-15%) and geopolitical risk (~5%) offset rate headwinds. Rate cuts are not the only driver.',
+       quote:'"The gold-real rate relationship is weaker than in the past, likely due to the increasing relevance of emerging market demand." — Oxford Economics / World Gold Council',
+       sources:[{title:'Gold Mid-Year Outlook 2024',author:'World Gold Council',url:'https://www.gold.org/goldhub/research/gold-mid-year-outlook-2024'}]}
+    ]},
+  'critical minerals list': {color:'\u{1F7E2}',claim:'Late 2024 silver added to critical minerals list; London silver shipped to COMEX; London inventory siphoned',structured:true,
+    conclusion:'\u{1F7E2} Facts verified: all three sub-claims have independent evidence',
+    subclaims:[
+      {text:'Fact 1: Was silver added to critical minerals list?',status:'\u{1F7E2}',
+       finding:'USGS did add silver. Report says "late 2024" but it was actually 2025; core fact stands.',
+       quote:'"The U.S. Geological Survey today published a final list of 50 critical minerals... Silver was added to the list for the first time."',
+       sources:[{title:'Interior Department Releases Final 2025 List of Critical Minerals',author:'USGS News Release, 2025.11.6',url:'https://www.usgs.gov/news/science-snippet/interior-department-releases-final-2025-list-critical-minerals'}]},
+      {text:'Fact 2: Was large-scale silver moved from London to COMEX?',status:'\u{1F7E2}',
+       finding:'~225Moz flowed from London to COMEX. COMEX inventory peaked at 532Moz on Oct 3, 2025.',
+       quote:'"As firms anticipated tighter rules, inventories surged as traders rushed material into the U.S. before potential duties." — StoneX',
+       sources:[
+         {title:'Silver COMEX inventories almost back to pre-tariff levels',author:'StoneX, 2025.11.12',url:'https://www.stonex.com/en/market-intelligence/precious-metals-talking-points-110425-silver-comex-inventories-almost-back-to-pre-tariff-levels/'},
+         {title:'COMEX Silver Warehouse Stocks',author:'CME Group',url:'https://www.cmegroup.com/delivery_reports/Silver_stocks.xls'}
+       ]},
+      {text:'Fact 3: Was London inventory siphoned to historic lows?',status:'\u{1F7E2}',
+       finding:'London available commercial inventory fell to 136Moz historic low by end-Sept 2025.',
+       quote:'"London faces 150-million-oz silver shortfall amid COMEX drain... a record low of 136 million oz."',
+       sources:[{title:'London faces 150-million-oz silver shortfall amid COMEX drain',author:'Kitco News, 2025.10.23',url:'https://www.kitco.com/news/article/2025-10-23/london-faces-150-million-oz-silver-shortfall-amid-comex-drain-insider'}]}
+    ]},
+  'Tariff expectations trigger': {color:'\u{1F7E2}',claim:'Tariff expectations trigger massive London-to-New York silver arbitrage',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: causal chain has triple independent evidence',
+    subclaims:[
+      {text:'Logic 1: Were there tariff expectations?',status:'\u{1F7E2}',
+       finding:'Yes. April 15, 2025 executive order launched Section 232 investigation; silver could face up to 50% tariff.',
+       quote:'"The problem with silver thus far is that there is only one tariff classification." — StoneX',
+       sources:[{title:'Precious Metals Talking Points: Silver COMEX inventories',author:'StoneX, 2025.11',url:'https://www.stonex.com/en/market-intelligence/precious-metals-talking-points-110425-silver-comex-inventories-almost-back-to-pre-tariff-levels/'}]},
+      {text:'Logic 2: Was the arbitrage driven by tariff expectations?',status:'\u{1F7E2}',
+       finding:'Yes. (a) COMEX-London spread spiked to $1.05-1.10/oz; (b) shipment timing matches tariff news; (c) gold tariff exemption immediately stopped arbitrage = natural experiment.',
+       quote:'"There\'s a genuine shortage of silver in London, but you\'ve got 500 million ounces sitting in COMEX doing nothing." — Macquarie',
+       sources:[{title:'Gold and Silver Fall as Trump Tariff EFP Blow-Out Fades',author:'BullionVault, 2024.12.17',url:'https://www.bullionvault.com/gold-news/gold-price-news/gold-silver-trump-tariffs-efp-121720241'},{title:'Gold Demand Trends Q1 2025',author:'World Gold Council',url:'https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q1-2025'}]}
+    ]},
+  'COMEX': {color:'\u{1F7E2}',claim:'Same as "critical minerals list" node',sources:['See above'],finding:'See above',verdict:'Green'},
+  '23749': {color:'\u{1F7E2}',claim:'Dec 2025 London ETF holdings 23,749t = ~87% of LBMA (23,749/27,187)',structured:true,
+    conclusion:'\u{1F7E2} Lock-up fact holds (specific numbers have deviation but don\'t change conclusion)',
+    subclaims:[
+      {text:'Fact 1: ETF holdings total',status:'\u{1F7E1}',
+       finding:'23,749t cannot be precisely replicated from public ETF data. Largest single ETF (SLV) ~16,060-16,600t. But ETFs holding most LBMA inventory is factual.',
+       quote:'"Approximately 75% of London silver vault holdings were bars held for ETFs, with the non-ETF float stable at only ~140 million oz." — Jensen David analysis',
+       sources:[{title:'How Much Silver Is Really Available as Free Float',author:'Jensen David, Substack, 2025',url:'https://jensendavid.substack.com/'}]},
+      {text:'Fact 2: Is 87% share accurate?',status:'\u{1F534}',
+       finding:'87% comes from a Feb 2021 BullionStar figure. Multiple 2025 analysts estimate 66-75%.',
+       quote:'"Houston, We Have a Problem – 85% of Silver in London Already Held by ETFs" — BullionStar, Feb 3 2021',
+       sources:[{title:'85% of Silver in London Held by ETFs',author:'Ronan Manly, BullionStar, 2021.2.3',url:'https://www.bullionstar.com/blogs/ronan-manly/houston-we-have-a-problem-85-of-silver-in-london-already-held-by-etfs/'}]}
+    ]},
+  'ETF holdings': {color:'\u{1F7E2}',claim:'Same as above',sources:['See 23749'],finding:'Same as above',verdict:'Green'},
+  '87%': {color:'\u{1F7E2}',claim:'Same as above',sources:['See 23749'],finding:'Same as above',verdict:'Green'},
+  'ETFs lock up': {color:'\u{1F7E2}',claim:'ETFs lock up most LBMA inventory, extremely low free float',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: ETF lock-up -> physical scarcity mechanism confirmed by market events',
+    subclaims:[
+      {text:'Logic 1: Do ETFs truly "lock up" physical silver?',status:'\u{1F7E2}',
+       finding:'Yes. SLV prospectus explicitly prohibits custodian (JPMorgan) from lending or leasing ETF silver. Grantor trust structure preserves shareholders\' legal ownership.',
+       quote:'"The custodian is not permitted to lend or lease the silver held by the trust." — SLV Prospectus, SEC filing',
+       sources:[{title:'iShares Silver Trust 10-Q (FY2025)',author:'BlackRock / SEC',url:'https://www.sec.gov/Archives/edgar/data/0001330568/000143774925033436/slv20250930_10q.htm'}]},
+      {text:'Logic 2: Did lock-up cause physical scarcity?',status:'\u{1F7E2}',
+       finding:'Yes. Oct 10, 2025 London silver market froze for 1.5 hours with zero liquidity; lease rate spiked to 40-100%. Free float fell from 850Moz (2019) to ~200Moz.',
+       quote:'"On October 10, 2025, the London silver market experienced a complete freeze with zero liquidity." — multiple sources',
+       sources:[{title:'Silver lease rates plunge as historic squeeze eases',author:'Bloomberg, 2025.10.27',url:'https://www.bloomberg.com/news/articles/2025-10-27/silver-lease-rates-plunge-as-historic-market-squeeze-eases'},{title:'London silver market liquidity event',author:'BullionStar, 2025.10',url:'https://www.bullionstar.com/'}]}
+    ]},
+  'lease rate': {color:'\u{1F7E2}',claim:'London silver lease rate 7.8% on Dec 19, 2025',structured:true,
+    conclusion:'\u{1F7E2} Multi-source cross-verified, falls within confirmed range',
+    subclaims:[
+      {text:'Fact 1: Mid-December lease rate level',status:'\u{1F7E2}',
+       finding:'Multiple independent sources confirm mid-Dec lease rate at 7-8% range: Dec 4 Gottlieb reported 7.3%, Dec 11 reported 7.5-8%, Dec 18 Ikemizu reported 7-8%. 7.8% falls within range.',
+       quote:'"London silver lease rates generally ranging between 7% and 8%." — Bruce Ikemizu, JBMA, 2025.12.18',
+       sources:[
+         {title:'Silver Lease Rates Plunge as Historic Market Squeeze Eases',author:'Bloomberg, 2025.10.27',url:'https://www.bloomberg.com/news/articles/2025-10-27/silver-lease-rates-plunge-as-historic-market-squeeze-eases'}
+       ]}
+    ]},
+  '7.8%': {color:'\u{1F7E2}',claim:'Same as above',sources:['See lease rate'],finding:'Same as above',verdict:'Green'},
+  '9.8%': {color:'\u{1F7E2}',claim:'Inventory/position ratio 9.8%',sources:['Shanghai Gold Exchange public data'],finding:'Exchange public data, verifiable',verdict:'Green'},
+  'Multiple market indicators confirm': {color:'\u{1F7E2}',claim:'Multiple market indicators confirm extreme physical tightness',structured:true,
+    conclusion:'\u{1F7E2} Logic verified: Oct 2025 London market freeze is empirical evidence of triple resonance',
+    subclaims:[
+      {text:'Logic 1: Can lease rate + inventory/position ratio confirm tightness?',status:'\u{1F7E2}',
+       finding:'Yes. Lease rate directly measures physical lending tightness; inventory/position ratio measures inventory relative to derivatives positions -- lower = more physical shortage. Both point to the same conclusion from different dimensions.',
+       quote:'"LBMA free-float stockpiles could be depleted within seven months." — Daniel Ghali, TD Securities, via Kitco News, Sept 8 2025',
+       sources:[{title:'Silver supply warning: LBMA free-float depletion',author:'TD Securities / Kitco News, 2025.9.8',url:'https://www.kitco.com/'}]}
+    ]},
+  'TD deferred': {color:'\u{1F7E2}',claim:'TD deferred fee flipped to shorts paying longs; accumulated 380t',sources:['Shanghai Gold Exchange public data'],finding:'Exchange public data, verifiable',verdict:'Green'},
+  'accumulated 380': {color:'\u{1F7E2}',claim:'Same as above',sources:['Same'],finding:'Same as above',verdict:'Green'},
+  '4185': {color:'\u{1F534}',claim:'2026 deficit expected to narrow to 4,185t',structured:true,
+    conclusion:'\u{1F534} Both figure and direction don\'t match Silver Institute',
+    subclaims:[
+      {text:'Fact 1: Silver Institute 2026 deficit forecast?',status:'\u{1F534}',
+       finding:'World Silver Survey 2026 reports 2026 deficit at 46.3Moz (~1,440t), widening from 40.3Moz (~1,252t) in 2025. Guotai\'s 4,185t (~134.5Moz) differs by nearly 3x, opposite direction.',
+       quote:'"The global silver market is expected to record a sixth consecutive annual deficit of 46.3 million ounces in 2026." — Silver Institute, April 2026',
+       sources:[{title:'Global Silver Investment to Remain Strong in 2026',author:'Silver Institute, April 2026',url:'https://silverinstitute.org/global-silver-investment-to-remain-strong-in-2026-against-the-backdrop-of-a-sixth-consecutive-annual-market-deficit/'}]},
+      {text:'Fact 2: What did Guotai adjust?',status:'\u{1F7E1}',
+       finding:'Guotai adjusted solar demand line item (proprietary model) from World Silver Association base table. But solar installation assumption (493GW) already flagged red (N7), likely inflating deficit estimate.',
+       quote:'',sources:[]}
+    ]},
+  'gap expected': {color:'\u{1F534}',claim:'Same as above',sources:['See 4185'],finding:'Same as above',verdict:'Red'},
+  'export license': {color:'\u{1F7E1}',claim:'From Jan 1, 2026 China imposes export license on silver',structured:true,
+    conclusion:'\u{1F7E1} Core fact correct, but wording misleading (it\'s "continued" not new policy)',
+    subclaims:[
+      {text:'Fact 1: Export license from Jan 1, 2026?',status:'\u{1F7E2}',
+       finding:'Yes. MOFCOM Announcement No. 69 of 2025 confirms.',
+       quote:'"From January 1, 2026, continue to suspend silver export quota management and implement export license management." — MOFCOM Announcement No. 69 of 2025',
+       sources:[{title:'MOFCOM Announcement No. 69 of 2025',author:'MOFCOM, 2025.10.29',url:'https://www.mofcom.gov.cn/zcfb/dwmygl/art/2025/art_d939f5e193604b1aaf76aacc441a16f4.html'}]},
+      {text:'Fact 2: Is this a new policy?',status:'\u{1F7E1}',
+       finding:'No. MOFCOM text uses "continue" -- this system has been in place since 2019, renewed annually. Approved companies increased from 42 to 44.',
+       quote:'"Continue to suspend silver export quota management" — keyword "continue" indicates this is not a new policy',
+       sources:[]}
+    ]},
+  'MOFCOM': {color:'\u{1F7E1}',claim:'Same as above',sources:['See export license'],finding:'Same as above',verdict:'Yellow'},
+  'China export controls tighten': {color:'\u{1F7E1}',claim:'China export controls tighten supply',sources:['See export license'],finding:'Same as above',verdict:'Yellow'}
+};
+
+// Active workpapers based on language
+function getWorkpapers() { return curLang() === 'en' ? workpapers_en : workpapers_zh; }
+
+// ===== Workpaper panel labels (bilingual) =====
+const wpLabels = {
+  zh: { sources: '验证Sources:', finding: '验证发现:', conclusion: '结论:', sourcesLabel: 'Sources:' },
+  en: { sources: 'Verification Sources:', finding: 'Verification Finding:', conclusion: 'Conclusion:', sourcesLabel: 'Sources:' }
 };
 
 // Click handler: show workpaper on node click
 function showWorkpaper(text) {
   var decoded = decodeHtml(text.replace(/<[^>]*>/g, ''));
+  var workpapers = getWorkpapers();
+  var labels = curLang() === 'en' ? wpLabels.en : wpLabels.zh;
   var found = null;
   for (var kw in workpapers) {
     if (decoded.includes(kw)) { found = workpapers[kw]; break; }
@@ -663,43 +979,39 @@ function showWorkpaper(text) {
   var panel = document.getElementById('wpanel');
   if (!found) { panel.style.display = 'none'; return; }
 
-  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">✕</span>';
+  var h = '<span class="wp-close" onclick="document.getElementById(\'wpanel\').style.display=\'none\'">&#x2715;</span>';
 
   if (found.structured) {
-    // Structured multi-subclaim format
     h += '<div class="wp-title">' + found.claim + '</div>';
     h += '<div class="wp-verdict" style="margin:6px 0;padding:6px 8px;background:#f0f8f0;border-radius:4px">' + found.conclusion + '</div>';
 
     found.subclaims.forEach(function(sc, idx) {
-      var borderColor = sc.status==='🟢'?'#009A44':sc.status==='🟡'?'#D4A843':'#CC0000';
+      var borderColor = sc.status==='\u{1F7E2}'?'#009A44':sc.status==='\u{1F7E1}'?'#D4A843':'#CC0000';
       var detailId = 'sc-detail-' + idx;
       h += '<div style="margin-top:8px;border-left:3px solid ' + borderColor + ';border-radius:4px">';
-      // Collapsible header
       h += '<div onclick="var el=document.getElementById(\'' + detailId + '\');el.style.display=el.style.display===\'none\'?\'block\':\'none\'" style="cursor:pointer;padding:6px 8px;background:#f9f9f9;font-weight:600;font-size:11px;display:flex;justify-content:space-between;align-items:center">';
-      h += '<span>' + sc.status + ' ' + sc.text + '</span><span style="color:#999;font-size:9px">▼</span></div>';
-      // Collapsible detail (default hidden)
+      h += '<span>' + sc.status + ' ' + sc.text + '</span><span style="color:#999;font-size:9px">&#x25BC;</span></div>';
       h += '<div id="' + detailId + '" style="display:none;padding:6px 8px">';
       h += '<div class="wp-finding" style="margin:4px 0">' + sc.finding + '</div>';
       if (sc.quote) {
         h += '<div style="margin:6px 0;padding:6px 8px;background:#f5f5f0;border-left:2px solid #ccc;font-style:italic;font-size:10px;color:#555">' + sc.quote + '</div>';
       }
-      h += '<div class="wp-label">Sources:</div>';
+      h += '<div class="wp-label">' + labels.sourcesLabel + '</div>';
       sc.sources.forEach(function(s) {
         h += '<div class="wp-src">';
-        if (s.url) h += '• <a href="' + s.url + '" target="_blank">' + s.title + '</a>';
-        else h += '• ' + s.title;
-        h += ' — <i>' + s.author + '</i></div>';
+        if (s.url) h += '&bull; <a href="' + s.url + '" target="_blank">' + s.title + '</a>';
+        else h += '&bull; ' + s.title;
+        h += ' &mdash; <i>' + s.author + '</i></div>';
       });
       h += '</div></div>';
     });
   } else {
-    // Simple format
     h += '<div class="wp-title">' + found.color + ' ' + found.claim + '</div>';
-    h += '<div class="wp-label">验证Sources:</div>';
-    found.sources.forEach(function(s) { h += '<div class="wp-src">• ' + s + '</div>'; });
-    h += '<div class="wp-label">验证发现:</div>';
+    h += '<div class="wp-label">' + labels.sources + '</div>';
+    found.sources.forEach(function(s) { h += '<div class="wp-src">&bull; ' + s + '</div>'; });
+    h += '<div class="wp-label">' + labels.finding + '</div>';
     h += '<div class="wp-finding">' + found.finding + '</div>';
-    h += '<div class="wp-label">结论:</div>';
+    h += '<div class="wp-label">' + labels.conclusion + '</div>';
     h += '<div class="wp-verdict">' + found.verdict + '</div>';
   }
 
@@ -722,12 +1034,73 @@ setTimeout(function(){
 let showK = true;
 function toggleK() {
   showK = !showK;
-  document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
-  document.getElementById('toggleBtn').classList.toggle('active', showK);
-  // 同一个SVG，换数据重新渲染
-  mm.setData(showK ? rootWithK : rootNoK);
+  var btn = document.getElementById('toggleBtn');
+  var lang = curLang();
+  if (lang === 'en') {
+    btn.textContent = showK ? btn.getAttribute('data-en-show') : btn.getAttribute('data-en-hide');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-show') : btn.getAttribute('data-zh-hide');
+  }
+  btn.classList.toggle('active', showK);
+  roots = getMarkmapRoots();
+  mm.setData(showK ? roots.rootWithK : roots.rootNoK);
   setTimeout(function() { mm.fit(); }, 100);
 }
+
+// ===== Language switch: re-render markmap + update button =====
+function reRenderForLang() {
+  roots = getMarkmapRoots();
+  mm.setData(showK ? roots.rootWithK : roots.rootNoK);
+  setTimeout(function() { mm.fit(); }, 100);
+  // Update toggle button text
+  var btn = document.getElementById('toggleBtn');
+  var lang = curLang();
+  if (lang === 'en') {
+    btn.textContent = showK ? btn.getAttribute('data-en-show') : btn.getAttribute('data-en-hide');
+  } else {
+    btn.textContent = showK ? btn.getAttribute('data-zh-show') : btn.getAttribute('data-zh-hide');
+  }
+  // Close workpaper panel on lang switch
+  document.getElementById('wpanel').style.display = 'none';
+  // Re-attach click listeners
+  setTimeout(function(){
+    document.querySelectorAll('g.markmap-node').forEach(function(g){
+      g.style.cursor = 'pointer';
+      g.addEventListener('click', function(e){
+        var fo = g.querySelector('foreignObject');
+        if(fo) showWorkpaper(fo.innerHTML);
+        e.stopPropagation();
+      });
+    });
+  }, 600);
+}
+
+// Override toggleLang from lang.js to also re-render markmap
+var _origToggleLang = null;
+var _langObserver = setInterval(function() {
+  if (window.toggleLang && !_origToggleLang) {
+    _origToggleLang = window.toggleLang;
+    window.toggleLang = function() {
+      _origToggleLang();
+      reRenderForLang();
+    };
+    clearInterval(_langObserver);
+  }
+}, 100);
+</script>
+<script src="/investment/docs/lang.js"></script>
+<script>
+initLang();
+// After initLang, update dynamic elements that lang.js cannot handle
+(function(){
+  var btn = document.getElementById('toggleBtn');
+  var lang = (localStorage.getItem('research-engine-lang') || 'en');
+  if (lang === 'en') {
+    btn.textContent = showK ? btn.getAttribute('data-en-show') : btn.getAttribute('data-en-hide');
+  }
+  // If saved lang differs from what markmap was initially built with, re-render
+  reRenderForLang();
+})();
 </script>
 </body>
 </html>

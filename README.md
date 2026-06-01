@@ -1,159 +1,146 @@
-# Investment Detective 研透
+**[中文版 Chinese Version](README_CN.md)**
 
-> **AI 投资研究新范式：人类擅长深度，AI 擅长广度**
->
+# Investment Detective
+
 > A new paradigm for investment research: humans go deep, AI goes wide.
 
-**[Live Demo](https://www.askmbb.com/investment/)** · **[Demo Journey: 白银投资 Case](https://www.askmbb.com/investment/docs/demo.html)** · **[AGENT.md](AGENT.md)** · **[SKILL.md](SKILL.md)**
+**[Live Demo](https://www.askmbb.com/investment/)** · **[Silver Case Journey](https://www.askmbb.com/investment/docs/demo.html)** · **[AGENT.md](AGENT.md)** · **[SKILL.md](SKILL.md)**
 
 UCWS Singapore 2026 × MiroMind Deep Research Special Track · Team KDLD
 
 ---
 
-## The Problem 问题
-
-做投资研究时，你可能遇到过这样的困境：
+## The Problem
 
 When doing investment research, you've probably faced this:
 
-- **无法快速且深入地了解**一个新行业、一家公司或一个投资课题。81 页的券商研报，光读完就要半天。
-- AI 给你的知识点**很散、没有主线、不知道该信哪个**。更糟糕的是，你不确定 AI 说的是事实还是幻觉。
-
-*You can't quickly AND deeply understand a new sector. AI gives you scattered facts with no thesis, and you can't tell what's real from what's hallucinated.*
+- You **can't quickly AND deeply understand** a new sector, company, or investment thesis. An 81-page broker report takes half a day just to read.
+- AI gives you scattered facts with **no thesis, no logic chain, and no way to tell what's real** from what's hallucinated.
 
 ---
 
-## Our Approach 我们的方案
+## Our Approach
 
-所有金融 AI 都在**生成**研究。这个 Agent **审计**它。
+Every financial AI **generates** research. This one **audits** it.
 
-*Every financial AI generates research. This one audits it.*
+Upload a few research reports, and the system walks you through six steps:
 
-你上传几篇研报，系统帮你走完六步：
-
-| Step | 中文 | What it does |
+| Step | Name | What it does |
 |------|------|-------------|
-| **搜** | Search | 识别权威来源，搜索高质量研报与信息源 |
-| **读** | Read | 金字塔原则严格拆解，IB Color Code 标注可信度 |
-| **审** | Verify | 多 Agent 并发，既审数据来源，也审逻辑推导 |
-| **沉** | Distill | 沉淀正确的核心判断与可追踪的知识资产 |
-| **合** | Merge | 多篇研报合成一条逻辑主线 (MECE + Storytelling) |
-| **追** | Track | 从主线导出定制化看板，持续追踪核心指标 |
+| **搜** | Search | Identify authoritative sources, collect high-quality reports across paradigms |
+| **读** | Read | Pyramid-principle decomposition with IB Color Code credibility tagging |
+| **审** | Verify | Multi-agent concurrent verification of both data sources and logical reasoning |
+| **沉** | Distill | Distill core judgments and build a trackable knowledge asset registry |
+| **合** | Merge | Merge multiple reports into one coherent investment thesis (MECE + Storytelling) |
+| **追** | Track | Generate a custom dashboard to continuously monitor key indicators |
 
-最终产出不是一份报告，而是一棵**你可以逐条审查的可验证论点树**。每个数据点有来源 URL，每条逻辑推导标注了验证状态。
-
-*The output is not a report. It's a verifiable thesis tree where every data point has a source URL and every causal link is tagged with its verification status.*
+The output is not a report. It's a **verifiable thesis tree** where every data point has a source URL and every causal link is tagged with its verification status.
 
 ---
 
-## Demo: Silver Investment Case 白银投资案例
+## Demo: Silver Investment Case
 
-**[→ 查看完整 Demo Journey](https://www.askmbb.com/investment/docs/demo.html)**
+**[→ View the full Demo Journey](https://www.askmbb.com/investment/docs/demo.html)**
 
-一个研究员想搞清楚白银为什么暴涨。之前从没碰过有色金属，下载了三篇券商研报（共 81 页）。
+A researcher wants to understand why silver surged. Never studied metals before. Downloaded 3 Chinese broker reports (81 pages total).
 
-*A researcher wants to understand why silver surged. Never studied metals before. Downloaded 3 broker reports (81 pages total).*
+| Report | Source | Pages | Perspective |
+|--------|--------|-------|------------|
+| Precious Metals Futures Outlook | Guotai Junan Futures | 45 | Futures, most detailed |
+| New Perspectives on Asset Allocation (III) | Founder Securities | 23 | Supply-demand + historical review |
+| Global Asset Allocation Weekly | Galaxy Securities | 13 | Macro weekly |
 
-| Report 研报 | Source 来源 | Pages | Perspective 视角 |
-|-------------|-----------|-------|-----------------|
-| 贵金属期货行情展望 | 国泰君安期货 | 45 | Futures outlook 期货展望 |
-| 大类资产新视角(三) | 方正证券 | 23 | Supply-demand + history 供需+历史 |
-| 全球大类资产配置周报 | 中国银河证券 | 13 | Macro weekly 宏观周报 |
+After six steps: 3 reports → 3 logic lines → multi-agent verification → 1 merged thesis → tracking dashboard.
 
-六步之后：3 篇研报 → 3 条逻辑线 → 多 Agent 验证 → 合并为 1 条投资主线 → 定制追踪看板。
-
-### Demo Outputs 产出
+### Demo Outputs
 
 | Output | What you'll see |
 |--------|----------------|
-| [国泰 · 金字塔](https://www.askmbb.com/investment/demo/silver/markmap_guotai.html) | 原文复刻 / 逻辑重组切换，IB Color Code |
-| [国泰 · 验证图](https://www.askmbb.com/investment/demo/silver/verify_guotai.html) | 三色染色，点击节点看验证底稿 |
-| [银河 · 金字塔](https://www.askmbb.com/investment/demo/silver/markmap_galaxy.html) | 宏观视角拆解 |
-| [方正 · 金字塔](https://www.askmbb.com/investment/demo/silver/markmap_founder.html) | 供需+历史复盘拆解 |
-| [合并投资主线](https://www.askmbb.com/investment/demo/silver/merged.html) | WHY/HOW/CONTEXT/RISK 共识树 |
-| [前瞻追踪看板](https://www.askmbb.com/investment/demo/silver/dashboard.html) | 供需面/现货面/宏观面指标监控 |
+| [Guotai · Pyramid](https://www.askmbb.com/investment/demo/silver/markmap_guotai.html) | Original / reorganized toggle, IB Color Code |
+| [Guotai · Verification](https://www.askmbb.com/investment/demo/silver/verify_guotai.html) | 3-color coding, click nodes for audit workpapers |
+| [Galaxy · Pyramid](https://www.askmbb.com/investment/demo/silver/markmap_galaxy.html) | Macro perspective decomposition |
+| [Founder · Pyramid](https://www.askmbb.com/investment/demo/silver/markmap_founder.html) | Supply-demand + history decomposition |
+| [Merged Thesis](https://www.askmbb.com/investment/demo/silver/merged.html) | WHY/HOW/CONTEXT/RISK consensus tree |
+| [Tracking Dashboard](https://www.askmbb.com/investment/demo/silver/dashboard.html) | Supply-demand / spot / macro indicator monitoring |
 
 ---
 
-## Core Methodology 核心方法论
+## Core Methodology
 
-### 投行级 Color Code · IB Financial Model Color Code
+### IB Financial Model Color Code
 
-借鉴投行财务模型的颜色标注体系，一眼区分事实与判断：
+Borrowed from investment banking financial models to instantly distinguish fact from judgment:
 
-- **蓝色** = 引用外部数据 (Blue = external reference)
-- **绿色** = 假设与预测 (Green = assumption)
-- **黑色** = 计算结果 (Black = calculated)
+- **Blue** = External reference data
+- **Green** = Assumption / forecast
+- **Black** = Calculated result
 
-### 咨询业方法论 · Consulting Methodology
+### Consulting Methodology
 
-- **MECE 原则**：相互独立、完全穷尽，确保逻辑不遗漏、不重复
-- **Storytelling**：把零散数据串成一条投资故事，而不是罗列事实
-- **金字塔原则**：结论先行，每个标题是方向性判断
+- **MECE Principle**: Mutually exclusive, collectively exhaustive — no gaps, no overlaps
+- **Storytelling**: Weave scattered data points into a compelling investment narrative
+- **Pyramid Principle**: Conclusion first — every heading is a directional judgment
 
-### 社科验证范式 · Verification Paradigm
+### Social Science Verification Paradigm
 
-- **数据节点验证**：每个数据独立溯源到一手来源
-- **逻辑推导验证**：每条因果关系独立检验
-- **多 Agent 交叉验证**：把"听起来对但经不起推敲"的幻觉筛出来
-- **三色染色**：绿=验证通过、黄=待验证、红=有冲突
+- **Data node verification**: Every data point independently traced to primary sources
+- **Logic verification**: Every causal link independently examined
+- **Multi-agent cross-verification**: Filter out "sounds right but doesn't hold up" hallucinations
+- **3-color coding**: Green = verified, Yellow = unverified, Red = conflicting
 
 ---
 
-## Architecture 架构
+## Architecture
 
 ```
 Topic + Reports
       │
   Orchestrator Agent (research-pipeline.md)
       │
-  01 搜 Search ─→ 02 读 Read ─→ 03 审 Verify
-                    (×N reports)    │ fan-out
-                                [Agent₁ Agent₂ ... Agentₙ]
-                                   │
-              04 沉 Distill ─→ 05 合 Merge ─→ 06 追 Track
+  01 Search ─→ 02 Read ─→ 03 Verify
+                (×N reports)  │ fan-out
+                           [Agent₁ Agent₂ ... Agentₙ]
+                              │
+           04 Distill ─→ 05 Merge ─→ 06 Track
       │
   Interactive Outputs (markmap + verification maps + dashboard)
 ```
 
-- **1 Orchestrator Agent** 编排管线 + **8 Skills** 定义每步推理逻辑
-- Skills 写在 Markdown 里（不是代码），评委可以直接阅读 Agent 的思考过程
-- 支持 Anthropic Claude / MiroMind / OpenAI 三种 LLM
+- **1 Orchestrator Agent** orchestrates the pipeline + **8 Skills** define reasoning logic per step
+- Skills are written in Markdown (not code) — judges can read exactly how the agent thinks
+- Supports Anthropic Claude / MiroMind / OpenAI
 
 ### Skills (8)
 
 | Skill | File | Purpose |
 |-------|------|---------|
-| 搜 Search | `skills/search/SKILL.md` | 识别权威源，搜索多范式研报 |
-| 读 Decompose | `skills/decompose/SKILL.md` | 金字塔拆解 + 逻辑重组 + 反幻觉 |
-| 审 Verify | `skills/verify/SKILL.md` | 多Agent并发验证 + 三色染色 |
-| 沉·整 Registry | `skills/distill-registry/SKILL.md` | 提取Source，构建注册表 |
-| 沉·探 Explore | `skills/distill-explore/SKILL.md` | 深挖Source数据版图 |
-| 合 Merge | `skills/merge/SKILL.md` | Storyteller合并 + MECE重建 |
-| 图 Visualize | `skills/visualize/SKILL.md` | markmap HTML 渲染 |
-| 追 Dashboard | `skills/dashboard/SKILL.md` | 前瞻看板生成 |
+| Search | `skills/search/SKILL.md` | Identify sources, collect multi-paradigm reports |
+| Decompose | `skills/decompose/SKILL.md` | Pyramid decomposition + anti-hallucination |
+| Verify | `skills/verify/SKILL.md` | Multi-agent verification + 3-color coding |
+| Distill Registry | `skills/distill-registry/SKILL.md` | Extract sources, build registry |
+| Distill Explore | `skills/distill-explore/SKILL.md` | Deep-dive source data landscape |
+| Merge | `skills/merge/SKILL.md` | Storyteller merge + MECE rebuild |
+| Visualize | `skills/visualize/SKILL.md` | markmap HTML rendering |
+| Dashboard | `skills/dashboard/SKILL.md` | Forward monitoring dashboard |
 
 ---
 
-## Quick Start 快速开始
+## Quick Start
 
 ```bash
-# Clone
 git clone https://github.com/Wild-KD/ucws-deep-research.git
 cd ucws-deep-research
 
-# Install
 pip install -r requirements.txt
 
-# Configure
 cp .env.example .env
 # Edit .env: add your ANTHROPIC_API_KEY or MIROMIND_API_KEY
 
-# Run the demo server
+# Serve the pre-computed demo
 python main.py demo
 
-# Or run the full pipeline on new reports
-python main.py run --topic "白银" --reports report1.pdf report2.pdf
+# Or run the full pipeline
+python main.py run --topic "silver" --reports report1.pdf report2.pdf
 ```
 
 ---
@@ -163,7 +150,5 @@ python main.py run --topic "白银" --reports report1.pdf report2.pdf
 **UCWS Singapore 2026 × MiroMind Deep Research Special Track**
 
 Built with Claude + MiroMind API
-
-*"你不需要信任这个 Agent。你只需要看到它查了什么、发现了什么、以及什么没能验证。"*
 
 *"You don't need to trust this agent. You just need to see what it checked, what it found, and what it couldn't verify."*

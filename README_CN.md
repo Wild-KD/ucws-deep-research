@@ -1,6 +1,6 @@
 **[English](README.md)** | **中文**
 
-# 研透 Research Engine
+# 投资侦探 Investment Detective
 
 > AI 投资研究新范式：人类擅长深度，AI 擅长广度
 

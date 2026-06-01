@@ -1,6 +1,6 @@
 **English** | **[中文](README_CN.md)**
 
-# Research Engine 研透
+# Investment Detective 投资侦探
 
 > A new paradigm for investment research: humans go deep, AI goes wide.
 

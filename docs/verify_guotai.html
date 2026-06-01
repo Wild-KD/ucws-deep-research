@@ -265,8 +265,9 @@ function buildMarkmap(svgId, md) {
   }, root);
 }
 
+// 只渲染当前可见的（有常识版），无常识版延迟到切换时
 const mm1a = buildMarkmap('s1a', mkReorg(true));
-const mm1b = buildMarkmap('s1b', mkReorg(false));
+let mm1b = null;
 
 // Post-render: add borders matching line colors
 function addBorders(svgId) {
@@ -723,9 +724,15 @@ function toggleK() {
   showK = !showK;
   document.getElementById('toggleBtn').textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
   document.getElementById('toggleBtn').classList.toggle('active', showK);
+  // 先切换可见性
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { if(showK) mm1a.fit(); else mm1b.fit(); }); });
+  // 延迟渲染无常识版（首次切换时才创建）
+  if (!showK && !mm1b) {
+    mm1b = buildMarkmap('s1b', mkReorg(false));
+    addBorders('s1b');
+  }
+  setTimeout(function() { if(showK) mm1a.fit(); else if(mm1b) mm1b.fit(); }, 50);
 }
 </script>
 </body>

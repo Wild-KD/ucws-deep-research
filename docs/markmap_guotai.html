@@ -227,7 +227,7 @@ function swTab(n) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===n));
   document.getElementById('w0').style.display = n===0 ? '' : 'none';
   document.getElementById('w1').style.display = n===1 ? '' : 'none';
-  fitCurrent();
+  requestAnimationFrame(() => { requestAnimationFrame(() => { fitCurrent(); }); });
 }
 
 function toggleK() {
@@ -235,10 +235,9 @@ function toggleK() {
   const btn = document.getElementById('toggleBtn');
   btn.textContent = showK ? '常识: 显示中' : '常识: 已隐藏';
   btn.classList.toggle('active', showK);
-  // For reorg tab, swap between with/without knowledge
   document.getElementById('s1a').classList.toggle('off', !showK);
   document.getElementById('s1b').classList.toggle('off', showK);
-  fitCurrent();
+  requestAnimationFrame(() => { requestAnimationFrame(() => { fitCurrent(); }); });
 }
 
 function fitCurrent() {

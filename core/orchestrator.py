@@ -8,6 +8,7 @@ import asyncio
 import inspect
 import json
 import logging
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -56,7 +57,10 @@ class Orchestrator:
 
     def _make_agent(self, skill_name: str, tools: dict | None = None) -> BaseAgent:
         """Create an agent for a specific pipeline step."""
-        skill_path = self.skills_dir / skill_name / "SKILL.md"
+        lang = os.environ.get("SKILL_LANG", "zh")
+        skill_path = self.skills_dir / skill_name / f"SKILL.{lang}.md"
+        if not skill_path.exists():
+            skill_path = self.skills_dir / skill_name / "SKILL.zh.md"
         return BaseAgent(
             llm=self.llm,
             skill_path=skill_path,

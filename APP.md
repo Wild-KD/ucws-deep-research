@@ -66,7 +66,7 @@ See [AGENT.md](AGENT.md) for full architecture documentation.
 ## Technology
 
 - **Python 3.11+** — Runtime
-- **Anthropic Claude / MiroMind / OpenAI** — LLM providers (switchable)
+- **MiroMind Deep Research API** — Primary LLM provider (also supports OpenAI-compatible endpoints)
 - **Tavily** — Web search for verification
 - **PyMuPDF** — PDF parsing
 - **markmap** — Interactive mind map visualization

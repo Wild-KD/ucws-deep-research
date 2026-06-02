@@ -90,38 +90,44 @@ Borrowed from investment banking financial models to instantly distinguish fact 
 
 ---
 
+## Skills: The Core of the Project
+
+**The 8 Skills ARE the product.** Each Skill is a structured Markdown file that encodes a specific research methodology. They are human-readable, bilingual (Chinese + English), and portable across any LLM provider.
+
+| # | Skill | File | What it encodes |
+|---|-------|------|-----------------|
+| 1 | **Search** | `skills/search/SKILL.{zh,en}.md` | Multi-round authority-source identification, analyst pre-research, diversity checks |
+| 2 | **Decompose** | `skills/decompose/SKILL.{zh,en}.md` | 9-step Minto pyramid extraction, MECE 5-step checklist, IB Color Code, anti-hallucination |
+| 3 | **Verify** | `skills/verify/SKILL.{zh,en}.md` | Node-level data verification, causal-edge logic testing, 3-color coding, time-point principle |
+| 4 | **Distill Registry** | `skills/distill-registry/SKILL.{zh,en}.md` | Source extraction, URL validation, core judgment filtering |
+| 5 | **Distill Explore** | `skills/distill-explore/SKILL.{zh,en}.md` | Source data-landscape mapping, gap discovery, tracking recommendations |
+| 6 | **Merge** | `skills/merge/SKILL.{zh,en}.md` | 10-step Storyteller merge, WHY/HOW/CONTEXT/RISK, color inheritance |
+| 7 | **Visualize** | `skills/visualize/SKILL.{zh,en}.md` | markmap rendering, verification-color functions, workpaper panels |
+| 8 | **Dashboard** | `skills/dashboard/SKILL.{zh,en}.md` | 3-framework indicator extraction, Chart.js generation, YTD + anomaly analysis |
+
+Each Skill can be read directly — open any `SKILL.en.md` file and you'll see exactly how the agent reasons, step by step, with decision branches and verification tables. No code required.
+
 ## Architecture
+
+The Skills are orchestrated by a lightweight pipeline runner. The runner is intentionally thin — the reasoning logic lives entirely in the Skills.
 
 ```
 Topic + Reports
       │
-  Orchestrator Agent (research-pipeline.md)
+  Pipeline Runner (loads Skills as system prompts)
       │
-  01 Search ─→ 02 Read ─→ 03 Verify
-                (×N reports)  │ fan-out
-                           [Agent₁ Agent₂ ... Agentₙ]
-                              │
-           04 Distill ─→ 05 Merge ─→ 06 Track
+  Skill 1: Search ─→ Skill 2: Decompose ─→ Skill 3: Verify
+                       (×N reports)            │ fan-out per node
+                                           [Agent₁ Agent₂ ... Agentₙ]
+                                               │
+                 Skill 4-5: Distill ─→ Skill 6: Merge ─→ Skill 8: Dashboard
       │
-  Interactive Outputs (markmap + verification maps + dashboard)
+  Interactive Outputs (Skill 7: Visualize)
 ```
 
-- **1 Orchestrator Agent** orchestrates the pipeline + **8 Skills** define reasoning logic per step
-- Skills are written in Markdown (not code) — judges can read exactly how the agent thinks
-- Supports Anthropic Claude / MiroMind / OpenAI
-
-### Skills (8)
-
-| Skill | File | Purpose |
-|-------|------|---------|
-| Search | `skills/search/SKILL.{zh,en}.md` | Identify sources, collect multi-paradigm reports |
-| Decompose | `skills/decompose/SKILL.{zh,en}.md` | Pyramid decomposition + anti-hallucination |
-| Verify | `skills/verify/SKILL.{zh,en}.md` | Multi-agent verification + 3-color coding |
-| Distill Registry | `skills/distill-registry/SKILL.{zh,en}.md` | Extract sources, build registry |
-| Distill Explore | `skills/distill-explore/SKILL.{zh,en}.md` | Deep-dive source data landscape |
-| Merge | `skills/merge/SKILL.{zh,en}.md` | Storyteller merge + MECE rebuild |
-| Visualize | `skills/visualize/SKILL.{zh,en}.md` | markmap HTML rendering |
-| Dashboard | `skills/dashboard/SKILL.{zh,en}.md` | Forward monitoring dashboard |
+- **8 Skills** define all reasoning logic in readable Markdown
+- **1 Pipeline Runner** chains Skills and manages concurrency
+- **Powered by MiroMind Deep Research API** (`mirothinker-1-7-deepresearch-mini`); also supports OpenAI-compatible endpoints
 
 ---
 
@@ -134,7 +140,7 @@ cd ucws-deep-research
 pip install -r requirements.txt
 
 cp .env.example .env
-# Edit .env: add your ANTHROPIC_API_KEY or MIROMIND_API_KEY
+# Edit .env: add your MIROMIND_API_KEY (get one at platform.miromind.ai)
 
 # Serve the pre-computed demo
 python main.py demo
@@ -149,6 +155,6 @@ python main.py run --topic "silver" --reports report1.pdf report2.pdf
 
 **UCWS Singapore 2026 × MiroMind Deep Research Special Track**
 
-Built with Claude + MiroMind API
+Powered by MiroMind Deep Research API
 
 *"You don't need to trust this agent. You just need to see what it checked, what it found, and what it couldn't verify."*

@@ -108,7 +108,7 @@ UCWS Singapore 2026 × MiroMind Deep Research 特别赛道 · Team KDLD
 
 - **1 个 Orchestrator Agent** 编排管线 + **8 个 Skills** 定义每步推理逻辑
 - Skills 写在 Markdown 里（不是代码），评委可以直接阅读 Agent 的思考过程
-- 支持 Anthropic Claude / MiroMind / OpenAI 三种 LLM
+- **基于 MiroMind Deep Research API**（`mirothinker-1-7-deepresearch-mini`），同时兼容 OpenAI 兼容接口
 
 ### Skills (8 个)
 
@@ -149,6 +149,6 @@ python main.py run --topic "白银" --reports report1.pdf report2.pdf
 
 **UCWS Singapore 2026 × MiroMind Deep Research 特别赛道**
 
-基于 Claude + MiroMind API 构建
+基于 MiroMind Deep Research API 构建
 
 *"你不需要信任这个 Agent。你只需要看到它查了什么、发现了什么、以及什么没能验证。"*

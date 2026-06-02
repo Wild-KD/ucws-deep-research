@@ -51,12 +51,9 @@ Output: Interactive HTML (markmap + verification maps + dashboard)
 
 ### LLM Providers
 
-Supports three API formats via a unified provider interface:
-- **MiroMind API** (required for competition)
-- **Anthropic Claude API**
-- **OpenAI-compatible API** (GPT, etc.)
+Powered by **MiroMind Deep Research API** (`mirothinker-1-7-deepresearch-mini`). The unified provider interface also supports any OpenAI-compatible endpoint.
 
-Switch via environment variable `LLM_PROVIDER=miromind|anthropic|openai`.
+Switch via environment variable `LLM_PROVIDER=miromind|openai`.
 
 ## Running
 

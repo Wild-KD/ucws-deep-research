@@ -1,0 +1,27 @@
+{
+  "model": "mirothinker-1-7-deepresearch-mini",
+  "generated_by": "MiroMind Deep Research API",
+  "frameworks": {
+    "supply_demand": {
+      "indicators": [
+        {"name": "Annual S/D Balance", "source": "Silver Institute WSS", "frequency": "annual", "current": "-40.3 Moz (2025)", "ytd_trend": "deficit narrowing but persists", "alert": "deficit reversal to surplus"},
+        {"name": "Deficit Trend", "source": "Silver Institute", "frequency": "annual", "current": "-46.3 Moz (2026E)", "ytd_trend": "re-widening after 2025 narrowing", "alert": "deficit exceeds -100 Moz"},
+        {"name": "ETF Holdings (SLV)", "source": "iShares/SEC", "frequency": "weekly", "current": "480 Moz", "ytd_trend": "declining from 520 Moz", "alert": "break below 450 Moz"}
+      ]
+    },
+    "physical_market": {
+      "indicators": [
+        {"name": "COMEX Inventory", "source": "CME Group", "frequency": "daily", "current": "340 Moz", "ytd_trend": "down 23% from 440 Moz", "alert": "below 300 Moz"},
+        {"name": "LBMA Vault Holdings", "source": "LBMA", "frequency": "monthly", "current": "27,454 tonnes", "ytd_trend": "stable, below 2020 peak", "alert": "below 25,000 tonnes"},
+        {"name": "Lease Rate 1M", "source": "Bloomberg", "frequency": "daily", "current": "~20%", "ytd_trend": "spiked from 5-10% range", "alert": "above 15% sustained"}
+      ]
+    },
+    "macro": {
+      "indicators": [
+        {"name": "FedWatch No-Cut Prob", "source": "CME FedWatch", "frequency": "weekly", "current": "70%", "ytd_trend": "rose from 15% at year start", "alert": "drops below 40%"},
+        {"name": "Gold/Silver Ratio", "source": "Exchange data", "frequency": "daily", "current": "55:1", "ytd_trend": "volatile, from 58 to 46 to 62 back to 55", "alert": "above 70 or below 45"},
+        {"name": "DXY", "source": "ICE", "frequency": "daily", "current": "99.0", "ytd_trend": "gradual weakening from 100.3", "alert": "break below 98"}
+      ]
+    }
+  }
+}

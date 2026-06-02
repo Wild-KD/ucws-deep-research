@@ -1,0 +1,51 @@
+```json
+[
+  {
+    "claim": "Global mine silver production in 2025 was 846.6 Moz (Source: Silver Institute WSS 2026)",
+    "status": "confirmed",
+    "reasoning": "The World Silver Survey 2026 PDF from The Silver Institute explicitly states that global silver mine production in 2025 rose by 3% to 846.6 Moz (26,331 t). A related Silver Institute press release and multiple secondary summaries repeat the same 846.6 Moz figure for 2025 mine output.",
+    "primary_source": {
+      "name": "World Silver Survey 2026 – The Silver Institute",
+      "excerpt": "Global silver mine production rose by 3 percent to 846.6 Moz in 2025, driven by higher by‑product output from copper operations in Peru...",
+      "url": "https://silverinstitute.org/wp-content/uploads/2026/04/World-Silver-Survey-2026.pdf"
+    },
+    "notes": "The number, year, and source match exactly what is cited in the broker reports."
+  },
+  {
+    "claim": "COMEX silver inventory fell from 440 Moz to 340 Moz in H1 2026 (Source: CME Group)",
+    "status": "partially_refuted",
+    "reasoning": "The CME Group silver stocks report for 1 June 2026 (activity date 29 May 2026) shows a combined COMEX silver inventory of about 317.2 Moz (registered + eligible). This is significantly below 340 Moz, so the claimed end‑H1 level (340 Moz) is too high versus the official warehouse data. Moreover, other market commentary notes COMEX silver inventories peaking around 531 Moz in early October 2025 and then falling, but there is no primary CME or serious secondary source indicating a clean 440 Moz → 340 Moz move specifically during H1 2026. The 440 Moz starting point in H1 2026 is therefore not supported by the available CME data, and the 340 Moz endpoint overstates the actual stocks (~317 Moz by late May).",
+    "primary_source": {
+      "name": "CME Group – Silver Stocks Report (Silver_stocks.xls, report date 2026‑06‑01, activity date 2026‑05‑29)",
+      "excerpt": "Totals (summary)\n- TOTAL REGISTERED ... Total Today: 84,976,869.917\n- TOTAL ELIGIBLE ... Total Today: 232,223,948.395\n- COMBINED TOTAL ... Total Today: 317,200,818.312",
+      "url": "https://www.cmegroup.com/delivery_reports/Silver_stocks.xls"
+    },
+    "notes": "Directionally, inventories did fall sharply from late‑2025 highs, but the specific path '440 Moz to 340 Moz in H1 2026' is not consistent with the CME warehouse data: (1) no clear CME confirmation of a 440 Moz level in early 2026, and (2) the combined total near the end of May 2026 is closer to 317 Moz, not 340 Moz."
+  },
+  {
+    "claim": "Silver 1-month lease rate spiked to ~20% in May 2026 (Source: Bloomberg)",
+    "status": "unverified_likely_exaggerated",
+    "reasoning": "Searches and related articles show silver lease rates spiking to multi‑year highs in 2025–2026, with cited 1‑month implied rates in the 6–8% range, based on Bloomberg data relayed via secondary outlets (e.g., Ahead of the Herd and The Jerusalem Post reporting 1‑month lease rates 'over 6%' in mid‑2025). A Bloomberg article URL pattern for May 2026 ('silver-lease-rates-spike-to-20-percentage') exists but returns 404, so its contents cannot be inspected. No accessible Bloomberg or reputable secondary source text confirms a realized 1‑month silver lease rate near 20% in May 2026; all concrete figures observed are in the mid‑single‑digit percentages. The existing evidence supports elevated but single‑digit lease rates, not ~20%. Therefore the 20% figure appears to be, at best, an unconfirmed headline number and more likely an overstatement or misinterpretation.",
+    "primary_source": {
+      "name": "404 Bloomberg news URL implying a '20 percent' spike",
+      "excerpt": "URL slug only: 'silver-lease-rates-spike-to-20-percentage'. The page itself returns 404 Not Found, and contains no actual rate figures.",
+      "url": "https://www.bloomberg.com/news/articles/2026-05-13/silver-lease-rates-spike-to-20-percentage"
+    },
+    "notes": "Without access to the disappeared Bloomberg article or corroborating data (e.g., LBMA lease‑rate time series or other terminals), this claim cannot be confirmed. Available secondary materials referencing Bloomberg data show spikes to ~6–8% for 1‑month tenors, not ~20%."
+  }
+]
+```  
+
+**References**
+
+[1] World Silver Survey 2026. https://silverinstitute.org/wp-content/uploads/2026/04/World-Silver-Survey-2026.pdf.  
+
+[2] ELEVATED LEASE RATES, REGIONAL LIQUIDITY TIGHTNESS, AND ROBUST INVESTOR INTEREST RESULTED IN RECORD SILVER PRICES IN 2025 (press release summarizing WSS 2026). https://edrsilver.com/site/assets/files/14910/world_silver_survey_2026_press_release.pdf.  
+
+[3] CME Silver Stocks Report (Silver_stocks.xls, report date 2026‑06‑01). https://www.cmegroup.com/delivery_reports/Silver_stocks.xls.  
+
+[4] Silver Faces Another Deficit in 2026 – StoneX (COMEX/CME inventory context). https://www.stonex.com/en/insights/silver-faces-another-deficit-in-2026/.  
+
+[5] Silver Lease Rates Surge to Multi-Year Highs as Market Tightness Builds – Ahead of the Herd. https://aheadoftheherd.com/silver-lease-rates-surge-to-multi-year-highs-as-market-tightness-builds/.  
+
+[6] Silver Lease Rates Surge to Multi-Year Highs as Market Tightness Builds – The Jerusalem Post (syndicated version). https://www.jpost.com/business-and-innovation/precious-metals/article-861138.

@@ -1,0 +1,198 @@
+{
+  "sources": [
+    {
+      "name": "Silver Institute – World Silver Survey",
+      "url": "https://silverinstitute.org/all-world-silver-surveys/",
+      "data_available": [
+        {
+          "category": "Global supply and demand balance",
+          "metrics": [
+            "Mine production (Moz and tonnes)",
+            "Recycling supply by source (industrial, jewelry, silverware, photography, coin) (Moz/tonnes)",
+            "Net hedging supply/demand (Moz)",
+            "Net official sector sales (Moz)",
+            "Total supply (Moz)",
+            "Industrial demand – total (Moz)",
+            "Industrial demand – by sector: electrical & electronics, photovoltaics (PV), brazing alloys & solders, other industrial, photography (Moz)",
+            "Jewelry fabrication (Moz)",
+            "Silverware fabrication (Moz)",
+            "Coin & net bar demand (Moz)",
+            "Market balance (surplus/deficit in Moz)",
+            "Net investment in ETPs and ETP holdings (Moz)",
+            "Silver price – nominal and real, multiple currencies; LBMA price history; gold:silver ratio"
+          ],
+          "granularity": "Global totals by year; appendices provide tonnage and ounce data by year over multi‑year history"
+        },
+        {
+          "category": "Regional and country breakdowns",
+          "metrics": [
+            "Mine production by region and by country (Top 20 producing countries; Top 20/30 producing companies and mines) (Moz/tonnes)",
+            "Mine production by primary metal source (primary silver, gold, copper, lead/zinc) (regional, annual)",
+            "Industrial demand by region and sector (Europe, North America, Latin America, East Asia, South Asia, Middle East, CIS, Others) (Moz/tonnes)",
+            "Jewelry and silverware demand by region and selected countries (Moz/tonnes)",
+            "Physical investment (bars, coins) by region and key countries (e.g., US, India, Europe, East Asia) (Moz/tonnes)",
+            "Recycling by region and sector (Moz/tonnes)"
+          ],
+          "granularity": "Regional and country‑level, annual; some tables cover ~2016–2025+ history and forecasts (e.g., 2025, 2026F)"
+        },
+        {
+          "category": "Investment and market structure",
+          "metrics": [
+            "Physical investment by region and country (Moz)",
+            "Coin and medals fabrication (Moz) by region",
+            "Exchange‑traded product (ETP) holdings by product and custodian (monthly, Moz)",
+            "Annual turnover on major commodity exchanges (CME, SHFE, MCX, SGE T+D) and LBMA spot/forwards (Moz)",
+            "CME activity & inventories – open interest, turnover, inventory aggregates (appendix level)",
+            "LBMA silver trading volumes – monthly and yearly by category",
+            "London vault inventories and estimated ‘free float’",
+            "Global bullion trade flows – imports/exports for key hubs (Swiss, UK, Hong Kong, India, etc.)"
+          ],
+          "granularity": "Exchange / product / region level; mix of monthly and annual series depending on table"
+        },
+        {
+          "category": "Cost curves and corporate data",
+          "metrics": [
+            "Primary silver mine cash costs, total cash cost (TCC), all‑in sustaining cost (AISC) by region",
+            "Reserve and resource data (global and by major asset/region)",
+            "Hedge book evolution – delta‑adjusted positions by year (forwards vs options)",
+            "Major streaming/royalty volumes and select deal metrics",
+            "Top 30 silver mines – production, operator, country"
+          ],
+          "granularity": "Mine/asset/company level, annual"
+        }
+      ],
+      "update_frequency": "Annual (World Silver Survey published once per year covering previous calendar year; some supplemental Interim Reviews also annual).",
+      "reliability_rating": 9,
+      "access_type": "World Silver Survey PDFs and many related publications are freely downloadable from The Silver Institute website; data is compiled by specialist consultancy (Metals Focus) from hallmarking series, trade statistics, company reports, and other public-domain and proprietary information, and is widely cited by industry and institutional research."
+    },
+    {
+      "name": "CME Group – COMEX silver inventory and futures",
+      "url": "https://www.cmegroup.com/markets/metals/precious/silver.html",
+      "data_available": [
+        {
+          "category": "COMEX silver warehouse inventories",
+          "metrics": [
+            "Depository name",
+            "Prev total inventory (oz)",
+            "Received (oz) – daily change",
+            "Withdrawn (oz) – daily change",
+            "Net change (oz)",
+            "Adjustment (oz)",
+            "Total today (oz)",
+            "Registered stocks by depository and total (oz)",
+            "Eligible stocks by depository and total (oz)",
+            "Combined total (registered + eligible) (oz)"
+          ],
+          "granularity": "Per approved depository plus exchange‑wide totals, reported in fine ounces on a daily warehouse stocks XLS."
+        },
+        {
+          "category": "Futures and options market data (high level, via CME public pages)",
+          "metrics": [
+            "Front and deferred contract prices (futures)",
+            "Daily settlement prices",
+            "Volume (contracts)",
+            "Open interest (contracts)",
+            "Basic contract specs (contract size, tick, delivery terms, eligible vs registered definitions via rulebooks)"
+          ],
+          "granularity": "By individual futures and options contract month; daily end‑of‑day on public site; tick‑by‑tick and full depth via paid market data feeds."
+        }
+      ],
+      "update_frequency": "Warehouse stocks report: daily at end of trading day; futures and options quotes: intraday (real‑time) with official settlements once per trading day.",
+      "reliability_rating": 10,
+      "access_type": "Headline futures/warehouse data is freely accessible on CME’s website (including daily Silver_stocks.xls and contract pages). Full tick‑level data and low‑latency feeds require paid CME/redistributor market data subscriptions through brokers or data vendors."
+    },
+    {
+      "name": "LBMA – London vault holdings (London Vault Data)",
+      "url": "https://www.lbma.org.uk/prices-and-data/london-vault-data",
+      "data_available": [
+        {
+          "category": "Aggregate London vault holdings",
+          "metrics": [
+            "Total Loco London silver held in LBMA‑recognized vaults (tonnes and equivalent troy ounces)",
+            "Total Loco London gold holdings (tonnes) – useful for cross‑metal context",
+            "Occasional breakdowns including/excluding Bank of England holdings (when published)",
+            "Contextual conversions (e.g., approximate number of good‑delivery bars implied by total holdings in some LBMA commentary)"
+          ],
+          "granularity": "System‑wide aggregate (London vaulting system) for silver and gold; no per‑vault or per‑owner detail in public series."
+        }
+      ],
+      "update_frequency": "Typically monthly or quarterly public releases; commentary from LBMA and secondary analytics sources indicate data is published at least quarterly, with many recent references to monthly tonnage changes.",
+      "reliability_rating": 9,
+      "access_type": "Aggregate vault data is published free on LBMA’s website and republished by various data aggregators (e.g., MetalCharts, GoldSilver.ai). Underlying position‑level data remains confidential; only systemwide aggregates are public."
+    },
+    {
+      "name": "Bloomberg – silver lease rates and ETF holdings (via Bloomberg Terminal & LBMA Trade Data)",
+      "url": "https://professional.bloomberg.com/products/bloomberg-terminal/",
+      "data_available": [
+        {
+          "category": "LBMA silver trade and lease‑related volumes (via LBMA Trade Data on Bloomberg)",
+          "metrics": [
+            "Silver loan/lease/deposit volume by tenor (e.g., 1 week, 2 weeks, 1 month, 3 months, 6 months, 9 months, 12 months, 1 year+)",
+            "Silver swap/forward volume by tenor (same tenor buckets)",
+            "Silver option volume by tenor",
+            "Sub‑metrics for each tenor: total volume and spot volume",
+            "Silver spot volume (daily and weekly)",
+            "Silver spot total volume (aggregated)"
+          ],
+          "granularity": "Tenor‑by‑tenor volumes for loans/leases, deposits, swaps/forwards, and options; daily and weekly datasets."
+        },
+        {
+          "category": "Silver lease rates (implied borrowing costs in London market)",
+          "metrics": [
+            "Implied silver lease rates by tenor (e.g., 1‑month, 3‑month, 6‑month, 1‑year) – annualized percentage",
+            "Time series of lease rates used in news and analytics (spot articles reference 1‑month and 1‑year implied lease rates surging to 5–6%+)",
+            "Associated reference series: LIBOR/benchmark funding rates and forward/spot spreads used in lease‑rate construction (internal to Bloomberg calculations)"
+          ],
+          "granularity": "Tenor‑specific rates with at least daily time series; intraday snapshots available in terminal functions."
+        },
+        {
+          "category": "Silver ETF and ETP holdings (Bloomberg funds/ETP data)",
+          "metrics": [
+            "Holdings of physically‑backed silver ETFs and ETPs by fund (ounces/tonnes and market value)",
+            "Daily changes in holdings and shares outstanding",
+            "Fund flows and AUM for silver‑linked products (including leveraged/inverse ETPs where relevant)",
+            "Aggregated global ETF silver holdings (sum across products), used in Bloomberg commentary and screens"
+          ],
+          "granularity": "Fund‑level daily holdings and flows; global aggregates available via custom screens; historical time series."
+        }
+      ],
+      "update_frequency": "LBMA trade data on Bloomberg: daily for full fee‑liable dataset (LBMA6), with delayed weekly data available free (LBMA7). Silver lease rates and ETF holdings: updated throughout the trading day with official fund holdings typically updated daily or when issuers publish changes.",
+      "reliability_rating": 9,
+      "access_type": "Access is primarily via the Bloomberg Terminal and B‑PIPE feeds. Daily LBMA trade data (LBMA6 <GO>) is fee‑liable; delayed weekly LBMA data (LBMA7 <GO>) is free to terminal users. Overall Bloomberg access requires an institutional‑grade subscription (typical cost around \\$24,000–\\$32,000 per terminal per year in recent pricing)."
+    },
+    {
+      "name": "ICE – U.S. Dollar Index (DXY)",
+      "url": "https://en.wikipedia.org/wiki/U.S._Dollar_Index",
+      "data_available": [
+        {
+          "category": "Index composition and methodology",
+          "metrics": [
+            "Constituent currencies and fixed weights:",
+            "– EUR: 57.6%",
+            "– JPY: 13.6%",
+            "– GBP: 11.9%",
+            "– CAD: 9.1%",
+            "– SEK: 4.2%",
+            "– CHF: 3.6%",
+            "Exact calculation formula for USDX as a weighted geometric mean of FX rates (EURUSD, USDJPY, GBPUSD, USDCAD, USDSEK, USDCHF)",
+            "Base value: 100.000 at inception (March 1973)"
+          ],
+          "granularity": "Index‑level only; no per‑constituent index series beyond the underlying FX rates themselves."
+        },
+        {
+          "category": "Historical performance and levels",
+          "metrics": [
+            "Historical yearly closes (DXY close by year)",
+            "Historical extremes (e.g., all‑time high 164.720 in Feb 1985; major lows like 70.698 in March 2008)",
+            "Ongoing real‑time level (index points)",
+            "Intraday high/low, previous close, 52‑week high/low on most data platforms"
+          ],
+          "granularity": "At least daily close series; real‑time tick level via ICE and major market data vendors."
+        }
+      ],
+      "update_frequency": "USDX/DXY is recalculated continuously whenever FX markets are open. Effective coverage from Sunday evening (New York time) through late Friday afternoon with near 24‑hour updates.",
+      "reliability_rating": 9,
+      "access_type": "ICE is the official administrator and publishes index levels via its data services; real‑time DXY is broadly redistributed (CNBC, Bloomberg, Yahoo Finance, trading platforms). Basic delayed/real‑time quotes and daily history are freely viewable on many finance sites; professional low‑latency and full historical feeds require paid ICE or vendor data subscriptions."
+    }
+  ]
+}

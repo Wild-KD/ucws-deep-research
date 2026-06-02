@@ -40,10 +40,10 @@ class LLMConfig:
         elif provider == "miromind":
             return cls(
                 provider="miromind",
-                model=os.getenv("MIROMIND_MODEL", "miromind-deep-research"),
+                model=os.getenv("MIROMIND_MODEL", "mirothinker-1-7-deepresearch-mini"),
                 api_key=os.getenv("MIROMIND_API_KEY", ""),
                 base_url=os.getenv(
-                    "MIROMIND_BASE_URL", "https://platform.miromind.ai/v1"
+                    "MIROMIND_BASE_URL", "https://api.miromind.ai/v1"
                 ),
             )
         else:

@@ -68,7 +68,7 @@ class TestSkillLoading:
                 assert len(md_files) > 0, f"No SKILL.md in {skill_dir.name}"
 
     def test_skill_frontmatter(self):
-        from core.agent import BaseAgent
+        from runtime.agent import BaseAgent
         skill_path = self.SKILLS_DIR / "search" / "SKILL.md"
         if not skill_path.exists():
             import pytest

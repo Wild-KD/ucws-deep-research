@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 def test_extract_json_from_fence():
-    from core.json_utils import parse_json_output
+    from runtime.json_utils import parse_json_output
 
     parsed = parse_json_output('Here:\n```json\n{"a": 1}\n```')
     assert parsed.data == {"a": 1}
@@ -17,14 +17,14 @@ def test_extract_json_from_fence():
 
 
 def test_extract_json_from_prose():
-    from core.json_utils import parse_json_output
+    from runtime.json_utils import parse_json_output
 
     parsed = parse_json_output('Before {"a": {"b": [1, 2]}} after')
     assert parsed.data["a"]["b"] == [1, 2]
 
 
 def test_schema_search_report_requires_source():
-    from core.schemas import validate_step
+    from runtime.schemas import validate_step
 
     result = validate_step("s1_search", {"reports": [{"id": "bad"}]})
     assert result.ok is False
@@ -32,7 +32,7 @@ def test_schema_search_report_requires_source():
 
 
 def test_artifact_store_roundtrip(tmp_path):
-    from core.artifacts import ArtifactStore
+    from runtime.artifacts import ArtifactStore
 
     store = ArtifactStore(tmp_path)
     store.record("s1_search", raw='{"reports":[]}', parsed={"reports": []})
@@ -53,7 +53,7 @@ def test_mock_provider_returns_json():
 
 
 def test_openai_tool_message_format(tmp_path):
-    from core.agent import BaseAgent
+    from runtime.agent import BaseAgent
     from llm.base import LLMProvider, LLMResponse, ToolCall
 
     class DummyTool:
@@ -92,8 +92,8 @@ def test_openai_tool_message_format(tmp_path):
 
 def test_mock_pipeline_writes_artifacts(tmp_path):
     from config import Config, LLMConfig
-    from core.harness import PipelineHarness
-    from core.orchestrator import Orchestrator
+    from runtime.harness import PipelineHarness
+    from runtime.orchestrator import Orchestrator
 
     async def run():
         config = Config(

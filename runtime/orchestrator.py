@@ -11,10 +11,10 @@ import os
 from pathlib import Path
 from datetime import datetime
 
-from core.agent import BaseAgent
-from core.artifacts import ArtifactStore
-from core.json_utils import dumps_pretty, parse_json_output
-from core.schemas import validate_step
+from runtime.agent import BaseAgent
+from runtime.artifacts import ArtifactStore
+from runtime.json_utils import dumps_pretty, parse_json_output
+from runtime.schemas import validate_step
 from config import Config
 from llm import create_provider
 from tools import WebSearchTool, WebFetchTool, PDFReaderTool, HTMLWriterTool

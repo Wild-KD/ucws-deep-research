@@ -13,8 +13,8 @@ import logging
 import sys
 
 from config import Config, LLMConfig
-from core.harness import PipelineHarness
-from core.orchestrator import Orchestrator
+from runtime.harness import PipelineHarness
+from runtime.orchestrator import Orchestrator
 
 
 logging.basicConfig(

@@ -19,7 +19,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import Config, LLMConfig
-from core.orchestrator import Orchestrator
+from runtime.orchestrator import Orchestrator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("server")

@@ -20,6 +20,13 @@
   .wp-src { color:#005EB8; margin:2px 0; font-size:10px; }
   .wp-finding { color:#333; line-height:1.6; }
   .wp-verdict { font-weight:600; margin-top:4px; }
+  .guide-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;background:#1a1a2e;color:#fff;border-radius:12px;padding:14px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.35);display:flex;align-items:center;gap:20px;font-size:12px;line-height:1.6;opacity:0;animation:toastIn .5s ease .8s forwards;border:1px solid rgba(255,255,255,0.08);max-width:720px}
+  @keyframes toastIn{to{opacity:1}}
+  .guide-toast .tip{display:flex;align-items:center;gap:8px}
+  .guide-toast .tip b{color:#d4a76a}
+  .guide-toast .dismiss{background:none;border:1px solid rgba(255,255,255,0.15);color:#999;padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;flex-shrink:0;transition:all .15s}
+  .guide-toast .dismiss:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+  .guide-toast .divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
 </style>
 </head>
 <body data-title-en="Founder &middot; Silver Verification Map">
@@ -35,6 +42,12 @@
 <div class="stats" data-en='Data nodes: <b style="color:#009A44">2&#x1F7E2;</b> &middot; <b style="color:#D4A843">6&#x1F7E1;</b> &middot; <b style="color:#CC0000">2&#x1F534;</b>'>数据节点: <b style="color:#009A44">2🟢</b> · <b style="color:#D4A843">6🟡</b> · <b style="color:#CC0000">2🔴</b></div>
 <div class="map-wrap"><svg id="mm"></svg></div>
 <div id="wpanel"></div>
+<div class="guide-toast" id="guideToast">
+  <div class="tip"><span style="font-size:18px">&#128065;</span><span id="guideTip1"></span></div>
+  <div class="divider"></div>
+  <div class="tip"><span style="font-size:18px">&#128196;</span><span id="guideTip2"></span></div>
+  <button class="dismiss" id="guideDismiss" onclick="dismissToast()"></button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
@@ -415,11 +428,22 @@ var _langObserver = setInterval(function() {
 </script>
 <script src="/investment/docs/lang.js"></script>
 <script>
+function curLang(){return localStorage.getItem('research-engine-lang')||'en'}
+function applyGuideToastLang(){
+  var lang=curLang(),t1=document.getElementById('guideTip1'),t2=document.getElementById('guideTip2'),btn=document.getElementById('guideDismiss');
+  if(!t1)return;
+  if(lang==='en'){t1.innerHTML='<b>Click any colored node</b> on the map to open its verification workpaper';t2.innerHTML='In the workpaper panel, <b>click each sub-claim row</b> to expand evidence details';btn.textContent='Got it';}
+  else{t1.innerHTML='<b>点击地图上任意彩色节点</b>，打开该节点的验证底稿';t2.innerHTML='在右侧底稿面板中，<b>点击每条子声明</b>可展开验证详情';btn.textContent='知道了';}
+}
+function dismissToast(){var t=document.getElementById('guideToast');if(t){t.style.opacity='0';t.style.pointerEvents='none';setTimeout(function(){t.remove()},400);}try{sessionStorage.setItem('verifyGuideShown','1')}catch(e){}}
+if(sessionStorage.getItem('verifyGuideShown')){var _t=document.getElementById('guideToast');if(_t)_t.remove();}
+
 initLang();
 // After initLang, if saved lang differs from initial, re-render markmap
 (function(){
   var lang = (localStorage.getItem('research-engine-lang') || 'en');
   reRenderForLang();
+  applyGuideToastLang();
 })();
 </script>
 </body>

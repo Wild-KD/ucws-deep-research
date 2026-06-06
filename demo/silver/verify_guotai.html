@@ -27,6 +27,28 @@
   .wp-src { color:#005EB8; margin:2px 0; }
   .wp-finding { color:#333; line-height:1.6; }
   .wp-verdict { font-weight:600; margin-top:4px; }
+
+  /* Guide hint */
+  .guide-toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;
+    background:#1a1a2e;color:#fff;border-radius:12px;padding:14px 24px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.35);display:flex;align-items:center;gap:20px;
+    font-size:12px;line-height:1.6;opacity:0;animation:toastIn .5s ease .8s forwards;
+    border:1px solid rgba(255,255,255,0.08);max-width:720px;
+  }
+  @keyframes toastIn{to{opacity:1}}
+  .guide-toast .tip{display:flex;align-items:center;gap:8px}
+  .guide-toast .tip-icon{font-size:18px;flex-shrink:0}
+  .guide-toast .tip b{color:#d4a76a}
+  .guide-toast .dismiss{
+    background:none;border:1px solid rgba(255,255,255,0.15);color:#999;
+    padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;flex-shrink:0;
+    transition:all .15s;
+  }
+  .guide-toast .dismiss:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+  .guide-toast .divider{width:1px;height:28px;background:rgba(255,255,255,0.1);flex-shrink:0}
+  .guide-pulse{animation:gpulse 1.5s ease-in-out 3}
+  @keyframes gpulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.6)}}
 </style>
 </head>
 <body>
@@ -54,6 +76,19 @@
   <svg id="s1a"></svg>
 </div>
 <div id="wpanel"></div>
+
+<div class="guide-toast" id="guideToast">
+  <div class="tip">
+    <span class="tip-icon">&#128065;</span>
+    <span id="guideTip1"></span>
+  </div>
+  <div class="divider"></div>
+  <div class="tip">
+    <span class="tip-icon">&#128196;</span>
+    <span id="guideTip2"></span>
+  </div>
+  <button class="dismiss" id="guideDismiss" onclick="dismissToast()"></button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18"></script>
@@ -1073,6 +1108,8 @@ function reRenderForLang() {
   }
   // Close workpaper panel on lang switch
   document.getElementById('wpanel').style.display = 'none';
+  // Update guide toast language
+  applyGuideToastLang();
   // Re-attach click listeners
   setTimeout(function(){
     document.querySelectorAll('g.markmap-node').forEach(function(g){
@@ -1101,6 +1138,38 @@ var _langObserver = setInterval(function() {
 </script>
 <script src="/investment/docs/lang.js"></script>
 <script>
+function applyGuideToastLang(){
+  var lang=curLang();
+  var t1=document.getElementById('guideTip1');
+  var t2=document.getElementById('guideTip2');
+  var btn=document.getElementById('guideDismiss');
+  if(!t1)return;
+  if(lang==='en'){
+    t1.innerHTML='<b>Click any colored node</b> on the map to open its verification workpaper';
+    t2.innerHTML='In the workpaper panel, <b>click each sub-claim row</b> to expand evidence details';
+    btn.textContent='Got it';
+  } else {
+    t1.innerHTML='<b>点击地图上任意彩色节点</b>，打开该节点的验证底稿';
+    t2.innerHTML='在右侧底稿面板中，<b>点击每条子声明</b>可展开验证详情';
+    btn.textContent='知道了';
+  }
+}
+function dismissToast(){
+  var t=document.getElementById('guideToast');
+  if(t){t.style.opacity='0';t.style.pointerEvents='none';setTimeout(function(){t.remove()},400);}
+  try{sessionStorage.setItem('verifyGuideShown','1')}catch(e){}
+}
+if(sessionStorage.getItem('verifyGuideShown')){
+  var t=document.getElementById('guideToast');if(t)t.remove();
+}
+// Auto-open one workpaper after a delay to show it's interactive
+setTimeout(function(){
+  if(!sessionStorage.getItem('verifyGuideShown')){
+    var lang=curLang();
+    showWorkpaper(lang==='en'?'Rate cuts continue to reduce':'降息延续降低');
+  }
+},2500);
+
 initLang();
 // After initLang, update dynamic elements that lang.js cannot handle
 (function(){
@@ -1111,6 +1180,8 @@ initLang();
   }
   // If saved lang differs from what markmap was initially built with, re-render
   reRenderForLang();
+  // Apply guide toast language
+  applyGuideToastLang();
 })();
 </script>
 </body>

@@ -106,6 +106,34 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0c0c0f;border:1px sol
 .metric b{font-size:20px;font-weight:600;letter-spacing:-0.02em}
 .metric span{display:block;color:var(--dim);font-size:10px;margin-top:4px;letter-spacing:0.02em}
 
+/* Demo guide overlay */
+.guide-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadeIn .35s ease forwards}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.guide-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:36px 40px 32px;max-width:480px;width:90%;text-align:center;
+  animation:slideUp .4s ease .1s both;box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.guide-card h2{font-size:22px;font-weight:700;margin:0 0 6px;letter-spacing:-0.02em}
+.guide-card h2 em{color:var(--accent);font-style:normal}
+.guide-card p{color:var(--muted);font-size:13px;line-height:1.7;margin:12px 0 24px}
+.guide-demos{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.guide-link{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  padding:14px 18px;text-decoration:none;color:var(--fg);transition:all .18s;text-align:left;
+}
+.guide-link:hover{border-color:var(--accent);background:rgba(212,167,106,0.04)}
+.guide-icon{font-size:24px;width:40px;text-align:center;flex-shrink:0}
+.guide-link b{font-size:13px;font-weight:600;display:block;margin-bottom:2px}
+.guide-link small{color:var(--dim);font-size:11px}
+.guide-dismiss{
+  background:none;border:none;color:var(--dim);font-size:12px;
+  padding:8px 16px;cursor:pointer;transition:color .15s;
+}
+.guide-dismiss:hover{color:var(--fg)}
+
 @media(max-width:1100px){
   .shell{grid-template-columns:1fr}
   .side,.right{border:0}
@@ -116,6 +144,21 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0c0c0f;border:1px sol
 </style>
 </head>
 <body>
+
+<div class="guide-overlay" id="guideOverlay">
+  <div class="guide-card">
+    <h2>Welcome to <em>Investment Detective</em></h2>
+    <p>This workspace connects to the live pipeline. To see what the system actually produces, start with our pre-computed demo first.</p>
+    <div class="guide-demos">
+      <a class="guide-link" href="/investment/docs/demo.html">
+        <span class="guide-icon">&#128270;</span>
+        <div><b>View Demo — Silver Case Journey</b><small>Walk through all 6 steps with 3 real research reports on silver (recommended)</small></div>
+      </a>
+    </div>
+    <button class="guide-dismiss" onclick="dismissGuide()">Skip — go to workspace</button>
+  </div>
+</div>
+
 <div class="shell">
   <aside class="side">
     <div class="brand"><div class="bar"></div><b>Investment<em>Detective</em></b></div>
@@ -258,6 +301,17 @@ async function openArtifact(name){const r=await fetch(`/api/run/${activeRun}/art
 async function loadRegistry(){const r=await fetch(`/api/run/${activeRun}/source-registry`); const j=await r.json(); document.getElementById('rightPane').innerHTML=`<pre>${escapeHtml(JSON.stringify(j.source_registry||{},null,2))}</pre>`}
 async function loadDashboard(){const r=await fetch(`/api/run/${activeRun}/dashboard`); const j=await r.json(); document.getElementById('rightPane').innerHTML=`<pre>${escapeHtml(JSON.stringify(j,null,2))}</pre>`}
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+
+function dismissGuide(){
+  const ov=document.getElementById('guideOverlay');
+  ov.style.opacity='0';ov.style.pointerEvents='none';
+  setTimeout(()=>ov.remove(),350);
+  try{sessionStorage.setItem('guideShown','1')}catch(e){}
+}
+if(sessionStorage.getItem('guideShown')){
+  const ov=document.getElementById('guideOverlay');
+  if(ov)ov.remove();
+}
 
 initTimeline(); health(); refreshRuns();
 </script>
